@@ -1,0 +1,709 @@
+
+[901]
+NAME="Nothing"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo ''
+[901-END]
+
+[902]
+NAME="Exec two command"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'ls /etc'
+  echo 'cat /etc/resolv.conf'
+[902-END]
+
+[903]
+NAME="Testing with /usr/bin PATH"
+SETUP="export TERM=xterm ; PATH='/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'pwd'
+[903-END]
+
+[904]
+NAME="Testing with /bin PATH"
+SETUP="export TERM=xterm ; PATH='/bin'"
+CLEAN=""
+TESTS=
+  echo 'pwd'
+[904-END]
+
+[905]
+NAME="run commands"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'cat /etc/resolv.conf'
+  sleep 0.5
+  echo 'ls -l /etc'
+  sleep 0.5
+  echo 'pwd'
+[905-END]
+
+[906]
+NAME="setenv and unsetenv"
+SETUP="/usr/bin/env > .lstenv ; while read varenv ; do unset $varenv ; done < <(/bin/cat .lstenv | /usr/bin/cut -f1 -d=) ; export PATH=/bin:/usr/bin ; export _=ls ; export LS_COLORS=RID ; export MYBG=4 ; export LVL=4 ; export NOTE=2"
+CLEAN="while read varenv ; do export "$varenv" 2>/dev/null ; done  < <(/bin/cat .lstenv) ; /bin/rm -f .lstenv"
+TESTS=
+  echo 'unsetenv HOSTTYPE'
+  echo 'unsetenv VENDOR'
+  echo 'unsetenv OSTYPE'
+  echo 'unsetenv MACHTYPE'
+  echo 'unsetenv SHLVL'
+  echo 'unsetenv PWD'
+  echo 'unsetenv LOGNAME'
+  echo 'unsetenv USER'
+  echo 'unsetenv GROUP'
+  echo 'unsetenv HOST'
+  echo 'unsetenv REMOTEHOST'
+  echo 'unsetenv _'
+  echo 'unsetenv LS_COLORS'
+  echo 'unsetenv NOTE'
+  echo 'setenv titi'
+  echo 'setenv tata coucou'
+  echo 'env'
+  echo '/usr/bin/env'
+  echo 'setenv var1 val1'
+  echo 'setenv var2 val2'
+[906-END]
+
+[907]
+NAME="builtin cd"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'cd ..'
+  echo 'ls -l'
+  echo 'cd /usr'
+  echo 'ls -l'
+[907-END]
+
+[908]
+NAME="many tab and space"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo -e "\t\t    ls\t     \t-l    \t\t  \t -a /usr   \t\t"
+[908-END]
+
+[909]
+NAME="Launch DivZero program with core dump"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "./my_divzero"
+[909-END]
+
+[910]
+NAME="Launch SegFault program without core dump"
+SETUP="ulimit -c 0 ; export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "./my_segfault"
+[910-END]
+
+[911]
+NAME="Testing simple pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l /etc | grep sh"
+[911-END]
+
+[912]
+NAME="A pipe with a builtin ?"
+SETUP="export VAR1=VALEUR1 ; OLDPATH=$PATH ; PATH='/random'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo 'setenv | /bin/grep VAR1'
+  echo '/bin/ls | cd /usr'
+  echo 'ls -l'
+  echo 'exit 45|cat /etc/resolv.conf'
+[912-END]
+
+[500]
+TYPE="SEMICOLONS"
+NAME="Basic semicolon separation"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l ; pwd"
+[500-END]
+
+[501]
+TYPE="SEMICOLONS"
+NAME="Multiple semicolon separation"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l ; pwd ; echo 'hello world' ; whoami"
+[501-END]
+
+[502]
+TYPE="SEMICOLONS"
+NAME="Semicolon with spaces"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l;pwd;echo 'hello world';whoami"
+[502-END]
+
+[503]
+TYPE="SEMICOLONS"
+NAME="Semicolon with builtin commands"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "cd /tmp ; pwd ; cd - ; pwd"
+[503-END]
+
+[504]
+TYPE="SEMICOLONS"
+NAME="Semicolon with errors"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l ; notexist ; pwd ; echo 'should continue after error'"
+[504-END]
+
+[505]
+TYPE="PIPES"
+NAME="Basic pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l | wc -l"
+[505-END]
+
+[506]
+TYPE="PIPES"
+NAME="Multiple pipes"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l | grep 'a' | wc -l"
+[506-END]
+
+[507]
+TYPE="PIPES"
+NAME="Pipe with spaces"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l|grep 'a'|wc -l"
+[507-END]
+
+[508]
+TYPE="PIPES"
+NAME="Pipe with builtin commands"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "echo 'hello world' | wc -c"
+[508-END]
+
+[509]
+TYPE="PIPES"
+NAME="Pipe with errors"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "notexist | wc -l"
+[509-END]
+
+[510]
+TYPE="REDIRECTIONS"
+NAME="Basic output redirection >"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f test_out.txt"
+TESTS=
+  echo "ls -l > test_out.txt"
+  echo "cat test_out.txt"
+[510-END]
+
+[511]
+TYPE="REDIRECTIONS"
+NAME="Basic input redirection <"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; echo 'test content' > test_in.txt"
+CLEAN="rm -f test_in.txt"
+TESTS=
+  echo "cat < test_in.txt"
+[511-END]
+
+[512]
+TYPE="REDIRECTIONS"
+NAME="Append output redirection >>"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; echo 'line 1' > test_append.txt"
+CLEAN="rm -f test_append.txt"
+TESTS=
+  echo "echo 'line 2' >> test_append.txt"
+  echo "cat test_append.txt"
+[512-END]
+
+[513]
+TYPE="REDIRECTIONS"
+NAME="Here document input redirection <<"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "cat << EOF
+hello world
+this is a test
+EOF"
+[513-END]
+
+[514]
+TYPE="REDIRECTIONS"
+NAME="Output redirection with spaces"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f test_spaces.txt"
+TESTS=
+  echo "ls -l>test_spaces.txt"
+  echo "cat test_spaces.txt"
+[514-END]
+
+[515]
+TYPE="REDIRECTIONS"
+NAME="Error redirection file not found"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "cat < notexist.txt"
+[515-END]
+
+[516]
+TYPE="REDIRECTIONS"
+NAME="Error redirection permission denied"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; touch test_noperm.txt ; chmod 000 test_noperm.txt"
+CLEAN="chmod 644 test_noperm.txt ; rm -f test_noperm.txt"
+TESTS=
+  echo "echo 'hello' > test_noperm.txt"
+[516-END]
+
+[517]
+TYPE="COMBINATIONS"
+NAME="Pipe and semicolon"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l | wc -l ; pwd"
+[517-END]
+
+[518]
+TYPE="COMBINATIONS"
+NAME="Semicolon and pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "pwd ; ls -l | wc -l"
+[518-END]
+
+[519]
+TYPE="COMBINATIONS"
+NAME="Multiple pipe and semicolon"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l | grep 'a' | wc -l ; echo 'hello world' | wc -w"
+[519-END]
+
+[520]
+TYPE="COMBINATIONS"
+NAME="Pipe and redirection"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f pipe_out.txt"
+TESTS=
+  echo "ls -l | grep 'a' > pipe_out.txt"
+  echo "cat pipe_out.txt"
+[520-END]
+
+[521]
+TYPE="COMBINATIONS"
+NAME="Redirection and pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; echo 'test content' > redir_in.txt"
+CLEAN="rm -f redir_in.txt"
+TESTS=
+  echo "cat < redir_in.txt | wc -c"
+[521-END]
+
+[522]
+TYPE="COMBINATIONS"
+NAME="Semicolon and redirection"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f semi_out.txt"
+TESTS=
+  echo "echo 'hello' > semi_out.txt ; cat semi_out.txt"
+[522-END]
+
+[523]
+TYPE="COMBINATIONS"
+NAME="Complex command chain"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f complex_out.txt"
+TESTS=
+  echo "ls -l | grep 'a' > complex_out.txt ; cat complex_out.txt | wc -l"
+[523-END]
+
+[524]
+TYPE="COMBINATIONS"
+NAME="Very complex command chain"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f test_dir/test_file.txt ; rmdir test_dir 2>/dev/null"
+TESTS=
+  echo "mkdir test_dir ; cd test_dir ; echo 'test content' > test_file.txt ; cat test_file.txt | wc -c > result.txt ; cat result.txt"
+[524-END]
+
+[525]
+TYPE="EDGE_CASES"
+NAME="Empty command with semicolon"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l ; ; pwd"
+[525-END]
+
+[526]
+TYPE="EDGE_CASES"
+NAME="Empty command with pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l | | wc -l"
+[526-END]
+
+[527]
+TYPE="EDGE_CASES"
+NAME="Leading semicolon"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "; ls -l"
+[527-END]
+
+[528]
+TYPE="EDGE_CASES"
+NAME="Trailing semicolon"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l;"
+[528-END]
+
+[529]
+TYPE="EDGE_CASES"
+NAME="Leading pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "| ls -l"
+[529-END]
+
+[530]
+TYPE="EDGE_CASES"
+NAME="Trailing pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l |"
+[530-END]
+
+[531]
+TYPE="EDGE_CASES"
+NAME="Redirection with no file"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l >"
+[531-END]
+
+[532]
+TYPE="EDGE_CASES"
+NAME="Here document with no delimiter"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "cat <<"
+[532-END]
+
+[533]
+TYPE="EDGE_CASES"
+NAME="Multiple redirections"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f out1.txt out2.txt"
+TESTS=
+  echo "ls -l > out1.txt > out2.txt"
+  echo "cat out1.txt"
+  echo "cat out2.txt"
+[533-END]
+
+[534]
+TYPE="PRIORITY"
+NAME="Priority between pipe and redirection"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f priority.txt"
+TESTS=
+  echo "echo 'hello world' | wc -c > priority.txt"
+  echo "cat priority.txt"
+[534-END]
+
+[535]
+TYPE="PRIORITY"
+NAME="Complex priority test"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f complex1.txt complex2.txt"
+TESTS=
+  echo "ls -l > complex1.txt | grep 'a' > complex2.txt ; cat complex1.txt ; cat complex2.txt"
+[535-END]
+
+[536]
+TYPE="TCSH_BUILTINS"
+NAME="cd with pipe in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "cd /tmp | pwd"
+[536-END]
+
+[537]
+TYPE="TCSH_BUILTINS"
+NAME="setenv with pipe in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "setenv TEST value | env | grep TEST"
+[537-END]
+
+[538]
+TYPE="TCSH_BUILTINS"
+NAME="setenv with proper tcsh syntax"
+SETUP="/usr/bin/env > .lstenv ; while read varenv ; do unset $varenv ; done < <(/bin/cat .lstenv | /usr/bin/cut -f1 -d=) ; export PATH=/bin:/usr/bin ; export _=ls ; export LS_COLORS=RID ; export MYBG=4 ; export LVL=4 ; export NOTE=2"
+CLEAN="while read varenv ; do export "$varenv" 2>/dev/null ; done  < <(/bin/cat .lstenv) ; /bin/rm -f .lstenv"
+TESTS=
+  echo "setenv VAR1 value1"
+  echo "setenv VAR2 value2"
+  echo "env | grep VAR"
+[538-END]
+
+[539]
+TYPE="TCSH_BUILTINS"
+NAME="unsetenv with proper tcsh syntax"
+SETUP="/usr/bin/env > .lstenv ; while read varenv ; do unset $varenv ; done < <(/bin/cat .lstenv | /usr/bin/cut -f1 -d=) ; export PATH=/bin:/usr/bin ; export VAR1=value1 ; export VAR2=value2"
+CLEAN="while read varenv ; do export "$varenv" 2>/dev/null ; done  < <(/bin/cat .lstenv) ; /bin/rm -f .lstenv"
+TESTS=
+  echo "env | grep VAR"
+  echo "unsetenv VAR1"
+  echo "env | grep VAR"
+[539-END]
+
+[540]
+TYPE="TCSH_BUILTINS"
+NAME="exit in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "echo 'Before exit' ; exit 42 ; echo 'Should not be visible'"
+[540-END]
+
+[541]
+TYPE="TCSH_BUILTINS"
+NAME="alias in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "alias ll 'ls -l'"
+  echo "ll"
+[541-END]
+
+[542]
+TYPE="TCSH_BUILTINS"
+NAME="cd to home in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; export HOME='/tmp'"
+CLEAN=""
+TESTS=
+  echo "cd"
+  echo "pwd"
+[542-END]
+
+[543]
+TYPE="TCSH_VARIABLES"
+NAME="Variable access in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; export TEST_VAR='hello'"
+CLEAN=""
+TESTS=
+  echo "echo $TEST_VAR"
+[543-END]
+
+[544]
+TYPE="TCSH_VARIABLES"
+NAME="Set shell variable in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "set test_var = 'hello world'"
+  echo "echo $test_var"
+[544-END]
+
+[545]
+TYPE="TCSH_VARIABLES"
+NAME="Append to path in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "setenv PATH ${PATH}:/usr/local/bin"
+  echo "echo $PATH"
+[545-END]
+
+[546]
+TYPE="ERROR_HANDLING"
+NAME="Command not found in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "nonexistentcommand"
+[546-END]
+
+[547]
+TYPE="ERROR_HANDLING"
+NAME="Permission denied in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; touch test_noperm ; chmod 000 test_noperm"
+CLEAN="chmod 644 test_noperm ; rm -f test_noperm"
+TESTS=
+  echo "./test_noperm"
+[547-END]
+
+[548]
+TYPE="ERROR_HANDLING"
+NAME="Invalid redirection path in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l > /root/noperm"
+[548-END]
+
+[549]
+TYPE="ERROR_HANDLING"
+NAME="Invalid input file in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "cat < nosuchfile.txt"
+[549-END]
+
+[550]
+TYPE="BONUS"
+NAME="Error output redirection in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f stderr.txt"
+TESTS=
+  echo "ls -l /nosuchdir >& stderr.txt"
+  echo "cat stderr.txt"
+[550-END]
+
+[551]
+TYPE="BONUS"
+NAME="Append stderr redirection in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; echo 'line 1' > combined.txt"
+CLEAN="rm -f combined.txt"
+TESTS=
+  echo "ls -l /nosuchdir >>& combined.txt"
+  echo "cat combined.txt"
+[551-END]
+
+[552]
+TYPE="TCSH_SPECIFIC"
+NAME="TCSH noclobber mode"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; echo 'content' > existing.txt"
+CLEAN="rm -f existing.txt"
+TESTS=
+  echo "set noclobber"
+  echo "echo 'new content' > existing.txt"
+  echo "cat existing.txt"
+[552-END]
+
+[553]
+TYPE="TCSH_SPECIFIC"
+NAME="TCSH history"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "echo 'command1'"
+  echo "echo 'command2'"
+  echo "history"
+[553-END]
+
+[554]
+TYPE="STRESS_TEST"
+NAME="Long pipe chain for tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l | grep 'a' | sort | uniq | wc -l | cat | cat | cat | cat | cat"
+[554-END]
+
+[555]
+TYPE="STRESS_TEST"
+NAME="Long semicolon chain for tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "pwd ; ls ; echo 'a' ; echo 'b' ; echo 'c' ; echo 'd' ; echo 'e' ; echo 'f' ; echo 'g' ; echo 'h'"
+[555-END]
+
+[556]
+TYPE="PERFORMANCE"
+NAME="Large file redirection for tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin' ; yes 'test line' | head -n 1000 > large_file.txt"
+CLEAN="rm -f large_file.txt large_file_copy.txt"
+TESTS=
+  echo "cat large_file.txt > large_file_copy.txt"
+  echo "wc -l large_file_copy.txt"
+[556-END]
+
+[557]
+TYPE="TCSH_SPECIFIC"
+NAME="Multiple cd changes"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "cd /tmp"
+  echo "pwd"
+  echo "cd /usr"
+  echo "pwd"
+  echo "cd -"
+  echo "pwd"
+[557-END]
+
+[558]
+TYPE="TCSH_SPECIFIC"
+NAME="setenv with no arguments"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "setenv"
+[558-END]
+
+[559]
+TYPE="TCSH_SPECIFIC"
+NAME="unsetenv with no arguments"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "unsetenv"
+[559-END]
+
+[560]
+TYPE="TCSH_SPECIFIC"
+NAME="Directory stack in tcsh"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "pushd /tmp"
+  echo "pushd /usr"
+  echo "dirs"
+  echo "popd"
+  echo "pwd"
+[560-END]
