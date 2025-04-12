@@ -14,7 +14,7 @@ const char *error_messages[] = {
     ": Not a directory.\n",
     "Exec format error. Binary file not executable.\n",
     ": Cannot create file.\n",
-    "cd: too many arguments\n",
+    "cd: Too many arguments.\n",
     "setenv: Too many arguments.\n",
     "unsetenv: Too few arguments.\n",
     "unsetenv: Wrong number of arguments.\n",
