@@ -5,6 +5,7 @@ a.out
 *.gcno
 *.gcda
 *.txt
+!test_history.txt
 *.pdf
 exe
 libmy.a
@@ -15,7 +16,8 @@ mysh
 explanation.md
 bin_not_compatible
 segfault
-*.log
+bin_permission_denied
+coding-style-reports.log
 *.py
 test_dir
 &

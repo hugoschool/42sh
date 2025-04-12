@@ -3,6 +3,13 @@
 MYSHELL="./../42sh"
 REFER="/bin/tcsh -f"
 TRAPSIG=0
+HISTORY_FILE="test_history.txt"
+
+GREEN="\033[1;32m"
+RED="\033[1;31m"
+BLUE="\033[1;36m"
+ORANGE="\033[1;38;5;208m"
+RESET="\033[0m"
 
 CAT=`which cat`
 GREP=`which grep`
@@ -16,15 +23,41 @@ CHMOD=`which chmod`
 EXPR=`which expr`
 MKDIR=`which mkdir`
 CP=`which cp`
+TOUCH=`which touch`
 
 TOTAL_TESTS=0
 PASSED_TESTS=0
 FAILED_TESTS=0
+IMPROVED_TESTS=0
+REGRESSED_TESTS=0
 
 for i in `env | grep BASH_FUNC_ | cut -d= -f1`; do
     f=`echo $i | sed s/BASH_FUNC_//g | sed s/%%//g`
     unset -f $f
 done
+
+if [ ! -f "$HISTORY_FILE" ]; then
+    $TOUCH "$HISTORY_FILE"
+fi
+
+get_previous_state() {
+    test_id=$1
+    previous_state=`$GREP "^$test_id:" "$HISTORY_FILE" | $CUT -d':' -f2`
+    if [ -z "$previous_state" ]; then
+        echo "UNKNOWN"
+    else
+        echo $previous_state
+    fi
+}
+
+update_history() {
+    test_id=$1
+    new_state=$2
+    
+    $GREP -v "^$test_id:" "$HISTORY_FILE" > "$HISTORY_FILE.tmp"
+    echo "$test_id:$new_state" >> "$HISTORY_FILE.tmp"
+    $MV "$HISTORY_FILE.tmp" "$HISTORY_FILE"
+}
 
 disp_test()
 {
@@ -92,13 +125,23 @@ load_test()
 
   TOTAL_TESTS=$((TOTAL_TESTS+1))
 
+  previous_state=`$GREP "^$id:" "$HISTORY_FILE" | cut -d':' -f2`
+  
   if [ $ok -eq 1 ]
   then
     PASSED_TESTS=$((PASSED_TESTS+1))
+    current_state="OK"
+    
+    if [ "$previous_state" = "KO" ]; then
+      IMPROVED_TESTS=$((IMPROVED_TESTS+1))
+      status_color=$BLUE
+    else
+      status_color=$GREEN
+    fi
     
     if [ $debug -ge 1 ]
     then
-      echo "Test $id ($NAME) : OK"
+      echo "Test $id ($NAME) : ${status_color}OK${RESET}"
       if [ $debug -eq 2 ]
       then
         echo "Output $MYSHELL :"
@@ -109,28 +152,43 @@ load_test()
         echo ""
       fi
     else
-      echo "OK"
+      echo -e "${status_color}OK${RESET}"
     fi
   else
     FAILED_TESTS=$((FAILED_TESTS+1))
+    current_state="KO"
+    
+    if [ "$previous_state" = "OK" ]; then
+      REGRESSED_TESTS=$((REGRESSED_TESTS+1))
+      status_color=$ORANGE
+    else
+      status_color=$RED
+    fi
     
     if [ $debug -ge 1 ]
     then
-      echo "Test $id ($NAME) : KO - Check output in /tmp/test.$$/$id/" 
+      echo "Test $id ($NAME) : ${status_color}KO${RESET} - /tmp/test.$$/$id/" 
       $MKDIR -p /tmp/test.$$/$id 2>/dev/null
       $CP /tmp/.shell.$$ /tmp/test.$$/$id/mysh.out
       $CP /tmp/.refer.$$ /tmp/test.$$/$id/tcsh.out
     else
-      echo "KO"
+      echo -e "${status_color}KO${RESET}"
     fi
   fi
+  
+  $GREP -v "^$id:" "$HISTORY_FILE" > "/tmp/.history.tmp.$$"
+  echo "$id:$current_state" >> "/tmp/.history.tmp.$$"
+  $CP "/tmp/.history.tmp.$$" "$HISTORY_FILE"
+  $RM -f "/tmp/.history.tmp.$$"
 }
 
 print_stats() {
   echo "===== STATISTIQUES DES TESTS ====="
   echo "Total des tests exécutés: $TOTAL_TESTS"
-  echo "Tests réussis: $PASSED_TESTS"
-  echo "Tests échoués: $FAILED_TESTS"
+  echo "Tests réussis: ${GREEN}$PASSED_TESTS${RESET}"
+  echo "Tests échoués: ${RED}$FAILED_TESTS${RESET}"
+  echo "Tests améliorés (KO → OK): ${BLUE}$IMPROVED_TESTS${RESET}"
+  echo "Tests dégradés (OK → KO): ${ORANGE}$REGRESSED_TESTS${RESET}"
   
   if [ $TOTAL_TESTS -gt 0 ]; then
     PASS_PERCENTAGE=$((PASSED_TESTS*100/TOTAL_TESTS))
