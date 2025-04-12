@@ -141,7 +141,7 @@ load_test()
     
     if [ $debug -ge 1 ]
     then
-      echo "Test $id ($NAME) : ${status_color}OK${RESET}"
+      echo -e "Test $id ($NAME) : ${status_color}OK${RESET}"
       if [ $debug -eq 2 ]
       then
         echo "Output $MYSHELL :"
@@ -167,7 +167,7 @@ load_test()
     
     if [ $debug -ge 1 ]
     then
-      echo "Test $id ($NAME) : ${status_color}KO${RESET} - /tmp/test.$$/$id/" 
+      echo -e "Test $id ($NAME) : ${status_color}KO${RESET} - /tmp/test.$$/$id/" 
       $MKDIR -p /tmp/test.$$/$id 2>/dev/null
       $CP /tmp/.shell.$$ /tmp/test.$$/$id/mysh.out
       $CP /tmp/.refer.$$ /tmp/test.$$/$id/tcsh.out
@@ -185,10 +185,10 @@ load_test()
 print_stats() {
   echo "===== STATISTIQUES DES TESTS ====="
   echo "Total des tests exécutés: $TOTAL_TESTS"
-  echo "Tests réussis: ${GREEN}$PASSED_TESTS${RESET}"
-  echo "Tests échoués: ${RED}$FAILED_TESTS${RESET}"
-  echo "Tests améliorés (KO → OK): ${BLUE}$IMPROVED_TESTS${RESET}"
-  echo "Tests dégradés (OK → KO): ${ORANGE}$REGRESSED_TESTS${RESET}"
+  echo -e "Tests réussis: ${GREEN}$PASSED_TESTS${RESET}"
+  echo -e "Tests échoués: ${RED}$FAILED_TESTS${RESET}"
+  echo -e "Tests améliorés (KO → OK): ${BLUE}$IMPROVED_TESTS${RESET}"
+  echo -e "Tests dégradés (OK → KO): ${ORANGE}$REGRESSED_TESTS${RESET}"
   
   if [ $TOTAL_TESTS -gt 0 ]; then
     PASS_PERCENTAGE=$((PASSED_TESTS*100/TOTAL_TESTS))
