@@ -1314,3 +1314,131 @@ echo 'if (1 == 1) then
     echo "True condition"
 endif'
 [1902-END]
+
+
+# &&/||
+[2001]
+NAME="Logical AND (&&) simple"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'echo "First" && echo "Second"'
+[2001-END]
+
+[2002]
+NAME="Logical AND (&&) with first command failing"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'false && echo "Should not be displayed"'
+echo 'echo "After failed AND operation"'
+[2002-END]
+
+[2003]
+NAME="Logical AND (&&) with second command failing"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'echo "First command" && false'
+echo 'echo "After AND with second failed"'
+[2003-END]
+
+[2004]
+NAME="Logical AND (&&) multiple commands"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'echo "1" && echo "2" && echo "3" && echo "4"'
+[2004-END]
+
+[2005]
+NAME="Logical OR (||) simple"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'echo "First" || echo "Should not be displayed"'
+[2005-END]
+
+[2006]
+NAME="Logical OR (||) with first command failing"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'false || echo "Should be displayed"'
+[2006-END]
+
+[2007]
+NAME="Logical OR (||) with all commands failing"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'false || false || false'
+echo 'echo "After failed OR chain"'
+[2007-END]
+
+[2008]
+NAME="Logical OR (||) multiple commands"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'false || false || echo "This one runs" || echo "This one does not"'
+[2008-END]
+
+[2009]
+NAME="Combination of && and ||"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'true && echo "AND works" || echo "OR not executed"'
+echo 'false && echo "AND fails" || echo "OR executed"'
+[2009-END]
+
+[2010]
+NAME="Complex combination of && and || with parentheses"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo '(false || echo "Inside OR works") && echo "Outside AND works"'
+[2010-END]
+
+[2011]
+NAME="Operator precedence without parentheses"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'false && echo "Not displayed" || echo "Displayed due to precedence"'
+[2011-END]
+
+[2012]
+NAME="Logical operators with redirections"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f /tmp/log_op_test"
+TESTS=
+echo 'echo "Testing" > /tmp/log_op_test && cat /tmp/log_op_test'
+[2012-END]
+
+[2013]
+NAME="Logical operators with pipes"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'ls -la | grep "." && echo "Found something"'
+echo 'ls -la | grep "impossible_pattern" || echo "Nothing found"'
+[2013-END]
+
+[2014]
+NAME="Logical operators with builtins"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'cd /tmp && pwd'
+echo 'cd /nonexistent || echo "Directory does not exist"'
+[2014-END]
+
+[2015]
+NAME="Logical operators with exit codes"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'exit 0 && echo "Should not display this"'
+[2015-END]
