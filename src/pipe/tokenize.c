@@ -55,8 +55,8 @@ static int add_operator(char **tokens, int count, char type, int dbl)
  */
 static int save_current_token(token_line_t *tl, token_state_t *state, int i)
 {
-    tl->line[i] = '\0';
-    tl->tokens[state->count] = strdup(&tl->line[state->start]);
+    tl->tokens[state->count] = strndup(&tl->line[state->start],
+        i - state->start);
     if (!tl->tokens[state->count])
         return -1;
     state->count++;

@@ -1442,3 +1442,11 @@ CLEAN=""
 TESTS=
 echo 'exit 0 && echo "Should not display this"'
 [2015-END]
+
+[2016]
+NAME="Semicolons not seperated by a space"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+echo 'ls -l;echo test1;echo test2'
+[2016-END]
