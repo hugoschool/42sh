@@ -29,7 +29,8 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/print_help.c	\
 		src/args_parser.c	\
 		src/command_struct.c	\
-		src/path_handler.c
+		src/path_handler.c	\
+		src/truth_table.c
 
 
 MAIN_SRC	= main.c
@@ -55,7 +56,7 @@ fclean: clean
 
 re: fclean all
 
-coding_style:
+coding_style: fclean
 	coding-style . > /dev/null
 	cat coding-style-reports.log
 	$(RM) coding-style-reports.log
