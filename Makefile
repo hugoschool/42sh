@@ -40,13 +40,16 @@ OBJ	=	$(SRC:.c=.o) $(MAIN_SRC:.c=.o)
 
 NAME	=	42sh
 
-CFLAGS += -Wall -Wextra -pedantic -g3
+CFLAGS += -Wall -Wextra -pedantic
 CPPFLAGS	+= -Iinclude/
+ifeq ($(ENV), dev)
+	CFLAGS	+=	-g3
+endif
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ) -g3
+	gcc -o $(NAME) $(OBJ)
 
 clean:
 	$(RM) $(OBJ) $(LIB_OBJ)
