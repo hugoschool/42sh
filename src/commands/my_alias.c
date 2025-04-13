@@ -47,10 +47,12 @@ alias_t **my_setaliases(char *alias, char *command)
     return my_getaliases(aliases);
 }
 
-char *get_aliased_command(char *alias)
+char *get_alias_command(char *alias)
 {
     alias_t **aliases = my_getaliases(NULL);
 
+    if (!alias || !aliases)
+        return NULL;
     for (int i = 0; aliases[i] != NULL; i++) {
         if (strcmp(aliases[i]->alias, alias) == 0)
             return aliases[i]->command;
@@ -68,7 +70,7 @@ int my_alias(char *args[], int count)
             printf("%s\t%s\n", aliases[i]->alias, aliases[i]->command);
     }
     if (count == 1 && aliases != NULL) {
-        command = get_aliased_command(args[1]);
+        command = get_alias_command(args[1]);
         if (command)
             printf("%s\n", command);
     }
