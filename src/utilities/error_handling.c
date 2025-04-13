@@ -30,7 +30,11 @@ const char *error_messages[] = {
     "Unknown node type\n",
     "setenv: Variable name must begin with a letter.\n",
     "setenv: Variable name must contain alphanumeric characters.\n",
-    "unsetenv: Variable name must contain alphanumeric characters.\n"
+    "unsetenv: Variable name must contain alphanumeric characters.\n",
+    "Invalid operator '&'. Did you mean '&&'?\n",
+    "Invalid operator '|'. Did you mean '||'?\n",
+    "Invalid null command after '&&'.\n",
+    "Invalid null command after '||'.\n"
 };
 
 /**

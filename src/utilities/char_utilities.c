@@ -23,17 +23,6 @@ char *trim_whitespace(char *line)
 }
 
 /**
- * @brief Checks if a character is a special token.
- *
- * @param c : The character to check.
- * @return : 1 if it's a special token (; | < >), 0 otherwise.
- */
-int is_special_token(char c)
-{
-    return (c == ';' || c == PIPE || c == REDIR_IN || c == REDIR_OUT);
-}
-
-/**
  * @brief Removes quotes from a string in-place.
  *
  * @param str : The string to process.
@@ -73,16 +62,4 @@ void skip_whitespace(token_line_t *tl, int *i, token_state_t *state)
     while (tl->line[*i] && !state->in_quotes &&
     (tl->line[*i] == ' ' || tl->line[*i] == '\t'))
         (*i)++;
-}
-
-/**
- * @brief Checks if a node type is a valid redirection type.
- *
- * @param type : The node type to check.
- * @return : 1 if it's a valid redirection type, 0 otherwise.
- */
-int is_valid_redirection_type(node_type_t type)
-{
-    return (type == NODE_REDIR_IN || type == NODE_REDIR_OUT ||
-    type == NODE_REDIR_APPEND || type == NODE_REDIR_HEREDOC);
 }

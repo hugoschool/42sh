@@ -8,37 +8,6 @@
 #include "mysh.h"
 
 /**
- * @brief Validates the syntax of a token array.
- * Checks for common syntax errors like empty pipes or missing
- * redirection targets.
- *
- * @param tokens : Array of tokens to validate.
- * @return : 0 if syntax is valid, 84 on syntax error with message.
- */
-static int validate_syntax(char **tokens)
-{
-    int i = 0;
-
-    if (!tokens || !tokens[0])
-        return 0;
-    if (tokens[0][0] == PIPE)
-        return print_error(get_error_msg(ERR_INVALID_NULL_COMMAND), NULL, 84);
-    while (tokens[i]) {
-        if (tokens[i][0] == PIPE && tokens[i + 1] && tokens[i + 1][0] == PIPE)
-            return print_error(get_error_msg(ERR_INVALID_NULL_COMMAND), NULL,
-            84);
-        if ((tokens[i][0] == REDIR_IN || tokens[i][0] == REDIR_OUT) &&
-        (!tokens[i + 1] || tokens[i + 1][0] == PIPE || tokens[i + 1][0] == ';'
-        || tokens[i + 1][0] == REDIR_IN || tokens[i + 1][0] == REDIR_OUT))
-            return print_error(get_error_msg(ERR_NO_NAME_REDIRECT), NULL, 84);
-        i++;
-    }
-    if (i > 0 && tokens[i - 1][0] == PIPE)
-        return print_error(get_error_msg(ERR_INVALID_NULL_COMMAND), NULL, 84);
-    return 0;
-}
-
-/**
  * @brief Allocates memory for a token array.
  *
  * @param line : The command line being tokenized.
