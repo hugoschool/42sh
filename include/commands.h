@@ -15,6 +15,9 @@ int print_environment(void);
 // executor //
 int create_fork(char *args[], int count);
 
+// my_alias //
+int my_alias(char *args[], int count);
+
 // my_cd //
 int my_cd(char *args[], int count);
 

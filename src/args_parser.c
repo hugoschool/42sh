@@ -98,6 +98,8 @@ static int execute_builtin_command(char **args, int count)
         free_args(args);
         exit(status);
     }
+    if (strcmp(args[0], ALIAS) == 0)
+        return free_return(args, my_alias(args, count));
     if (strcmp(args[0], CD) == 0)
         return free_return(args, my_cd(args, count));
     if (strcmp(args[0], SETENV) == 0)

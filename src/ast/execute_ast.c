@@ -125,6 +125,8 @@ static int handle_builtin_command(ast_node_t *node, int old_stdin,
     int arg_count = count_args(node->args) - 1;
     int status;
 
+    if (strcmp(node->args[0], ALIAS) == 0)
+        return my_alias(node->args, arg_count);
     if (strcmp(node->args[0], CD) == 0)
         return my_cd(node->args, arg_count);
     if (strcmp(node->args[0], EXIT) == 0) {

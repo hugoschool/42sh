@@ -145,7 +145,8 @@ static int is_builtin_command(ast_node_t *node)
 {
     if (!node || !node->args || !node->args[0])
         return 0;
-    return (strcmp(node->args[0], CD) == 0 ||
+    return (strcmp(node->args[0], ALIAS) == 0 ||
+    strcmp(node->args[0], CD) == 0 ||
     strcmp(node->args[0], EXIT) == 0 ||
     strcmp(node->args[0], SETENV) == 0 ||
     strcmp(node->args[0], UNSETENV) == 0 ||

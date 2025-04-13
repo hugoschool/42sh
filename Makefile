@@ -14,6 +14,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/ast/setup_redirection.c	\
 		src/commands/env.c	\
 		src/commands/executor.c	\
+		src/commands/my_alias.c	\
 		src/commands/my_cd.c	\
 		src/commands/my_exit.c	\
 		src/commands/my_getenv.c	\
@@ -24,6 +25,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/pipe/tokenize.c	\
 		src/utilities/bin_not_compatible.c	\
 		src/utilities/char_utilities.c	\
+		src/utilities/concat_args.c	\
 		src/utilities/error_handling.c	\
 		src/utilities/frees.c	\
 		src/utilities/print_help.c	\
@@ -38,7 +40,7 @@ OBJ	=	$(SRC:.c=.o) $(MAIN_SRC:.c=.o)
 
 NAME	=	42sh
 
-CFLAGS += -Wall -Wextra -pedantic
+CFLAGS += -Wall -Wextra -pedantic -g3
 CPPFLAGS	+= -Iinclude/
 
 all: $(NAME)

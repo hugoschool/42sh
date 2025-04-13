@@ -19,6 +19,9 @@ void strip_quotes(char *str);
 void skip_whitespace(token_line_t *tl, int *i, token_state_t *state);
 int is_valid_redirection_type(node_type_t type);
 
+// concat_args.c //
+char *concat_args(char *args[]);
+
 // frees.c //
 void free_command(command_t *cmd);
 void free_args(char **args);

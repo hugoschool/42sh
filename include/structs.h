@@ -118,6 +118,12 @@ typedef struct command_s {
     int cmd_count;
 } command_t;
 
+// TODO: docstrings
+typedef struct alias_s {
+    char *alias;
+    char *command;
+} alias_t;
+
 // DATA //
 /**
  * @brief Tokens states
