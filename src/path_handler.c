@@ -66,24 +66,6 @@ static char *get_path_value(void)
 }
 
 /**
- * @brief Attempts to execute a command using a given path.
- *
- * @param full_path : The complete path to try.
- * @param args : The command arguments.
- * @param environ : The environment variables.
- * @return : 1 if execution succeeded, 0 if failed.
- */
-static int try_execute_path(const char *full_path, char *args[],
-    char **environ)
-{
-    if (access(full_path, X_OK) == 0) {
-        execve(full_path, args, environ);
-        return 1;
-    }
-    return 0;
-}
-
-/**
  * @brief Builds a full path by combining directory and command.
  *
  * @param dir : The directory path.
@@ -121,8 +103,10 @@ static void search_in_path(char *args[], char **environ)
     dir = strtok_r(path_value, ":", &saveptr);
     while (dir) {
         build_full_path(dir, args[0], full_path);
-        if (try_execute_path(full_path, args, environ))
+        if (access(full_path, X_OK) == 0) {
+            args[0] = full_path;
             break;
+        }
         dir = strtok_r(NULL, ":", &saveptr);
     }
     free(path_value);
