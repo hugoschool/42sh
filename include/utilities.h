@@ -37,6 +37,9 @@ int is_special_token(char c);
 int is_valid_redirection_type(node_type_t type);
 int is_logical_op(const char *line, int i);
 
+// prepend.c //
+char *prepend(char *line, char *pre);
+
 // print_help.c //
 void print_help(void);
 

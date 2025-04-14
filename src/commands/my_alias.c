@@ -60,13 +60,22 @@ static char *get_alias_command(char *alias)
     return NULL;
 }
 
-char *replace_command(char *command)
+char *replace_alias_line(char *line)
 {
-    char *new_command = get_alias_command(command);
+    alias_t **alias = my_getaliases(NULL);
+    char *str = NULL;
 
-    if (new_command)
-        return new_command;
-    return command;
+    if (!alias)
+        return NULL;
+    for (int i = 0; alias[i] != NULL; i++) {
+        if (strncmp(line, alias[i]->alias, strlen(alias[i]->alias)) == 0) {
+            str = prepend(&line[strlen(alias[i]->alias)], alias[i]->command);
+            break;
+        }
+    }
+    if (!str)
+        return NULL;
+    return str;
 }
 
 int my_alias(char *args[], int count)

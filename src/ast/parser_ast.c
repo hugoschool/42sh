@@ -74,6 +74,10 @@ static char *free_tokens_and_line(char **tokens, char *line_copy,
 int preprocess_line(char *line, char **line_copy, char ***tokens,
     int *token_count)
 {
+    char *aliased_line = replace_alias_line(line);
+
+    if (aliased_line)
+        line = aliased_line;
     line = trim_whitespace(line);
     if (!line)
         return 0;
