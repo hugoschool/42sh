@@ -38,12 +38,8 @@ static void execute_file(char *args[], char **environ, int pass)
         check_is_dir(args[0]);
         if (access(args[0], X_OK) != 0)
             exit(print_error(args[0], get_error_msg(ERR_PERMISSION), 1));
-        if (execve(args[0], args, environ) == -1 && errno == ENOEXEC) {
-            bin_not_compatible(args[0]);
-            exit(1);
-        }
-        if (execve(args[0], args, environ) == -1 && errno != ENOEXEC)
-            exit(print_error(args[0], get_error_msg(ERR_NOT_FOUND), 1));
+        if (execve(args[0], args, environ) == -1)
+            exit(get_errno_error(args[0]));
     }
 }
 

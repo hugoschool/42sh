@@ -23,7 +23,6 @@ SRC	=	src/ast/command_parser.c	\
 		src/pipe/redirection.c	\
 		src/pipe/tokenize_with_quotes.c	\
 		src/pipe/tokenize.c	\
-		src/utilities/bin_not_compatible.c	\
 		src/utilities/char_utilities.c	\
 		src/utilities/concat_args.c	\
 		src/utilities/error_handling.c	\

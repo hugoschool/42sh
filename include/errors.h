@@ -41,5 +41,6 @@ typedef enum {
 char *get_error_msg(error_type_t type);
 
 int print_error(char *cmd, char *msg, int nb);
+int get_errno_error(char *cmd);
 
 #endif // ERROR_TYPES_H
