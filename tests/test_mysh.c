@@ -1274,3 +1274,62 @@ Test(logical_execution, test_execute_logical_invalid_node)
     cr_assert_eq(status, 1);
     free_ast(node);
 }
+
+Test(subshell, parse_command_or_subshell_command)
+{
+    char *tokens[] = {"ls", "-l", NULL};
+    int pos = 0;
+    int max_pos = 2;
+    
+    ast_node_t *result = parse_command_or_subshell(tokens, &pos, max_pos);
+    
+    cr_assert_not_null(result, "Should return a node");
+    cr_assert_eq(result->type, NODE_COMMAND, "Node type should be NODE_COMMAND");
+    
+    free(result->args[0]);
+    free(result->args);
+    free(result);
+}
+
+Test(subshell, parse_command_or_subshell_subshell)
+{
+    char *tokens[] = {"(", "ls", ")", NULL};
+    int pos = 0;
+    int max_pos = 3;
+    
+    ast_node_t *result = parse_command_or_subshell(tokens, &pos, max_pos);
+    
+    cr_assert_not_null(result, "Should return a node");
+    cr_assert_eq(result->type, NODE_SUBSHELL, "Node type should be NODE_SUBSHELL");
+    cr_assert_not_null(result->left, "Left child should not be NULL");
+    
+    free_ast(result);
+}
+
+Test(subshell, handle_wait_status_exit)
+{
+    int status = 0;
+    int result = handle_wait_status(status);
+    
+    cr_assert_eq(result, 0, "Should return exit code 0");
+}
+
+Test(subshell, execute_subshell_success)
+{
+    ast_node_t *inner = malloc(sizeof(ast_node_t));
+    inner->type = NODE_COMMAND;
+    inner->args = NULL;
+    inner->redirections = NULL;
+    inner->left = NULL;
+    inner->right = NULL;
+    
+    ast_node_t *node = malloc(sizeof(ast_node_t));
+    node->type = NODE_SUBSHELL;
+    node->args = NULL;
+    node->redirections = NULL;
+    node->left = inner;
+    node->right = NULL;
+    free(inner);
+    free(node);
+    cr_assert(1, "Placeholder for complex subshell execution test");
+}

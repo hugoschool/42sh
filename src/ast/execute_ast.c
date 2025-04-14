@@ -7,6 +7,16 @@
 
 #include "mysh.h"
 
+static int second_execute_ast(ast_node_t *node)
+{
+    switch (node->type) {
+        case NODE_SUBSHELL:
+            return execute_subshell(node);
+        default:
+            return print_error(get_error_msg(ERR_INVALID_OPERATOR), NULL, 1);
+    }
+}
+
 /**
  * @brief Recursively executes an AST node.
  *
@@ -32,7 +42,7 @@ int execute_ast(ast_node_t *node)
                 return 0;
             return execute_ast(node->right);
         default:
-            return print_error(get_error_msg(ERR_INVALID_OPERATOR), NULL, 1);
+            return second_execute_ast(node);
     }
 }
 
@@ -59,7 +69,7 @@ static int count_args(char **args)
  * @param old_stdin : The original stdin file descriptor.
  * @param old_stdout : The original stdout file descriptor.
  */
-static void restore_redirections(int old_stdin, int old_stdout)
+void restore_redirections(int old_stdin, int old_stdout)
 {
     if (old_stdin != -1) {
         dup2(old_stdin, STDIN_FILENO);
@@ -159,26 +169,6 @@ static int execute_child_process(ast_node_t *node)
     signal(SIGINT, SIG_DFL);
     execute_command_path(node->args);
     return print_error(node->args[0], get_error_msg(ERR_NOT_FOUND), 1);
-}
-
-/**
- * @brief Processes the wait status of a child process.
- *
- * @param wait_status : The status returned by waitpid.
- * @return : Normalized exit status.
- */
-static int handle_wait_status(int wait_status)
-{
-    int signal;
-
-    if (WIFEXITED(wait_status))
-        return WEXITSTATUS(wait_status);
-    if (WIFSIGNALED(wait_status)) {
-        signal = WTERMSIG(wait_status);
-        return print_error(strsignal(signal),
-        WCOREDUMP(wait_status) ? CORE_DUMPED : "", 128 + signal);
-    }
-    return 1;
 }
 
 /**

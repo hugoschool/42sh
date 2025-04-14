@@ -78,7 +78,7 @@ ast_node_t *parse_pipeline(char **tokens, int *pos, int max_pos)
     ast_node_t *left = NULL;
     ast_node_t *right = NULL;
 
-    left = parse_command(tokens, pos, max_pos);
+    left = parse_command_or_subshell(tokens, pos, max_pos);
     if (!left)
         return NULL;
     while (*pos < max_pos && tokens[*pos] && tokens[*pos][0] == PIPE) {
