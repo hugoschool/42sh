@@ -47,7 +47,7 @@ alias_t **my_setaliases(char *alias, char *command)
     return my_getaliases(aliases);
 }
 
-char *get_alias_command(char *alias)
+static char *get_alias_command(char *alias)
 {
     alias_t **aliases = my_getaliases(NULL);
 
@@ -58,6 +58,15 @@ char *get_alias_command(char *alias)
             return aliases[i]->command;
     }
     return NULL;
+}
+
+char *replace_command(char *command)
+{
+    char *new_command = get_alias_command(command);
+
+    if (new_command)
+        return new_command;
+    return command;
 }
 
 int my_alias(char *args[], int count)

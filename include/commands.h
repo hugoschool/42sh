@@ -17,6 +17,7 @@ int create_fork(char *args[], int count);
 
 // my_alias //
 int my_alias(char *args[], int count);
+char *replace_command(char *command);
 
 // my_cd //
 int my_cd(char *args[], int count);
