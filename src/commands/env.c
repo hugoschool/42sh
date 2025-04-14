@@ -19,7 +19,7 @@ int print_environment(void)
     if (!environ)
         return 0;
     if (!my_getenv(NLSPATH))
-        write(1, NLSPATH_PRINT_PT1 NLSPATH_PRINT_PT2, 88);
+        write(1, NLSPATH_PRINT_PT1 NLSPATH_PRINT_PT2, 80);
     for (int i = 0; environ[i]; i++) {
         write(1, environ[i], strlen(environ[i]));
         write(1, "\n", 1);

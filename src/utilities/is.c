@@ -7,6 +7,11 @@
 
 #include "mysh.h"
 
+int is_parenthesis(char c)
+{
+    return (c == OPEN_PAREN || c == CLOSE_PAREN);
+}
+
 /**
  * @brief Checks if a character is a special token.
  *
@@ -16,7 +21,7 @@
 int is_special_token(char c)
 {
     return (c == ';' || c == PIPE || c == REDIR_IN || c == REDIR_OUT ||
-    c == AND);
+    c == AND || c == OPEN_PAREN || c == CLOSE_PAREN);
 }
 
 /**

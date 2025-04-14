@@ -8,6 +8,32 @@
 #include "mysh.h"
 
 /**
+ * @brief Validates the balance of parentheses in a token array
+ *
+ * @param tokens Array of tokens to validate
+ * @return int 0 if balanced, error code otherwise
+ */
+static int validate_parentheses_balance(char **tokens)
+{
+    int paren_count = 0;
+    int i = 0;
+
+    while (tokens[i]) {
+        if (tokens[i][0] == OPEN_PAREN)
+            paren_count++;
+        if (tokens[i][0] != OPEN_PAREN && tokens[i][0] == CLOSE_PAREN)
+            paren_count--;
+        if (paren_count < 0)
+            return print_error(get_error_msg(ERR_MISSING_OPENING_PAREN),
+            NULL, 84);
+        i++;
+    }
+    if (paren_count > 0)
+        return print_error(get_error_msg(ERR_MISSING_CLOSING_PAREN), NULL, 84);
+    return 0;
+}
+
+/**
  * @brief Validates if the first token is valid
  *
  * @param tokens Array of tokens to validate
@@ -114,6 +140,8 @@ int validate_syntax(char **tokens)
     int i = 0;
 
     if (validate_first_token(tokens) == 84)
+        return 84;
+    if (validate_parentheses_balance(tokens) == 84)
         return 84;
     while (tokens[i]) {
         if (validate_consecutive_pipes(tokens, i) == 84)
