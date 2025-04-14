@@ -63,8 +63,8 @@ static int find_closing_parenthesis(char **tokens, int *pos, int max_pos)
  * @param max_pos : Maximum valid position in tokens.
  * @return : AST node representing the subshell, or NULL on error.
  */
-int process_redirections_after_subshell(char **tokens, int *pos, int max_pos,
-    ast_node_t *subshell_node)
+static int process_redirections_after_subshell(char **tokens, int *pos,
+    int max_pos, ast_node_t *subshell_node)
 {
     node_type_t type;
 
@@ -155,7 +155,7 @@ int handle_wait_status(int wait_status)
  * @param old_stdout Pointer to store the original output descriptor
  * @return 0 on success, error code otherwise
  */
-int setup_subshell_redirections(ast_node_t *node, int *old_stdin,
+static int setup_subshell_redirections(ast_node_t *node, int *old_stdin,
     int *old_stdout)
 {
     if (!node->redirections)
