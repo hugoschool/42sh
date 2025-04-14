@@ -28,6 +28,9 @@ int execute_pipe(ast_node_t *node);
 int execute_ast(ast_node_t *node);
 int execute_command(ast_node_t *node);
 
+// execute_builtins.c //
+int handle_builtin_command(ast_node_t *node, int old_stdin, int old_stdout);
+
 // parser_ast.c //
 int preprocess_line(char *line, char **line_copy, char ***tokens,
     int *token_count);
