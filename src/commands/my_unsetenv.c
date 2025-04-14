@@ -18,7 +18,7 @@ int check_unsetenv(char *args[])
     if (!args[1])
         return print_error(get_error_msg(ERR_UNSETENV_TOO_FEW), NULL, 1);
     if (strcmp(args[1], "*") == 0)
-        return print_error(get_error_msg(ERR_UNSETENV_ALPHA_CAR), NULL, 1);
+        return print_error(get_error_msg(ERR_UNSETENV_ALPHA_CARA), NULL, 1);
     return 0;
 }
 

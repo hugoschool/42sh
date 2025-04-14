@@ -28,7 +28,8 @@ static int handle_error(char **tokens, int count, const char *message)
  * @param tokens : The tokens array.
  * @param count : Current token count.
  * @param type : The operator character.
- * @param dbl : Flag indicating if it's a double character operator (>> or <<).
+ * @param dbl : Flag indicating if it's a double character operator
+ * (>>, <<, &&, ||).
  * @return : 0 on success, -1 on failure.
  */
 static int add_operator(char **tokens, int count, char type, int dbl)
@@ -53,7 +54,7 @@ static int add_operator(char **tokens, int count, char type, int dbl)
  * @param i : Current position in the line.
  * @return : 0 on success, -1 on failure.
  */
-static int save_current_token(token_line_t *tl, token_state_t *state, int i)
+int save_current_token(token_line_t *tl, token_state_t *state, int i)
 {
     tl->tokens[state->count] = strndup(&tl->line[state->start],
         i - state->start);
@@ -76,6 +77,8 @@ static int handle_special_token(token_line_t *tl, token_state_t *state, int i)
     int ret = 0;
     int save = 0;
 
+    if (is_logical_op(tl->line, i))
+        return handle_logical_operator(tl, state, i);
     if (state->in_token) {
         ret = save_current_token(tl, state, i);
         if (ret == -1)
@@ -167,7 +170,7 @@ static int add_last_token(token_line_t *tl, token_state_t *state)
  * @return : 0 for normal processing, 1 for whitespace, 2 for double operators,
  * -2 for errors.
  */
-static int process_token_char(token_line_t *tl, token_state_t *state, int i)
+static int handle_special_cases(token_line_t *tl, token_state_t *state, int i)
 {
     int ret;
 
@@ -177,12 +180,25 @@ static int process_token_char(token_line_t *tl, token_state_t *state, int i)
         ret = handle_whitespace(tl, state, i);
         return (ret == -1) ? -2 : 1;
     }
+    if (!(state->in_quotes) && is_logical_op(tl->line, i)) {
+        ret = handle_logical_operator(tl, state, i);
+        return (ret == -1) ? -2 : 2;
+    }
     if (!(state->in_quotes) && is_special_token(tl->line[i])) {
         ret = handle_special_token(tl, state, i);
         if (ret == -1)
             return -2;
         return ret == 1 ? 2 : 1;
     }
+    return 0;
+}
+
+static int process_token_char(token_line_t *tl, token_state_t *state, int i)
+{
+    int special_result = handle_special_cases(tl, state, i);
+
+    if (special_result != 0)
+        return special_result;
     if (!(state->in_token)) {
         state->start = i;
         state->in_token = 1;

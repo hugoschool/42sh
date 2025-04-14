@@ -39,4 +39,7 @@ ast_node_t *parse_pipeline(char **tokens, int *pos, int max_pos);
 // setup_redirection.c //
 int setup_redirections(ast_node_t *node);
 
+// validate_syntax.c //
+int validate_syntax(char **tokens);
+
 #endif //AST_H

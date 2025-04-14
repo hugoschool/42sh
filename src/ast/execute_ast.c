@@ -22,6 +22,10 @@ int execute_ast(ast_node_t *node)
             return execute_command(node);
         case NODE_PIPE:
             return execute_pipe(node);
+        case NODE_AND:
+            return execute_logical(node, 1);
+        case NODE_OR:
+            return execute_logical(node, 0);
         case NODE_SEMICOLON:
             execute_ast(node->left);
             if (!node->right)
