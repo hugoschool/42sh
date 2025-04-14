@@ -57,4 +57,8 @@ int set_redirection(simple_command_t *cmd, redirection_type_t type,
 // path_handler.c //
 void execute_command_path(char *args[]);
 
+// config_files.c //
+int main_execute_command(char *line);
+void setup_config_files(void);
+
 #endif //MYSH_H
