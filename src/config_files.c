@@ -29,12 +29,12 @@ static char *file_in_home(void)
 
     if (!home)
         return NULL;
-    path = malloc(sizeof(char) * (strlen(home) + 9));
+    path = malloc(sizeof(char) * (strlen(home) + strlen(CONFIG_FILE) + 1));
     if (!path)
         return NULL;
     strcpy(path, home);
     strcat(path, "/");
-    strcat(path, ".42shrc");
+    strcat(path, CONFIG_FILE);
     if (access(path, R_OK) == 0)
         return path;
     free(path);
@@ -49,7 +49,7 @@ void setup_config_files(void)
     char *buf = NULL;
     char *home_path = file_in_home();
     size_t size = 0;
-    FILE *fd = home_path == NULL ? fopen(".42shrc", "r") :
+    FILE *fd = home_path == NULL ? fopen(CONFIG_FILE, "r") :
         fopen(home_path, "r");
 
     if (!fd) {

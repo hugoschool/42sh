@@ -24,6 +24,7 @@
     #define HEREDOC "heredoc"
     #define CORE_DUMPED " (core dumped)\n"
     #define PROMPT "$> "
+    #define CONFIG_FILE ".42shrc"
 
     #include <stdlib.h>
     #include <stdio.h>
