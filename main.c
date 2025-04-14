@@ -49,7 +49,8 @@ static void display_prompt(void)
         if (git != NULL) {
             getline(&line, &n, git);
             strstr(line, "\n")[0] = '\0';
-            printf(COLOR_BLUE" git:%s%s", COLOR_RED,&(strstr(line, "ds/")[3]));
+            printf(COLOR_BLUE" git:%s%s", COLOR_RED,
+                &(strstr(line, "ds/")[3]));
             fclose(git);
         }
         printf(COLOR_CYAN" $> "COLOR_NONE);
