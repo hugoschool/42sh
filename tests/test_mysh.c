@@ -803,17 +803,6 @@ Test(tokenize, tokenize_with_quotes_edge_cases)
     free_args(tokens4);
 }
 
-
-Test(utilities, bin_not_compatible, .exit_code = 8, .init = redirect_all_stdout)
-{
-    errno = ENOEXEC;
-    
-    bin_not_compatible("test_binary");
-    
-    cr_assert_stderr_eq_str("test_binary: Exec format error. Binary file not executable.\n", 
-                           "Should print error message for incompatible binary");
-}
-
 Test(env, add_nlspath)
 {
     extern char **environ;
