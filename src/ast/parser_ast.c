@@ -61,9 +61,36 @@ static char *free_tokens_and_line(char **tokens, char *line_copy,
 }
 
 /**
+ * @brief Preprocesses the tokens for parsing.
+ *
+ * Allocates token array, and tokenizes.
+ *
+ * @param line : The input command line.
+ * @param line_copy : Pointer to store the duplicated line.
+ * @param tokens : Pointer to store the token array.
+ * @param token_count : Pointer to store the token count.
+ * @return : 1 on success, 0 on error.
+ */
+static int preprocess_tokens(char *line, char **line_copy, char ***tokens,
+    int *token_count)
+{
+    *tokens = allocate_tokens(line);
+    if (!*tokens) {
+        free(*line_copy);
+        return 0;
+    }
+    *token_count = process_tokens(*line_copy, *tokens);
+    if (*token_count < 0) {
+        free_tokens_and_line(*tokens, *line_copy, 0);
+        return 0;
+    }
+    return 1;
+}
+
+/**
  * @brief Preprocesses a command line for parsing.
  *
- * Trims whitespace, duplicates the line, allocates token array, and tokenizes.
+ * Trims whitespace, duplicates the line then takes care of the tokens
  *
  * @param line : The input command line.
  * @param line_copy : Pointer to store the duplicated line.
@@ -86,16 +113,8 @@ int preprocess_line(char *line, char **line_copy, char ***tokens,
         perror("strdup failed");
         return 0;
     }
-    *tokens = allocate_tokens(line);
-    if (!*tokens) {
-        free(*line_copy);
+    if (!preprocess_tokens(line, line_copy, tokens, token_count))
         return 0;
-    }
-    *token_count = process_tokens(*line_copy, *tokens);
-    if (*token_count < 0) {
-        free_tokens_and_line(*tokens, *line_copy, 0);
-        return 0;
-    }
     return 1;
 }
 
