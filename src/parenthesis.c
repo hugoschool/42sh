@@ -30,22 +30,6 @@ static ast_node_t *create_subshell_node(ast_node_t *inner)
 }
 
 /**
- * @brief Validates that a command follows the opening parenthesis.
- *
- * @param tokens : Array of tokens being parsed.
- * @param pos : Pointer to current position in tokens.
- * @param max_pos : Maximum valid position in tokens.
- * @return : 1 if valid, 0 if invalid with error message.
- */
-static int is_valid_command_after_open_paren(char **tokens, int *pos,
-    int max_pos)
-{
-    if (*pos >= max_pos || !tokens[*pos] || tokens[*pos][0] == CLOSE_PAREN)
-        return print_error(get_error_msg(ERR_INVALID_NULL_COMMAND), NULL, 0);
-    return 1;
-}
-
-/**
  * @brief Validates that a closing parenthesis exists.
  *
  * @param tokens : Array of tokens being parsed.
@@ -79,7 +63,32 @@ static int find_closing_parenthesis(char **tokens, int *pos, int max_pos)
  * @param max_pos : Maximum valid position in tokens.
  * @return : AST node representing the subshell, or NULL on error.
  */
-ast_node_t *parse_parenthesis(char **tokens, int *pos, int max_pos)
+int process_redirections_after_subshell(char **tokens, int *pos, int max_pos,
+    ast_node_t *subshell_node)
+{
+    node_type_t type;
+
+    while (*pos < max_pos && tokens[*pos] &&
+    (tokens[*pos][0] == REDIR_IN || tokens[*pos][0] == REDIR_OUT)) {
+        if (tokens[*pos][0] == REDIR_OUT)
+            type = (tokens[*pos][1] == REDIR_OUT) ? NODE_REDIR_APPEND :
+            NODE_REDIR_OUT;
+        if (tokens[*pos][0] != REDIR_OUT)
+            type = (tokens[*pos][1] == REDIR_IN) ? NODE_REDIR_HEREDOC :
+            NODE_REDIR_IN;
+        (*pos)++;
+        if (*pos >= max_pos || !tokens[*pos]) {
+            print_error(get_error_msg(ERR_NO_NAME_REDIRECTION), NULL, 0);
+            free_ast(subshell_node);
+            return 0;
+        }
+        add_redirection(subshell_node, type, tokens[*pos]);
+        (*pos)++;
+    }
+    return 1;
+}
+
+static ast_node_t *parse_parenthesis(char **tokens, int *pos, int max_pos)
 {
     ast_node_t *inner_cmd = NULL;
     ast_node_t *subshell_node = NULL;
@@ -96,11 +105,10 @@ ast_node_t *parse_parenthesis(char **tokens, int *pos, int max_pos)
         return NULL;
     *pos = end_pos + 1;
     subshell_node = create_subshell_node(inner_cmd);
-    if (!subshell_node) {
-        free_ast(inner_cmd);
-        return NULL;
-    }
-    return subshell_node;
+    if (!subshell_node)
+        return (ast_node_t *)free_ast(inner_cmd);
+    return (!process_redirections_after_subshell(tokens, pos, max_pos,
+    subshell_node)) ? NULL : subshell_node;
 }
 
 /**
@@ -140,27 +148,78 @@ int handle_wait_status(int wait_status)
 }
 
 /**
- * @brief Executes a subshell command in a child process.
+ * Set up redirections for a subshell
  *
- * @param node : The AST node to execute.
- * @return : Status code of the execution.
+ * @param node The AST node containing the redirections
+ * @param old_stdin Pointer to store the original input descriptor
+ * @param old_stdout Pointer to store the original output descriptor
+ * @return 0 on success, error code otherwise
  */
-int execute_subshell(ast_node_t *node)
+int setup_subshell_redirections(ast_node_t *node, int *old_stdin,
+    int *old_stdout)
 {
-    pid_t pid;
-    int status;
+    if (!node->redirections)
+        return 0;
+    *old_stdin = dup(STDIN_FILENO);
+    *old_stdout = dup(STDOUT_FILENO);
+    if (*old_stdin == -1 || *old_stdout == -1) {
+        perror("dup failed");
+        return 1;
+    }
+    if (setup_redirections(node) != 0) {
+        restore_redirections(*old_stdin, *old_stdout);
+        return 1;
+    }
+    return 0;
+}
 
-    if (!node || !node->left)
-        return print_error(get_error_msg(ERR_INVALID_SUBSHELL), NULL, 1);
-    pid = fork();
+/**
+ * Creates a child process and executes the AST subtree
+ *
+ * @param node The AST node containing the subtree to be executed
+ * @return PID of the child process, or -1 on error
+ */
+static pid_t fork_and_execute_ast(ast_node_t *node)
+{
+    pid_t pid = fork();
+
     if (pid == -1) {
         perror("fork failed");
-        return 1;
+        return -1;
     }
     if (pid == 0) {
         signal(SIGINT, SIG_DFL);
         exit(execute_ast(node->left));
     }
+    return pid;
+}
+
+/**
+ * Executes a subshell
+ *
+ * @param node The AST node representing the subshell
+ * @return Return code for subshell execution
+ */
+int execute_subshell(ast_node_t *node)
+{
+    pid_t pid;
+    int status;
+    int old_stdin = -1;
+    int old_stdout = -1;
+    int validation_result = validate_subshell_node(node);
+
+    if (validation_result != 0)
+        return validation_result;
+    if (setup_subshell_redirections(node, &old_stdin, &old_stdout) != 0)
+        return 1;
+    pid = fork_and_execute_ast(node);
+    if (pid == -1) {
+        if (node->redirections)
+            restore_redirections(old_stdin, old_stdout);
+        return 1;
+    }
     waitpid(pid, &status, 0);
+    if (node->redirections)
+        restore_redirections(old_stdin, old_stdout);
     return handle_wait_status(status);
 }

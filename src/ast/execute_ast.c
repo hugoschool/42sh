@@ -69,7 +69,7 @@ static int count_args(char **args)
  * @param old_stdin : The original stdin file descriptor.
  * @param old_stdout : The original stdout file descriptor.
  */
-static void restore_redirections(int old_stdin, int old_stdout)
+void restore_redirections(int old_stdin, int old_stdout)
 {
     if (old_stdin != -1) {
         dup2(old_stdin, STDIN_FILENO);

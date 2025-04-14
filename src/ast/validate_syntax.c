@@ -8,6 +8,19 @@
 #include "mysh.h"
 
 /**
+ * Checks if subshell node is valid
+ *
+ * @param node The AST node to check
+ * @return 0 if valid, error code otherwise
+ */
+int validate_subshell_node(ast_node_t *node)
+{
+    if (!node || !node->left)
+        return print_error(get_error_msg(ERR_INVALID_SUBSHELL), NULL, 1);
+    return 0;
+}
+
+/**
  * @brief Validates the balance of parentheses in a token array
  *
  * @param tokens Array of tokens to validate
