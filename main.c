@@ -44,7 +44,7 @@ static void display_prompt(void)
     size_t n = 0;
 
     getcwd(current_dir, PATH_MAX);
-    if (isatty(0) == 1) {
+    if (isatty(STDIN_FILENO)) {
         printf(COLOR_CYAN" -> %s", current_dir);
         if (git != NULL) {
             getline(&line, &n, git);
