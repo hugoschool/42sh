@@ -40,8 +40,7 @@ static ast_node_t *process_right_command(char **tokens, int *pos,
 
     if (!right) {
         print_error(get_error_msg(ERR_INVALID_NULL_COMMAND), NULL, 0);
-        free_ast(left);
-        return NULL;
+        return (ast_node_t *)free_ast(left);
     }
     return right;
 }
@@ -59,8 +58,7 @@ static ast_node_t *create_pipe_node(ast_node_t *left, ast_node_t *right)
 
     if (!pipe_node) {
         free_ast(right);
-        free_ast(left);
-        return NULL;
+        return (ast_node_t *)free_ast(left);
     }
     return pipe_node;
 }
@@ -78,7 +76,7 @@ ast_node_t *parse_pipeline(char **tokens, int *pos, int max_pos)
     ast_node_t *left = NULL;
     ast_node_t *right = NULL;
 
-    left = parse_command(tokens, pos, max_pos);
+    left = parse_command_or_subshell(tokens, pos, max_pos);
     if (!left)
         return NULL;
     while (*pos < max_pos && tokens[*pos] && tokens[*pos][0] == PIPE) {

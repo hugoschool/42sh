@@ -27,6 +27,7 @@ int execute_pipe(ast_node_t *node);
 // execute_ast.c //
 int execute_ast(ast_node_t *node);
 int execute_command(ast_node_t *node);
+void restore_redirections(int old_stdin, int old_stdout);
 
 // execute_builtins.c //
 int handle_builtin_command(ast_node_t *node, int old_stdin, int old_stdout);
@@ -45,5 +46,6 @@ void restore_redirections(int old_stdin, int old_stdout);
 
 // validate_syntax.c //
 int validate_syntax(char **tokens);
+int validate_subshell_node(ast_node_t *node);
 
 #endif //AST_H
