@@ -25,6 +25,8 @@ typedef enum {
     NONE,
     NODE_COMMAND,
     NODE_PIPE,
+    NODE_AND,
+    NODE_OR,
     NODE_SEMICOLON,
     NODE_REDIR_OUT,
     NODE_REDIR_IN,

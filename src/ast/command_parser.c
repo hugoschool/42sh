@@ -21,7 +21,8 @@ static int count_command_arguments(char **tokens, int *pos, int max_pos)
 
     while (*pos < max_pos && tokens[*pos] && tokens[*pos][0] != ';' &&
     tokens[*pos][0] != PIPE && tokens[*pos][0] != REDIR_IN &&
-    tokens[*pos][0] != REDIR_OUT) {
+    tokens[*pos][0] != REDIR_OUT && strcmp(tokens[*pos], AND_OP) != 0 &&
+    strcmp(tokens[*pos], OR_OP) != 0) {
         count++;
         (*pos)++;
     }
@@ -192,7 +193,7 @@ static ast_node_t *process_semicolon_nodes(char **tokens, int *pos,
             (*pos)++;
         if (*pos >= max_pos || !tokens[*pos])
             break;
-        right = parse_pipeline(tokens, pos, max_pos);
+        right = parse_logical_expression(tokens, pos, max_pos);
         if (!right)
             continue;
         semicolon_node = create_operator_node(NODE_SEMICOLON, left, right);
@@ -221,7 +222,7 @@ ast_node_t *parse_command_list(char **tokens, int *pos, int max_pos)
         (*pos)++;
     if (*pos >= max_pos || !tokens[*pos])
         return NULL;
-    left = parse_pipeline(tokens, pos, max_pos);
+    left = parse_logical_expression(tokens, pos, max_pos);
     if (!left)
         return NULL;
     return process_semicolon_nodes(tokens, pos, max_pos, left);

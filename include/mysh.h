@@ -47,6 +47,10 @@
     #define PIPE '|'
     #define REDIR_OUT '>'
     #define REDIR_IN '<'
+    #define AND '&'
+    #define OR '|'
+    #define AND_OP "&&"
+    #define OR_OP "||"
 
 // args_parser.c //
 int check_input(char *line, ssize_t read);
@@ -58,5 +62,11 @@ int set_redirection(simple_command_t *cmd, redirection_type_t type,
 
 // path_handler.c //
 void execute_command_path(char *args[]);
+
+// truth_table.c //
+int execute_logical(ast_node_t *node, int op_is_and);
+ast_node_t *parse_logical_expression(char **tokens, int *pos, int max_pos);
+int handle_logical_operator(token_line_t *tl, token_state_t *state,
+    int i);
 
 #endif //MYSH_H
