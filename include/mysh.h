@@ -35,6 +35,7 @@
     #include <sys/stat.h>
     #include <fcntl.h>
     #include <signal.h>
+    #include <linux/limits.h>
     #include "errors.h"
     #include "ast.h"
     #include "commands.h"
