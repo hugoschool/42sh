@@ -38,8 +38,11 @@ static void setup_signal_handlers(void)
  */
 static void display_prompt(void)
 {
-    if (isatty(STDIN_FILENO))
-        write(1, PROMPT, strlen(PROMPT));
+    char current_dir[PATH_MAX];
+
+    getcwd(current_dir, PATH_MAX);
+    if (isatty(0) == 1)
+        printf("\033[1;36m -> %s $>\033[0;0m ", current_dir);
 }
 
 /**
