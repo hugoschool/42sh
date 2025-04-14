@@ -116,3 +116,21 @@ int setup_redirections(ast_node_t *node)
     }
     return 0;
 }
+
+/**
+ * @brief Restores the original file descriptors after redirection.
+ *
+ * @param old_stdin : The original stdin file descriptor.
+ * @param old_stdout : The original stdout file descriptor.
+ */
+void restore_redirections(int old_stdin, int old_stdout)
+{
+    if (old_stdin != -1) {
+        dup2(old_stdin, STDIN_FILENO);
+        close(old_stdin);
+    }
+    if (old_stdout != -1) {
+        dup2(old_stdout, STDOUT_FILENO);
+        close(old_stdout);
+    }
+}

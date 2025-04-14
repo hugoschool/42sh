@@ -37,41 +37,6 @@ int execute_ast(ast_node_t *node)
 }
 
 /**
- * @brief Counts the number of arguments in an array.
- *
- * @param args : The array of arguments to count.
- * @return : Number of arguments in the array.
- */
-static int count_args(char **args)
-{
-    int count = 0;
-
-    if (!args)
-        return 0;
-    while (args[count])
-        count++;
-    return count;
-}
-
-/**
- * @brief Restores the original file descriptors after redirection.
- *
- * @param old_stdin : The original stdin file descriptor.
- * @param old_stdout : The original stdout file descriptor.
- */
-static void restore_redirections(int old_stdin, int old_stdout)
-{
-    if (old_stdin != -1) {
-        dup2(old_stdin, STDIN_FILENO);
-        close(old_stdin);
-    }
-    if (old_stdout != -1) {
-        dup2(old_stdout, STDOUT_FILENO);
-        close(old_stdout);
-    }
-}
-
-/**
  * @brief Sets up file descriptors for redirections and checks for errors.
  *
  * @param node : The AST node with redirections.
