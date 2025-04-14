@@ -43,7 +43,8 @@ ast_node_t *create_operator_node(node_type_t type, ast_node_t *left,
 {
     ast_node_t *node;
 
-    if (type != NODE_PIPE && type != NODE_SEMICOLON) {
+    if (type != NODE_PIPE && type != NODE_SEMICOLON &&
+    type != NODE_AND && type != NODE_OR) {
         print_error("Invalid operator node type\n", NULL, 0);
         return NULL;
     }

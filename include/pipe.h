@@ -19,5 +19,6 @@ char **tokenize_with_quotes(char *line);
 // tokenize.c //
 int handle_quotes_token(token_line_t *tl, token_state_t *state, int i);
 int tokenize(char *line, char **tokens);
+int save_current_token(token_line_t *tl, token_state_t *state, int i);
 
 #endif //PIPE_H

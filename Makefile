@@ -12,6 +12,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/ast/parser_ast.c	\
 		src/ast/pipeline_parser.c	\
 		src/ast/setup_redirection.c	\
+		src/ast/validate_syntax.c	\
 		src/commands/env.c	\
 		src/commands/executor.c	\
 		src/commands/my_cd.c	\
@@ -26,11 +27,13 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/char_utilities.c	\
 		src/utilities/error_handling.c	\
 		src/utilities/frees.c	\
+		src/utilities/is.c	\
 		src/utilities/print_help.c	\
 		src/args_parser.c	\
 		src/command_struct.c	\
 		src/path_handler.c	\
-		src/config_files.c
+		src/config_files.c	\
+		src/truth_table.c
 
 
 MAIN_SRC	= main.c
@@ -56,7 +59,7 @@ fclean: clean
 
 re: fclean all
 
-coding_style:
+coding_style: fclean
 	coding-style . > /dev/null
 	cat coding-style-reports.log
 	$(RM) coding-style-reports.log
@@ -64,7 +67,7 @@ coding_style:
 unit_tests: fclean all
 	gcc -o unit_tests tests/test_mysh.c $(SRC) -Iinclude/ \
 	--coverage -lcriterion
-	./unit_tests
+	-./unit_tests
 
 gcovr: unit_tests
 	gcovr --exclude tests --gcov-ignore-parse-errors=negative_hits.warn
