@@ -69,7 +69,6 @@ int handle_logical_operator(token_line_t *tl, token_state_t *state,
     int i);
 
 // config_files.c //
-int main_execute_command(char *line);
 void setup_config_files(void);
 
 #endif //MYSH_H
