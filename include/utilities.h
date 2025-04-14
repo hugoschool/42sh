@@ -9,6 +9,11 @@
     #define UTILITIES_H
     #include "mysh.h"
 
+    #define COLOR_CYAN "\033[1;36m"
+    #define COLOR_BLUE "\033[1;34m"
+    #define COLOR_RED "\033[1;31m"
+    #define COLOR_NONE "\033[0;0m"
+
 // bin_not_compatible.c //
 void bin_not_compatible(char *arg);
 
