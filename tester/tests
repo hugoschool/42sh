@@ -1190,7 +1190,7 @@ SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
 echo 'alias lsl "ls -la"'
-echo 'lsl /tmp'
+echo 'lsl /bin'
 [1601-END]
 
 [1602]
