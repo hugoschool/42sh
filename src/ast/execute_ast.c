@@ -29,7 +29,7 @@ int execute_ast(ast_node_t *node)
         return 0;
     switch (node->type) {
         case NODE_COMMAND:
-            return execute_command(node);
+            return wildcard(node);
         case NODE_PIPE:
             return execute_pipe(node);
         case NODE_AND:

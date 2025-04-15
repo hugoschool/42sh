@@ -37,6 +37,7 @@
     #include <fcntl.h>
     #include <signal.h>
     #include <linux/limits.h>
+    #include <dirent.h>
     #include "errors.h"
     #include "ast.h"
     #include "commands.h"
@@ -75,5 +76,8 @@ int execute_logical(ast_node_t *node, int op_is_and);
 ast_node_t *parse_logical_expression(char **tokens, int *pos, int max_pos);
 int handle_logical_operator(token_line_t *tl, token_state_t *state,
     int i);
+
+// wildcard //
+int wildcard(ast_node_t *ast);
 
 #endif //MYSH_H
