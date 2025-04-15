@@ -25,6 +25,10 @@ char *concat_args(char *args[]);
 // count_args.c //
 int count_args(char **args);
 
+// file_path.c //
+char *is_file_in_home(char *file);
+FILE *get_file_path(char *file, char *perms);
+
 // frees.c //
 void free_command(command_t *cmd);
 void free_args(char **args);

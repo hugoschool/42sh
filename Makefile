@@ -31,6 +31,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/count_args.c	\
 		src/utilities/error_handling.c	\
 		src/utilities/frees.c	\
+		src/utilities/file_path.c	\
 		src/utilities/is.c	\
 		src/utilities/prepend.c	\
 		src/utilities/print_help.c	\

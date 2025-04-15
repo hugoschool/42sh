@@ -8,16 +8,17 @@
 #include "mysh.h"
 
 // TODO: docstrings
+// TODO: change open in home to create file
 int save_history(char *line)
 {
-    FILE *file = fopen(HISTORY_FILE, "a");
-    char *temp = calloc(sizeof(char), strlen(line) + 2);
+    FILE *fd = get_file_path(HISTORY_FILE, "a");
+    char *temp = calloc(strlen(line) + 2, sizeof(char));
 
-    if (!file)
+    if (!fd)
         return 0;
     strcat(temp, line);
     strcat(temp, "\n");
-    fwrite(temp, sizeof(char), strlen(temp), file);
+    fwrite(temp, sizeof(char), strlen(temp), fd);
     free(temp);
     return 1;
 }
