@@ -16,6 +16,7 @@
     #define NLSPATH_PT2 "at:/usr/share/locale/%cl/LC_MESSAGES/%N.cat"
     #define NLSPATH_PRINT_PT1 "/usr/share/locale/%L/LC_MESSAGES/%N.c"
     #define NLSPATH_PRINT_PT2 "at:/usr/share/locale/%l/LC_MESSAGES/%N.cat\n"
+    #define ALIAS "alias"
     #define CD "cd"
     #define EXIT "exit"
     #define SETENV "setenv"

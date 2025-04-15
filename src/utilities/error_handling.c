@@ -12,7 +12,7 @@ const char *error_messages[] = {
     ": Command not found.\n",
     ": No such file or directory.\n",
     ": Not a directory.\n",
-    "Exec format error. Binary file not executable.\n",
+    ": Exec format error. Binary file not executable.\n",
     ": Cannot create file.\n",
     "cd: Too many arguments.\n",
     "setenv: Too many arguments.\n",
@@ -66,4 +66,19 @@ int print_error(char *cmd, char *msg, int nb)
     if (msg)
         write(2, msg, strlen(msg));
     return nb;
+}
+
+/**
+ * @brief Prints an error message depending on errno value.
+ *
+ * @param cmd : Command name.
+ * @return : Exit code 1.
+ */
+int get_errno_error(char *cmd)
+{
+    if (errno == ENOEXEC)
+        return print_error(cmd, get_error_msg(ERR_WRG_ARCH), 1);
+    if (errno != ENOEXEC)
+        return print_error(cmd, get_error_msg(ERR_NOT_FOUND), 1);
+    return 1;
 }

@@ -4,9 +4,8 @@ env:
     EXECUTABLES: 42sh
 
 on:
-    pull_request:
-        types: [opened]
     push:
+    pull_request:
 
 jobs:
     check_coding_style:

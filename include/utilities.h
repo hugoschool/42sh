@@ -14,13 +14,16 @@
     #define COLOR_RED "\033[1;31m"
     #define COLOR_NONE "\033[0;0m"
 
-// bin_not_compatible.c //
-void bin_not_compatible(char *arg);
-
 // char_utilities.c //
 char *trim_whitespace(char *line);
 void strip_quotes(char *str);
 void skip_whitespace(token_line_t *tl, int *i, token_state_t *state);
+
+// concat_args.c //
+char *concat_args(char *args[]);
+
+// count_args.c //
+int count_args(char **args);
 
 // frees.c //
 void free_command(command_t *cmd);
@@ -35,6 +38,9 @@ int is_valid_redirection_type(node_type_t type);
 int is_logical_op(const char *line, int i);
 int is_valid_command_after_open_paren(char **tokens, int *pos,
     int max_pos);
+
+// prepend.c //
+char *prepend(char *line, char *pre);
 
 // print_help.c //
 void print_help(void);

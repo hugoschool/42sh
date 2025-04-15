@@ -29,6 +29,9 @@ int execute_ast(ast_node_t *node);
 int execute_command(ast_node_t *node);
 void restore_redirections(int old_stdin, int old_stdout);
 
+// execute_builtins.c //
+int handle_builtin_command(ast_node_t *node, int old_stdin, int old_stdout);
+
 // parser_ast.c //
 int preprocess_line(char *line, char **line_copy, char ***tokens,
     int *token_count);
@@ -37,8 +40,9 @@ ast_node_t *parse_line(char *line);
 // pipeline_parser.c //
 ast_node_t *parse_pipeline(char **tokens, int *pos, int max_pos);
 
-// setup_redirection.c //
+// redirections.c //
 int setup_redirections(ast_node_t *node);
+void restore_redirections(int old_stdin, int old_stdout);
 
 // validate_syntax.c //
 int validate_syntax(char **tokens);

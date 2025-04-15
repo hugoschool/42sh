@@ -739,7 +739,7 @@ NAME="Aliases simple"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'alias ll="ls -l"'
+echo 'alias ll "ls -l"'
 echo 'll'
 [909-END]
 
@@ -1189,8 +1189,8 @@ NAME="Aliases - command with args"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'alias lsl="ls -la"'
-echo 'lsl /tmp'
+echo 'alias lsl "ls -la"'
+echo 'lsl /bin'
 [1601-END]
 
 [1602]
@@ -1198,8 +1198,8 @@ NAME="Aliases - listing defined alias"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'alias lsl="ls -la"'
-echo 'alias g="grep"'
+echo 'alias lsl "ls -la"'
+echo 'alias g "grep"'
 echo 'alias'
 [1602-END]
 
@@ -1216,8 +1216,8 @@ NAME="Aliases - recursive alias"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'alias list="ls"'
-echo 'alias ll="list -l"'
+echo 'alias list "ls"'
+echo 'alias ll "list -l"'
 echo 'll'
 [1604-END]
 
@@ -1226,7 +1226,7 @@ NAME="Aliases - command not found"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'alias cmd="command_not_found"'
+echo 'alias cmd "command_not_found"'
 echo 'cmd'
 [1605-END]
 
@@ -1235,9 +1235,9 @@ NAME="Aliases - with pipe/redirections"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN="rm -f /tmp/alias_test"
 TESTS=
-echo 'alias lsg="ls -la | grep"'
+echo 'alias lsg "ls -la | grep"'
 echo 'lsg total'
-echo 'alias ech="echo Hello > /tmp/alias_test"'
+echo 'alias ech "echo Hello > /tmp/alias_test"'
 echo 'ech'
 echo 'cat /tmp/alias_test'
 [1606-END]
