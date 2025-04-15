@@ -68,7 +68,12 @@ int print_error(char *cmd, char *msg, int nb)
     return nb;
 }
 
-// TODO: docstrings
+/**
+ * @brief Prints an error message depending on errno value.
+ *
+ * @param cmd : Command name.
+ * @return : Exit code 1.
+ */
 int get_errno_error(char *cmd)
 {
     if (errno == ENOEXEC)

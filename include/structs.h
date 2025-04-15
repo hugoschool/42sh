@@ -121,7 +121,12 @@ typedef struct command_s {
     int cmd_count;
 } command_t;
 
-// TODO: docstrings
+/**
+ * @brief Structure for aliases
+ *
+ * alias : name of the alias
+ * command : command replacing the alias
+ */
 typedef struct alias_s {
     char *alias;
     char *command;

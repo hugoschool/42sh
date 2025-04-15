@@ -7,8 +7,12 @@
 
 #include "mysh.h"
 
-// TODO: docstrings
-// args needs to be NULL terminated
+/**
+ * @brief Concatenates the arguments of all arguments seperated by a space.
+ *
+ * @param args : Arguments given by a NULL terminated char array.
+ * @return : A concatenated strings if successful, NULL if not.
+ */
 char *concat_args(char *args[])
 {
     char *str = NULL;

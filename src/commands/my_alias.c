@@ -3,11 +3,16 @@
 ** 42sh
 ** File description:
 ** my_alias.c
-** TODO: add docstrings
 */
 
 #include "mysh.h"
 
+/**
+ * @brief Gets the size of the aliases array.
+ *
+ * @param aliases : A NULL terminated aliases array.
+ * @return : The size of the aliases array.
+*/
 int get_alias_size(alias_t **aliases)
 {
     int i = 0;
@@ -18,6 +23,12 @@ int get_alias_size(alias_t **aliases)
     return i;
 }
 
+/**
+ * @brief Retrieves the aliases OR sets new aliases.
+ *
+ * @param new_aliases : A NULL terminated aliases array.
+ * @return : The aliases array.
+*/
 alias_t **my_getaliases(alias_t **new_aliases)
 {
     static alias_t **aliases = NULL;
@@ -27,7 +38,13 @@ alias_t **my_getaliases(alias_t **new_aliases)
     return aliases;
 }
 
-// command is a concatenate of all arguments
+/**
+ * @brief Retrieves the aliases OR sets new aliases.
+ *
+ * @param alias : The alias.
+ * @param command : The command you want to replace for the aliases.
+ * @return : The new aliases array.
+*/
 alias_t **my_setaliases(char *alias, char *command)
 {
     alias_t **aliases = my_getaliases(NULL);
@@ -47,6 +64,13 @@ alias_t **my_setaliases(char *alias, char *command)
     return my_getaliases(aliases);
 }
 
+/**
+ * @brief Gets the alias command from the aliases array.
+ *
+ * @param alias : The alias you want to check if present in aliases array.
+ * @return : If found, the command of the alias from aliases array.
+ * If not, NULL.
+*/
 static char *get_alias_command(char *alias)
 {
     alias_t **aliases = my_getaliases(NULL);
@@ -60,6 +84,12 @@ static char *get_alias_command(char *alias)
     return NULL;
 }
 
+/**
+ * @brief Replaces the given string by the command of the alias.
+ *
+ * @param line : The string to be replaced.
+ * @return : If found, newly replaced aliased command. If not, NULL.
+*/
 char *replace_alias_line(char *line)
 {
     alias_t **alias = my_getaliases(NULL);
@@ -78,6 +108,13 @@ char *replace_alias_line(char *line)
     return str;
 }
 
+/**
+ * @brief The builtin command for aliases.
+ *
+ * @param args : A NULL terminated arguments array.
+ * @param count : The amount of arguments in the arguments array.
+ * @return : Exit code for that builtin.
+*/
 int my_alias(char *args[], int count)
 {
     alias_t **aliases = my_getaliases(NULL);
