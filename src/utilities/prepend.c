@@ -16,7 +16,7 @@
  */
 char *prepend(char *line, char *pre)
 {
-    char *str = calloc(sizeof(char), strlen(pre) + strlen(line) + 1);
+    char *str = calloc(strlen(pre) + strlen(line) + 1, sizeof(char));
 
     if (!str)
         return NULL;

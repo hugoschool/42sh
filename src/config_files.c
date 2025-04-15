@@ -29,7 +29,7 @@ static char *file_in_home(void)
 
     if (!home)
         return NULL;
-    path = malloc(sizeof(char) * (strlen(home) + strlen(CONFIG_FILE) + 1));
+    path = malloc(sizeof(char) * (strlen(home) + strlen(CONFIG_FILE) + 2));
     if (!path)
         return NULL;
     strcpy(path, home);
