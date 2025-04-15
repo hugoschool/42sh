@@ -31,6 +31,9 @@ int my_exit(char *args[]);
 void add_nlspath(char **environ, char *args[]);
 char *my_getenv(const char *name);
 
+// my_history //
+int save_history(char *line);
+
 // my_setenv //
 int my_setenv(char *args[], int count);
 

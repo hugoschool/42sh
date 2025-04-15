@@ -20,6 +20,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/commands/my_cd.c	\
 		src/commands/my_exit.c	\
 		src/commands/my_getenv.c	\
+		src/commands/my_history.c	\
 		src/commands/my_setenv.c	\
 		src/commands/my_unsetenv.c	\
 		src/pipe/redirection.c	\

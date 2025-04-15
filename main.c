@@ -126,6 +126,8 @@ int main(void)
         display_prompt();
         if (!read_command_line(&line, &len, &read))
             handle_eof(line, last_status);
+        if (!save_history(line))
+            continue;
         if (process_special_commands(line, last_status))
             continue;
         last_status = main_execute_command(line);
