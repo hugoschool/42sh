@@ -25,7 +25,7 @@ const char *error_messages[] = {
     "Missing name for redirection\n"
     "Invalid null command.\n",
     "exit: Expression Syntax.\n",
-    "exit: Badly formed number.\n",
+    ": Badly formed number.\n",
     ": Failed to create heredoc.\n"
     "Unknown node type\n",
     "setenv: Variable name must begin with a letter.\n",

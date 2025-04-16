@@ -68,9 +68,11 @@ static void read_n_last_lines(long n)
 }
 
 // TODO: docstrings
-// TODO: error handling here
+// TODO: error handling here such as badly formed number
 int my_history(char *args[], int count)
 {
+    if (strncmp(args[0], HISTORY_BANG, strlen(HISTORY_BANG)) == 0)
+        return my_history_bang(args, count);
     if (count == 0)
         read_entire_file();
     if (count == 1)

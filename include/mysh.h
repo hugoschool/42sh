@@ -20,6 +20,7 @@
     #define CD "cd"
     #define EXIT "exit"
     #define HISTORY "history"
+    #define HISTORY_BANG "!"
     #define SETENV "setenv"
     #define UNSETENV "unsetenv"
     #define ENV "env"

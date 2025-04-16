@@ -51,7 +51,8 @@ static int handle_most_builtins(char **args, int arg_count)
         return my_cd(args, arg_count);
     if (strcmp(args[0], ENV) == 0)
         return print_environment();
-    if (strcmp(args[0], HISTORY) == 0)
+    if (strcmp(args[0], HISTORY) == 0
+        || strncmp(args[0], HISTORY_BANG, strlen(HISTORY_BANG)) == 0)
         return my_history(args, arg_count);
     if (strcmp(args[0], SETENV) == 0)
         return my_setenv(args, arg_count);
