@@ -66,3 +66,17 @@ jobs:
             - name: Running tests
               timeout-minutes: 2
               run: make unit_tests -j
+
+    run_functionnal_tests:
+        name: Run functionnal tests
+        runs-on: ubuntu-latest
+        container:
+            image: epitechcontent/epitest-docker:latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+            - name: Running tests
+              timeout-minutes: 10
+              run: make func_tests -j
+            - name: Compare ran tests with currently pushed tests
+              run: git diff --exit-code tester/test_history.txt
