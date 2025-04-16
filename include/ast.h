@@ -30,6 +30,7 @@ int execute_command(ast_node_t *node);
 void restore_redirections(int old_stdin, int old_stdout);
 
 // execute_builtins.c //
+int is_builtin_command(char **args);
 int handle_builtin_command(ast_node_t *node, int old_stdin, int old_stdout);
 
 // parser_ast.c //

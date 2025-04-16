@@ -44,7 +44,7 @@ static void read_entire_file(void)
 int my_history(char *args[], int count)
 {
     (void) args;
-    if (count == 1) {
+    if (count == 0) {
         read_entire_file();
     }
     return 0;
