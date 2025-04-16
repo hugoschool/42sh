@@ -22,11 +22,11 @@ const char *error_messages[] = {
     "Ambiguous input redirect.\n",
     "Ambiguous output redirect.\n",
     "Missing name for redirect.\n",
-    "Missing name for redirection\n"
+    "Missing name for redirection\n",
     "Invalid null command.\n",
     "exit: Expression Syntax.\n",
     ": Badly formed number.\n",
-    ": Failed to create heredoc.\n"
+    ": Failed to create heredoc.\n",
     "Unknown node type\n",
     "setenv: Variable name must begin with a letter.\n",
     "setenv: Variable name must contain alphanumeric characters.\n",
