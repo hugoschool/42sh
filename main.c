@@ -112,12 +112,27 @@ static char *read_command_line(char **line, size_t *len, ssize_t *read_size)
     return *line;
 }
 
+static char *handle_unclosed_quotes(char *line, char *quote_type)
+{
+    char *multiline_buffer = NULL;
+
+    if (has_unclosed_quotes(line, quote_type)) {
+        multiline_buffer = read_multiline_quotes(line, *quote_type);
+        if (multiline_buffer != line) {
+            free(line);
+            line = multiline_buffer;
+        }
+    }
+    return line;
+}
+
 int main(void)
 {
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
     int last_status = 0;
+    char quote_type = 0;
 
     setup_environment();
     setup_signal_handlers();
@@ -126,6 +141,7 @@ int main(void)
         display_prompt();
         if (!read_command_line(&line, &len, &read))
             handle_eof(line, last_status);
+        line = handle_unclosed_quotes(line, &quote_type);
         if (process_special_commands(line, last_status))
             continue;
         last_status = main_execute_command(line);

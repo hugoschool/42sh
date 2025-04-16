@@ -38,7 +38,7 @@ void strip_quotes(char *str)
     if (!str)
         return;
     for (i = 0; i < len; i++) {
-        if ((str[i] == '\'' || str[i] == '"') &&
+        if ((str[i] == QUOTE || str[i] == DBL_QUOTE) &&
         (!in_quotes || quote_char == str[i])) {
             in_quotes = !in_quotes;
             quote_char = (in_quotes) ? str[i] : 0;

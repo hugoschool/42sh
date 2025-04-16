@@ -25,6 +25,7 @@
     #define HEREDOC "heredoc"
     #define CORE_DUMPED " (core dumped)\n"
     #define PROMPT "$> "
+    #define MULTI_PROMPT "...: "
     #define CONFIG_FILE ".42shrc"
 
     #include <stdlib.h>
@@ -54,6 +55,8 @@
     #define OR_OP "||"
     #define OPEN_PAREN '('
     #define CLOSE_PAREN ')'
+    #define QUOTE '\''
+    #define DBL_QUOTE '"'
 
 // args_parser.c //
 int check_input(char *line, ssize_t read);
@@ -62,6 +65,10 @@ int parse_args(char *line);
 // command_struct.c //
 int set_redirection(simple_command_t *cmd, redirection_type_t type,
     char *file);
+
+// multiline.c //
+int has_unclosed_quotes(const char *line, char *quote_type);
+char *read_multiline_quotes(char *initial_line, char quote_type);
 
 // parenthesis.c //
 int execute_subshell(ast_node_t *node);
