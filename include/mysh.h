@@ -56,10 +56,6 @@
     #define OPEN_PAREN '('
     #define CLOSE_PAREN ')'
 
-// args_parser.c //
-int check_input(char *line, ssize_t read);
-int parse_args(char *line);
-
 // command_struct.c //
 int set_redirection(simple_command_t *cmd, redirection_type_t type,
     char *file);

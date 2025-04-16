@@ -35,7 +35,6 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/is.c	\
 		src/utilities/prepend.c	\
 		src/utilities/print_help.c	\
-		src/args_parser.c	\
 		src/command_struct.c	\
 		src/parenthesis.c	\
 		src/path_handler.c	\
