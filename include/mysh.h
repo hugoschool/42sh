@@ -26,7 +26,6 @@
     #define ENV "env"
     #define HEREDOC "heredoc"
     #define CORE_DUMPED " (core dumped)\n"
-    #define PROMPT "$> "
     #define CONFIG_FILE ".42shrc"
     #define HISTORY_FILE ".42sh_history"
 

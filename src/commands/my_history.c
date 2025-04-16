@@ -53,7 +53,7 @@ static void read_n_last_lines(long n)
     ssize_t nread = 0;
     long i = 0;
 
-    if (!fp || lines == -1 || n <= 0)
+    if (!fp || lines == -1 || n < 0)
         return;
     while (nread != -1 && i != (lines - n + 1)) {
         nread = getline(&line, &len, fp);
@@ -75,7 +75,10 @@ int my_history(char *args[], int count)
         return my_history_bang(args, count);
     if (count == 0)
         read_entire_file();
-    if (count == 1)
-        read_n_last_lines(atol(args[1]));
+    if (count == 1) {
+        if (atol(args[1]) == 0 && strncmp(args[1], "0", 1) != 0)
+            return print_error(args[0], get_error_msg(ERR_BAD_FORMAT_NUM), 1);
+        read_n_last_lines(atol(args[1]) == 0 ? 1 : atol(args[1]));
+    }
     return 0;
 }
