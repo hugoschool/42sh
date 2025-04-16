@@ -1125,14 +1125,16 @@ echo 'cd /tmp'
 
 
 # History
-[1501]
-NAME="History - last command"
-SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
-CLEAN=""
-TESTS=
-echo 'echo "First command"'
-echo '!!'
-[1501-END]
+
+# This test will never pass because tcsh doesn't have !!
+# [1501]
+# NAME="History - last command"
+# SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+# CLEAN=""
+# TESTS=
+# echo 'echo "First command"'
+# echo '!!'
+# [1501-END]
 
 [1502]
 NAME="History - by number"
