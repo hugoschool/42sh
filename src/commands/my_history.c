@@ -11,15 +11,16 @@
 // TODO: change open in home to create file
 int save_history(char *line)
 {
-    FILE *fd = get_file_path(HISTORY_FILE, "a");
+    FILE *fp = get_file_path(HISTORY_FILE, "a");
     char *temp = calloc(strlen(line) + 2, sizeof(char));
 
-    if (!fd)
+    if (!fp)
         return 0;
     strcat(temp, line);
     strcat(temp, "\n");
-    fwrite(temp, sizeof(char), strlen(temp), fd);
+    fwrite(temp, sizeof(char), strlen(temp), fp);
     free(temp);
+    fclose(fp);
     return 1;
 }
 
