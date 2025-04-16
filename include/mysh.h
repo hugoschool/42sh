@@ -50,7 +50,7 @@
     #define REDIR_OUT '>'
     #define REDIR_IN '<'
     #define AND '&'
-    #define OR '|'
+    #define BACKSLASH '\\'
     #define AND_OP "&&"
     #define OR_OP "||"
     #define OPEN_PAREN '('
@@ -68,7 +68,8 @@ int set_redirection(simple_command_t *cmd, redirection_type_t type,
 
 // multiline.c //
 int has_unclosed_quotes(const char *line, char *quote_type);
-char *read_multiline_quotes(char *initial_line, char quote_type);
+char *read_multiline_input(char *initial_line, int check_type, void *param);
+int has_trailing_continuation(const char *line, int *is_operator);
 
 // parenthesis.c //
 int execute_subshell(ast_node_t *node);

@@ -112,12 +112,27 @@ static char *read_command_line(char **line, size_t *len, ssize_t *read_size)
     return *line;
 }
 
-static char *handle_unclosed_quotes(char *line, char *quote_type)
+/**
+ * @brief Handles line continuation and unclosed quotes in input
+ *
+ * @param line The input line to process
+ * @param quote_type Pointer to store the type of unclosed quote
+ * @return The processed line (possibly extended with additional input)
+ */
+static char *handle_line_continuation(char *line, char *quote_type)
 {
     char *multiline_buffer = NULL;
+    int is_operator = 0;
 
     if (has_unclosed_quotes(line, quote_type)) {
-        multiline_buffer = read_multiline_quotes(line, *quote_type);
+        multiline_buffer = read_multiline_input(line, 0, &quote_type);
+        if (multiline_buffer != line) {
+            free(line);
+            line = multiline_buffer;
+        }
+    }
+    if (has_trailing_continuation(line, &is_operator)) {
+        multiline_buffer = read_multiline_input(line, 1, &is_operator);
         if (multiline_buffer != line) {
             free(line);
             line = multiline_buffer;
@@ -141,7 +156,7 @@ int main(void)
         display_prompt();
         if (!read_command_line(&line, &len, &read))
             handle_eof(line, last_status);
-        line = handle_unclosed_quotes(line, &quote_type);
+        line = handle_line_continuation(line, &quote_type);
         if (process_special_commands(line, last_status))
             continue;
         last_status = main_execute_command(line);

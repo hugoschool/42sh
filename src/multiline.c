@@ -8,6 +8,36 @@
 #include "mysh.h"
 
 /**
+ * @brief Checks if a line ends with a backslash or an operator
+ *
+ * @param line The line to check
+ * @param is_operator Pointer to store if continuation is due to operator (1)
+ * or backslash (0)
+ * @return 1 if the line ends with a continuation character, 0 otherwise
+ */
+int has_trailing_continuation(const char *line, int *is_operator)
+{
+    int len = (line) ? strlen(line) : 0;
+
+    if (!line || len == 0)
+        return 0;
+    if (line[len - 1] == BACKSLASH) {
+        if (is_operator)
+            *is_operator = 0;
+        return 1;
+    }
+    if ((line[len - 1] == REDIR_IN || line[len - 1] == REDIR_OUT ||
+    line[len - 1] == PIPE || line[len - 1] == ';') ||
+    (len >= 2 && (line[len - 2] == REDIR_IN && line[len - 1] == REDIR_IN) ||
+    (line[len - 2] == REDIR_OUT && line[len - 1] == REDIR_OUT))) {
+        if (is_operator)
+            *is_operator = 1;
+        return 1;
+    }
+    return 0;
+}
+
+/**
  * @brief Checks if a line contains unclosed quotes
  *
  * @param line The line to check
@@ -34,11 +64,10 @@ int has_unclosed_quotes(const char *line, char *quote_type)
 }
 
 /**
- * @brief Reads input in multiline mode when quotes are unclosed
+ * @brief Reads input line in multiline mode
  *
- * @param initial_line The initial line with unclosed quotes
- * @param quote_type The type of unclosed quote
- * @return A complete new line or NULL on error
+ * @param line Pointer to store the read line
+ * @return Number of bytes read or -1 on error
  */
 static ssize_t read_input_line(char **line)
 {
@@ -55,6 +84,16 @@ static ssize_t read_input_line(char **line)
     return read;
 }
 
+/**
+ * @brief Appends a new line to an existing buffer
+ *
+ * @param buffer Current content buffer
+ * @param line Line to append
+ * @param initial_line The original line
+ * (to avoid freeing it if buffer == initial_line)
+ * @param read Number of bytes read in line
+ * @return Updated buffer with appended line
+ */
 static char *append_line_to_buffer(char *buffer, char *line,
     char *initial_line, ssize_t read)
 {
@@ -72,26 +111,78 @@ static char *append_line_to_buffer(char *buffer, char *line,
     return new_buffer;
 }
 
-char *read_multiline_quotes(char *initial_line, char quote_type)
+/**
+ * @brief Helper function to check if multiline input is complete
+ *
+ * @param buffer Current input buffer
+ * @param check_type Type of check to perform: 0 for quotes, 1 for continuation
+ * @param param Pointer to store quote type (for quotes) or is_operator flag
+ * (for continuation)
+ * @return 1 if more input is needed, 0 if input is complete
+ */
+static int needs_more_input(char *buffer, int check_type, void *param)
 {
-    char *buffer = initial_line;
+    if (check_type == 0)
+        return has_unclosed_quotes(buffer, (char *)param);
+    else
+        return has_trailing_continuation(buffer, (int *)param);
+}
+
+/**
+ * @brief Handles multiline input processing for both quote and continuation
+ * cases
+ *
+ * @param initial_line The initial line with unclosed quotes or continuation
+ * @param check_type Type of check to perform: 0 for quotes, 1 for continuation
+ * @param param Quote type (for quotes) or is_operator flag (for continuation)
+ * @return Complete input buffer
+ */
+static char *handle_continuation(char *buffer, int check_type, void *param)
+{
+    int buffer_len = 0;
+
+    if (check_type == 1 && !(*(int *)param)) {
+        buffer_len = strlen(buffer);
+        if (buffer_len > 0 && buffer[buffer_len - 1] == BACKSLASH)
+            buffer[buffer_len - 1] = '\0';
+    }
+    return buffer;
+}
+
+static char *continue_reading_input(char *buffer, int check_type, void *param,
+    char *initial_line)
+{
     char *line = NULL;
     ssize_t read;
-    char current_quote = quote_type;
+    int need_more;
 
-    if (!isatty(STDIN_FILENO))
-        return buffer;
     while (1) {
+        buffer = handle_continuation(buffer, check_type, param);
         read = read_input_line(&line);
         if (read == -1) {
-            free((line) ? line : NULL);
-            return buffer;
-        }
-        buffer = append_line_to_buffer(buffer, line, initial_line, read);
-        if (!has_unclosed_quotes(buffer, &current_quote)) {
             free(line);
             return buffer;
         }
+        buffer = append_line_to_buffer(buffer, line, initial_line, read);
+        need_more = needs_more_input(buffer, check_type, param);
+        if (!need_more)
+            break;
     }
+    free(line);
     return buffer;
+}
+
+char *read_multiline_input(char *initial_line, int check_type, void *param)
+{
+    int need_more;
+    char *buffer;
+
+    if (!isatty(STDIN_FILENO))
+        return initial_line;
+    buffer = initial_line;
+    buffer = handle_continuation(buffer, check_type, param);
+    need_more = needs_more_input(buffer, check_type, param);
+    if (!need_more)
+        return buffer;
+    return continue_reading_input(buffer, check_type, param, initial_line);
 }
