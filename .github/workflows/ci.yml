@@ -73,17 +73,12 @@ jobs:
         container:
             image: epitechcontent/epitest-docker:latest
         steps:
-            - name: Trying to install the latest version of git
-              run: |
-                apt-get install -y software-properties-common \
-                && apt-get update \
-                && add-apt-repository -y ppa:git-core/ppa \
-                && apt-get update \
-                && apt-get install -y git
             - name: Checkout repo
               uses: actions/checkout@v4
+            - name: Copy old test_history
+              run: cp tester/test_history.txt tester/test_history.txt.old
             - name: Running tests
               timeout-minutes: 10
               run: make func_tests -j
             - name: Compare ran tests with currently pushed tests
-              run: git diff --exit-code tester/test_history.txt
+              run: diff tester/test_history.txt.old tester/test_history.txt
