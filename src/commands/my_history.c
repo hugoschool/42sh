@@ -22,3 +22,30 @@ int save_history(char *line)
     free(temp);
     return 1;
 }
+
+static void read_entire_file(void)
+{
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t n = 0;
+    FILE *fp = get_file_path(HISTORY_FILE, "r");
+
+    if (!fp)
+        return;
+    n = getline(&line, &len, fp);
+    while (n != -1) {
+        printf("%s", line);
+        n = getline(&line, &len, fp);
+    }
+    fclose(fp);
+}
+
+// TODO: docstrings
+int my_history(char *args[], int count)
+{
+    (void) args;
+    if (count == 1) {
+        read_entire_file();
+    }
+    return 0;
+}

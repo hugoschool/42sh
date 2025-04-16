@@ -33,6 +33,7 @@ char *my_getenv(const char *name);
 
 // my_history //
 int save_history(char *line);
+int my_history(char *args[], int count);
 
 // my_setenv //
 int my_setenv(char *args[], int count);

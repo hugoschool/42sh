@@ -19,6 +19,7 @@
     #define ALIAS "alias"
     #define CD "cd"
     #define EXIT "exit"
+    #define HISTORY "history"
     #define SETENV "setenv"
     #define UNSETENV "unsetenv"
     #define ENV "env"
