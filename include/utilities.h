@@ -52,4 +52,7 @@ char *prepend(char *line, char *pre);
 // print_help.c //
 void print_help(void);
 
+// strisdigit.c //
+int strisdigit(char *str);
+
 #endif //UTILITIES_H

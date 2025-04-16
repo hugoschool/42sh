@@ -76,7 +76,8 @@ int my_history(char *args[], int count)
     if (count == 0)
         read_entire_file();
     if (count == 1) {
-        if (atol(args[1]) == 0 && strncmp(args[1], "0", 1) != 0)
+        if (strisdigit(args[1]) == 0 || (atol(args[1]) == 0
+            && strncmp(args[1], "0", 1) != 0))
             return print_error(args[0], get_error_msg(ERR_BAD_FORMAT_NUM), 1);
         read_n_last_lines(atol(args[1]) == 0 ? 1 : atol(args[1]));
     }
