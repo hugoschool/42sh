@@ -38,6 +38,7 @@
     #include <signal.h>
     #include <linux/limits.h>
     #include <dirent.h>
+    #include <glob.h>
     #include "errors.h"
     #include "ast.h"
     #include "commands.h"

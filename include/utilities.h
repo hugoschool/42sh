@@ -8,6 +8,7 @@
 #ifndef UTILITIES_H
     #define UTILITIES_H
     #include "mysh.h"
+    #include <stdbool.h>
 
     #define COLOR_CYAN "\033[1;36m"
     #define COLOR_BLUE "\033[1;34m"
@@ -44,5 +45,8 @@ char *prepend(char *line, char *pre);
 
 // print_help.c //
 void print_help(void);
+
+// dup_array //
+char **my_dup_array(char **array);
 
 #endif //UTILITIES_H
