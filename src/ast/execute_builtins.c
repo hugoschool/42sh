@@ -7,7 +7,18 @@
 
 #include "mysh.h"
 
-// TODO: replace with a builtins array
+const char *builtins[] = {
+    ALIAS,
+    CD,
+    EXIT,
+    HISTORY,
+    HISTORY_BANG,
+    SETENV,
+    UNSETENV,
+    ENV,
+    NULL
+};
+
 /**
  * @brief Checks if a node represents a builtin command.
  *
@@ -18,13 +29,11 @@ int is_builtin_command(char **args)
 {
     if (!args || !args[0])
         return 0;
-    return (strcmp(args[0], ALIAS) == 0 ||
-    strcmp(args[0], CD) == 0 ||
-    strcmp(args[0], EXIT) == 0 ||
-    strcmp(args[0], HISTORY) == 0 ||
-    strcmp(args[0], SETENV) == 0 ||
-    strcmp(args[0], UNSETENV) == 0 ||
-    strcmp(args[0], ENV) == 0);
+    for (int i = 0; builtins[i] != NULL; i++) {
+        if (strcmp(args[0], builtins[i]) == 0)
+            return 1;
+    }
+    return 0;
 }
 
 /**

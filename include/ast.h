@@ -10,6 +10,8 @@
     #include "mysh.h"
     #include "structs.h"
 
+extern const char *builtins[];
+
 // command_parser.c //
 ast_node_t *parse_command(char **tokens, int *pos, int max_pos);
 ast_node_t *parse_command_list(char **tokens, int *pos, int max_pos);
