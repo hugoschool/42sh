@@ -599,21 +599,6 @@ Test(parser, parse_line_complex)
     free_ast(node);
 }
 
-
-Test(executor, handle_builtin_commands)
-{
-    char *cd_args[] = {"cd", "/tmp", NULL};
-    int result = create_fork(cd_args, 1);
-
-    cr_assert_eq(result, 1, "cd should return 1");
-
-    char *nonexistent_args[] = {"nonexistent_command_xyz", NULL};
-    result = create_fork(nonexistent_args, 0);
-
-    cr_assert_neq(result, 0, "Nonexistent command should return error");
-}
-
-
 Test(command_struct, set_redirection)
 {
     simple_command_t cmd = {NULL, 0, {REDIR_NONE, NULL}, {REDIR_NONE, NULL}};

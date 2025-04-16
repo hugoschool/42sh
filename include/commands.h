@@ -13,7 +13,6 @@
 int print_environment(void);
 
 // executor //
-int create_fork(char *args[], int count);
 int main_execute_command(char *line);
 
 // my_alias //
