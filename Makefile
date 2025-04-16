@@ -28,6 +28,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/pipe/tokenize.c	\
 		src/utilities/char_utilities.c	\
 		src/utilities/concat_args.c	\
+		src/utilities/count_lines_file.c	\
 		src/utilities/count_args.c	\
 		src/utilities/error_handling.c	\
 		src/utilities/frees.c	\

@@ -38,15 +38,42 @@ static void read_entire_file(void)
         printf("%s", line);
         n = getline(&line, &len, fp);
     }
+    free(line);
     fclose(fp);
 }
 
 // TODO: docstrings
+// TODO: if n > lines, print whole file
+static void read_n_last_lines(long n)
+{
+    FILE *fp = get_file_path(HISTORY_FILE, "r");
+    long lines = count_lines_file(fp);
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t nread = 0;
+    long i = 0;
+
+    if (!fp || lines == -1 || n <= 0)
+        return;
+    while (nread != -1 && i != (lines - n + 1)) {
+        nread = getline(&line, &len, fp);
+        i++;
+    }
+    while (nread != -1) {
+        printf("%s", line);
+        nread = getline(&line, &len, fp);
+    }
+    free(line);
+    fclose(fp);
+}
+
+// TODO: docstrings
+// TODO: error handling here
 int my_history(char *args[], int count)
 {
-    (void) args;
-    if (count == 0) {
+    if (count == 0)
         read_entire_file();
-    }
+    if (count == 1)
+        read_n_last_lines(atol(args[1]));
     return 0;
 }

@@ -25,6 +25,9 @@ char *concat_args(char *args[]);
 // count_args.c //
 int count_args(char **args);
 
+// count_lines_file.c //
+long count_lines_file(FILE *fp);
+
 // file_path.c //
 char *is_file_in_home(char *file);
 FILE *get_file_path(char *file, char *perms);
