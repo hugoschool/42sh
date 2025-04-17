@@ -83,8 +83,6 @@ jobs:
               run: make func_tests -j
             - name: Compare ran tests with currently pushed tests
               run: |
-                declare new old ret1 ret2 num1
-                shopt -s varredir_close
                 while IFS= read -r new && IFS= read -r old <&3; do
                     num=$(echo $new | cut -d ':' -f 1)
                     ret_new=$(echo $new | cut -d ':' -f 2)
