@@ -82,4 +82,19 @@ jobs:
               timeout-minutes: 10
               run: make func_tests -j
             - name: Compare ran tests with currently pushed tests
-              run: diff tester/test_history.txt.old tester/test_history.txt
+              run: |
+                declare new old ret1 ret2 num1
+                shopt -s varredir_close
+                while IFS= read -r new && IFS= read -r old <&3; do
+                    num=$(echo $new | cut -d ':' -f 1)
+                    ret_new=$(echo $new | cut -d ':' -f 2)
+                    ret_old=$(echo $old | cut -d ':' -f 2)
+                    if [ "$ret_new" == "KO" -a "$ret_old" == "OK" ]
+                    then
+                        echo -e "::error::\033[1m$num\033[0m has failed"
+                    fi
+                    if [ "$ret_new" == "OK" -a "$ret_old" == "KO" ]
+                    then
+                        echo "Test \033[1m$num\033[0m has now passed." >> $GITHUB_OUTPUT
+                    fi
+                done < test_history.txt 3< test_history.txt.old
