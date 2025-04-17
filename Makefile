@@ -49,6 +49,7 @@ NAME	=	42sh
 
 CFLAGS += -Wall -Wextra -pedantic
 CPPFLAGS	+= -Iinclude/
+LDLIBS	+=	-lreadline
 ifeq ($(ENV), dev)
 	CFLAGS	+=	-g3
 endif
@@ -56,10 +57,10 @@ endif
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ) -lreadline
+	gcc -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	$(RM) $(OBJ) $(LIB_OBJ)
+	$(RM) $(OBJ)
 
 fclean: clean
 	$(RM) $(NAME)
