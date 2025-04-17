@@ -94,29 +94,9 @@ static void handle_eof(char *line, int last_status)
     exit(last_status);
 }
 
-/**
- * @brief Reads a command line from standard input.
- *
- * @param line : Pointer to the line buffer.
- * @param len : Pointer to the buffer size.
- * @param read_size : Pointer to store the number of bytes read.
- * @return : The line read, or NULL on EOF.
- */
-static char *read_command_line(char **line, size_t *len, ssize_t *read_size)
-{
-    *read_size = getline(line, len, stdin);
-    if (*read_size == -1)
-        return NULL;
-    if (*read_size > 0 && (*line)[*read_size - 1] == '\n')
-        (*line)[*read_size - 1] = '\0';
-    return *line;
-}
-
 int main(void)
 {
     char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
     int last_status = 0;
 
     setup_environment();
@@ -124,7 +104,8 @@ int main(void)
     setup_config_files();
     while (1) {
         display_prompt();
-        if (!read_command_line(&line, &len, &read))
+        line = readline("");
+        if (!line)
             handle_eof(line, last_status);
         if (process_special_commands(line, last_status))
             continue;

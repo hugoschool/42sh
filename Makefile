@@ -56,7 +56,7 @@ endif
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ)
+	gcc -o $(NAME) $(OBJ) -lreadline
 
 clean:
 	$(RM) $(OBJ) $(LIB_OBJ)
