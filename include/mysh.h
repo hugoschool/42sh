@@ -25,6 +25,7 @@
     #define HEREDOC "heredoc"
     #define CORE_DUMPED " (core dumped)\n"
     #define PROMPT "$> "
+    #define CONFIG_FILE ".42shrc"
 
     #include <stdlib.h>
     #include <stdio.h>
@@ -77,6 +78,9 @@ int execute_logical(ast_node_t *node, int op_is_and);
 ast_node_t *parse_logical_expression(char **tokens, int *pos, int max_pos);
 int handle_logical_operator(token_line_t *tl, token_state_t *state,
     int i);
+
+// config_files.c //
+void setup_config_files(void);
 
 // wildcard //
 int wildcard(ast_node_t *ast);

@@ -45,7 +45,7 @@ static void display_prompt(void)
 
     getcwd(current_dir, PATH_MAX);
     if (isatty(STDIN_FILENO)) {
-        printf(COLOR_CYAN" -> %s", current_dir);
+        printf(COLOR_CYAN"-> %s", current_dir);
         if (git != NULL) {
             getline(&line, &n, git);
             strstr(line, "\n")[0] = '\0';
@@ -95,24 +95,6 @@ static void handle_eof(char *line, int last_status)
 }
 
 /**
- * @brief Executes a command by parsing and processing the command line.
- *
- * @param line : The command line to execute.
- * @return : The status of the command execution.
- */
-static int main_execute_command(char *line)
-{
-    ast_node_t *root = parse_line(line);
-    int status;
-
-    if (!root)
-        return 1;
-    status = execute_ast(root);
-    free_ast(root);
-    return status;
-}
-
-/**
  * @brief Reads a command line from standard input.
  *
  * @param line : Pointer to the line buffer.
@@ -130,17 +112,16 @@ static char *read_command_line(char **line, size_t *len, ssize_t *read_size)
     return *line;
 }
 
-int main(int argc, char **argv)
+int main(void)
 {
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
     int last_status = 0;
 
-    (void)argc;
-    (void)argv;
     setup_environment();
     setup_signal_handlers();
+    setup_config_files();
     while (1) {
         display_prompt();
         if (!read_command_line(&line, &len, &read))
