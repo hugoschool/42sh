@@ -55,6 +55,10 @@
     #define OR_OP "||"
     #define OPEN_PAREN '('
     #define CLOSE_PAREN ')'
+    #define OPEN_BRACKET '['
+    #define CLOSE_BRACKET ']'
+    #define OPEN_BRACE '{'
+    #define CLOSE_BRACE '}'
     #define QUOTE '\''
     #define DBL_QUOTE '"'
 
@@ -70,6 +74,7 @@ int set_redirection(simple_command_t *cmd, redirection_type_t type,
 int has_unclosed_quotes(const char *line, char *quote_type);
 char *read_multiline_input(char *initial_line, int check_type, void *param);
 int has_trailing_continuation(const char *line, int *is_operator);
+int has_unclosed_brackets(const char *line, char *bracket_type);
 
 // parenthesis.c //
 int execute_subshell(ast_node_t *node);

@@ -119,25 +119,28 @@ static char *read_command_line(char **line, size_t *len, ssize_t *read_size)
  * @param quote_type Pointer to store the type of unclosed quote
  * @return The processed line (possibly extended with additional input)
  */
+static char *process_multiline(char *line, int type, void *param)
+{
+    char *multiline_buffer = read_multiline_input(line, type, param);
+
+    if (multiline_buffer != line) {
+        free(line);
+        line = multiline_buffer;
+    }
+    return line;
+}
+
 static char *handle_line_continuation(char *line, char *quote_type)
 {
-    char *multiline_buffer = NULL;
     int is_operator = 0;
+    char bracket_type = 0;
 
-    if (has_unclosed_quotes(line, quote_type)) {
-        multiline_buffer = read_multiline_input(line, 0, &quote_type);
-        if (multiline_buffer != line) {
-            free(line);
-            line = multiline_buffer;
-        }
-    }
-    if (has_trailing_continuation(line, &is_operator)) {
-        multiline_buffer = read_multiline_input(line, 1, &is_operator);
-        if (multiline_buffer != line) {
-            free(line);
-            line = multiline_buffer;
-        }
-    }
+    if (has_unclosed_quotes(line, quote_type))
+        line = process_multiline(line, 0, &quote_type);
+    if (has_trailing_continuation(line, &is_operator))
+        line = process_multiline(line, 1, &is_operator);
+    if (has_unclosed_brackets(line, &bracket_type))
+        line = process_multiline(line, 2, &bracket_type);
     return line;
 }
 

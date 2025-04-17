@@ -8,62 +8,6 @@
 #include "mysh.h"
 
 /**
- * @brief Checks if a line ends with a backslash or an operator
- *
- * @param line The line to check
- * @param is_operator Pointer to store if continuation is due to operator (1)
- * or backslash (0)
- * @return 1 if the line ends with a continuation character, 0 otherwise
- */
-int has_trailing_continuation(const char *line, int *is_operator)
-{
-    int len = (line) ? strlen(line) : 0;
-
-    if (!line || len == 0)
-        return 0;
-    if (line[len - 1] == BACKSLASH) {
-        if (is_operator)
-            *is_operator = 0;
-        return 1;
-    }
-    if ((line[len - 1] == REDIR_IN || line[len - 1] == REDIR_OUT ||
-    line[len - 1] == PIPE || line[len - 1] == ';') ||
-    (len >= 2 && (line[len - 2] == REDIR_IN && line[len - 1] == REDIR_IN) ||
-    (line[len - 2] == REDIR_OUT && line[len - 1] == REDIR_OUT))) {
-        if (is_operator)
-            *is_operator = 1;
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * @brief Checks if a line contains unclosed quotes
- *
- * @param line The line to check
- * @param quote_type Pointer to store the type of unclosed quote (', " or 0)
- * @return 1 if quotes are unclosed, 0 otherwise
- */
-int has_unclosed_quotes(const char *line, char *quote_type)
-{
-    char current_quote = 0;
-    int in_quotes = 0;
-
-    if (!line)
-        return 0;
-    for (int i = 0; line[i]; i++) {
-        if ((line[i] == QUOTE || line[i] == DBL_QUOTE) &&
-        (!in_quotes || line[i] == current_quote)) {
-            current_quote = (in_quotes) ? 0 : line[i];
-            in_quotes = (in_quotes) ? 0 : 1;
-        }
-    }
-    if (in_quotes && quote_type)
-        *quote_type = current_quote;
-    return in_quotes;
-}
-
-/**
  * @brief Reads input line in multiline mode
  *
  * @param line Pointer to store the read line
@@ -116,16 +60,24 @@ static char *append_line_to_buffer(char *buffer, char *line,
  *
  * @param buffer Current input buffer
  * @param check_type Type of check to perform: 0 for quotes, 1 for continuation
+ * 2 for unclosed brackets
  * @param param Pointer to store quote type (for quotes) or is_operator flag
  * (for continuation)
  * @return 1 if more input is needed, 0 if input is complete
  */
 static int needs_more_input(char *buffer, int check_type, void *param)
 {
-    if (check_type == 0)
-        return has_unclosed_quotes(buffer, (char *)param);
-    else
-        return has_trailing_continuation(buffer, (int *)param);
+    switch (check_type) {
+        case 0:
+            return has_unclosed_quotes(buffer, (char *)param);
+        case 1:
+            return has_trailing_continuation(buffer, (int *)param);
+        case 2:
+            return has_unclosed_brackets(buffer, (char *)param);
+        default:
+            return 0;
+    }
+    return 0;
 }
 
 /**
