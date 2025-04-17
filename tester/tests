@@ -1147,37 +1147,39 @@ echo 'history 42sh'
 # echo '!!'
 # [1551-END]
 
-[1552]
-NAME="History Bangs - by number"
-SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
-CLEAN=""
-TESTS=
-echo 'echo "Command 1"'
-echo 'echo "Command 2"'
-echo 'echo "Command 3"'
-echo '!2'
-[1552-END]
+# All of these tests won't work because tcsh is dependant on the session 
+# and everytime we add an echo here it will relaunch a tcsh session
+# [1552]
+# NAME="History Bangs - by number"
+# SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+# CLEAN=""
+# TESTS=
+# echo 'echo "Command 1"'
+# echo 'echo "Command 2"'
+# echo 'echo "Command 3"'
+# echo '!2'
+# [1552-END]
 
-[1553]
-NAME="History Bangs - by prefix"
-SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
-CLEAN=""
-TESTS=
-echo 'echo "Test history"'
-echo 'ls -la'
-echo '!ec'
-[1553-END]
+# [1553]
+# NAME="History Bangs - by prefix"
+# SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+# CLEAN=""
+# TESTS=
+# echo 'echo "Test history"'
+# echo 'ls -la'
+# echo '!ec'
+# [1553-END]
 
-[1554]
-NAME="History Bangs - negative research"
-SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
-CLEAN=""
-TESTS=
-echo 'echo "First"'
-echo 'echo "Second"'
-echo 'echo "Third"'
-echo '!-2'
-[1554-END]
+# [1554]
+# NAME="History Bangs - negative research"
+# SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+# CLEAN=""
+# TESTS=
+# echo 'echo "First"'
+# echo 'echo "Second"'
+# echo 'echo "Third"'
+# echo '!-2'
+# [1554-END]
 
 [1555]
 NAME="History Bangs - undefined command"

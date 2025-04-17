@@ -39,9 +39,12 @@ static int execute_last_command(char *command, char *rest)
     i = read_file(&line, &prev, command, fp);
     fclose(fp);
     if (i != 0) {
-        run_command = prepend(rest, prev ? prev : line, true);
-        printf("%s\n", run_command);
-        return main_execute_command(run_command);
+        if ((line && strcmp(command, HISTORY_BANG) == 0) || prev) {
+            run_command = prepend(rest, prev ? prev : line, true);
+            printf("%s\n", run_command);
+            return main_execute_command(run_command);
+        } else
+            return print_error(command, get_error_msg(ERR_EVENT_NOT_FOUND), 1);
     }
     return 1;
 }
