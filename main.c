@@ -141,6 +141,7 @@ int main(void)
         if (!line)
             handle_eof(line, last_status);
         line = handle_line_continuation(line, &quote_type);
+        save_history(line);
         if (process_special_commands(line, last_status))
             continue;
         last_status = main_execute_command(line);

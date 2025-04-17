@@ -94,12 +94,14 @@ char *replace_alias_line(char *line)
 {
     alias_t **alias = my_getaliases(NULL);
     char *str = NULL;
+    char *command = NULL;
 
     if (!alias)
         return NULL;
     for (int i = 0; alias[i] != NULL; i++) {
         if (strncmp(line, alias[i]->alias, strlen(alias[i]->alias)) == 0) {
-            str = prepend(&line[strlen(alias[i]->alias)], alias[i]->command);
+            command = alias[i]->command;
+            str = prepend(&line[strlen(alias[i]->alias)], command, false);
             break;
         }
     }

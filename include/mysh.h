@@ -19,15 +19,19 @@
     #define ALIAS "alias"
     #define CD "cd"
     #define EXIT "exit"
+    #define HISTORY "history"
+    #define HISTORY_BANG "!"
     #define SETENV "setenv"
     #define UNSETENV "unsetenv"
     #define ENV "env"
     #define HEREDOC "heredoc"
     #define CORE_DUMPED " (core dumped)\n"
-    #define PROMPT "$> "
     #define MULTI_PROMPT "...: "
     #define CONFIG_FILE ".42shrc"
+    #define HISTORY_FILE ".42sh_history"
 
+    #include <stdbool.h>
+    #include <ctype.h>
     #include <stdlib.h>
     #include <stdio.h>
     #include <readline/readline.h>
@@ -63,10 +67,6 @@
     #define CLOSE_BRACE '}'
     #define QUOTE '\''
     #define DBL_QUOTE '"'
-
-// args_parser.c //
-int check_input(char *line, ssize_t read);
-int parse_args(char *line);
 
 // command_struct.c //
 int set_redirection(simple_command_t *cmd, redirection_type_t type,

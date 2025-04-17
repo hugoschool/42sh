@@ -10,6 +10,8 @@
     #include "mysh.h"
     #include "structs.h"
 
+extern const char *builtins[];
+
 // command_parser.c //
 ast_node_t *parse_command(char **tokens, int *pos, int max_pos);
 ast_node_t *parse_command_list(char **tokens, int *pos, int max_pos);
@@ -30,6 +32,7 @@ int execute_command(ast_node_t *node);
 void restore_redirections(int old_stdin, int old_stdout);
 
 // execute_builtins.c //
+int is_builtin_command(char **args);
 int handle_builtin_command(ast_node_t *node, int old_stdin, int old_stdout);
 
 // parser_ast.c //
