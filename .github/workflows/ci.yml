@@ -99,7 +99,7 @@ jobs:
                     fi
                     if [ "$ret_new" == "OK" -a "$ret_old" == "KO" ]
                     then
-                        echo "Test \033[1m$num\033[0m has now passed." >> "$GITHUB_OUTPUT"
+                        echo "test_passed=Test $num has now passed." >> "$GITHUB_OUTPUT"
                     fi
                 done
 
