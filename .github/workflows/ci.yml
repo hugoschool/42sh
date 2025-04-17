@@ -95,4 +95,4 @@ jobs:
                     then
                         echo "Test \033[1m$num\033[0m has now passed." >> $GITHUB_OUTPUT
                     fi
-                done < test_history.txt 3< test_history.txt.old
+                done < tester/test_history.txt 3< tester/test_history.txt.old
