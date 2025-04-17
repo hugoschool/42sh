@@ -19,10 +19,33 @@ char **my_dup_array(char **array)
     return n_array;
 }
 
+bool my_acces_star(char *str)
+{
+    char *token = strtok(str, "*");
+    struct stat st;
+
+    if (strchr(token, '/') != NULL) {
+        if (stat(token, &st) == -1) {
+            free(str);
+            return false;
+        }
+        if (S_ISDIR(st.st_mode)) {
+            free(str);
+            return true;
+        }
+        free(str);
+        return false;
+    }
+    free(str);
+    return true;
+}
+
 bool is_card(char *str)
 {
-    if (strchr(str, '*') != NULL)
+    if (strchr(str, '*') != NULL && my_acces_star(strdup(str))) {
+        printf("%s\n", str);
         return true;
+    }
     if (strchr(str, '?') != NULL)
         return true;
     if (strchr(str, '+') != NULL)
@@ -30,6 +53,8 @@ bool is_card(char *str)
     if (strchr(str, '@') != NULL)
         return true;
     if (strchr(str, '!') != NULL)
+        return true;
+    if (strchr(str, '[') != NULL)
         return true;
     return false;
 }
@@ -50,7 +75,6 @@ int wildcard(ast_node_t *ast)
         ast->args = my_dup_array(globbuff->gl_pathv);
     }
     globfree(globbuff);
-    execute_command(ast);
+    execute_command_path(ast->args);
     return ret;
 }
-char *end = NULL;

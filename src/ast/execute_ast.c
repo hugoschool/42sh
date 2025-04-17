@@ -29,7 +29,7 @@ int execute_ast(ast_node_t *node)
         return 0;
     switch (node->type) {
         case NODE_COMMAND:
-            return wildcard(node);
+            return execute_command(node);
         case NODE_PIPE:
             return execute_pipe(node);
         case NODE_AND:
@@ -79,7 +79,7 @@ static int setup_and_check_redirections(ast_node_t *node, int *old_stdin,
 static int execute_child_process(ast_node_t *node)
 {
     signal(SIGINT, SIG_DFL);
-    execute_command_path(node->args);
+    wildcard(node);
     return print_error(node->args[0], get_error_msg(ERR_NOT_FOUND), 1);
 }
 
