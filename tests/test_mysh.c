@@ -1322,3 +1322,270 @@ Test(subshell, execute_subshell_success)
     free(node);
     cr_assert(1, "Placeholder for complex subshell execution test");
 }
+
+Test(brackets, null_input)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets(NULL, &bracket_type), 0,
+        "has_unclosed_brackets should return 0 for NULL input");
+}
+
+Test(brackets, empty_string)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("", &bracket_type), 0,
+        "has_unclosed_brackets should return 0 for empty string");
+}
+
+Test(brackets, balanced_parentheses)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("(echo test)", &bracket_type), 0,
+        "has_unclosed_brackets should return 0 for balanced parentheses");
+}
+
+Test(brackets, balanced_mixed)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("if (test) { [echo] }", &bracket_type), 0,
+        "has_unclosed_brackets should return 0 for balanced mixed brackets");
+}
+
+Test(brackets, unclosed_parentheses)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("(echo test", &bracket_type), 1,
+        "has_unclosed_brackets should return 1 for unclosed parentheses");
+    cr_assert_eq(bracket_type, OPEN_PAREN,
+        "bracket_type should be set to OPEN_PAREN for unclosed parentheses");
+}
+
+Test(brackets, unclosed_brackets)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("[echo test", &bracket_type), 1,
+        "has_unclosed_brackets should return 1 for unclosed brackets");
+    cr_assert_eq(bracket_type, OPEN_BRACKET,
+        "bracket_type should be set to OPEN_BRACKET for unclosed brackets");
+}
+
+Test(brackets, unclosed_braces)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("{echo test", &bracket_type), 1,
+        "has_unclosed_brackets should return 1 for unclosed braces");
+    cr_assert_eq(bracket_type, OPEN_BRACE,
+        "bracket_type should be set to OPEN_BRACE for unclosed braces");
+}
+
+Test(brackets, nested_unclosed)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("([{echo test}]", &bracket_type), 1,
+        "has_unclosed_brackets should return 1 for nested unclosed brackets");
+    cr_assert_eq(bracket_type, OPEN_PAREN,
+        "bracket_type should detect the outermost unclosed parentheses");
+}
+
+Test(brackets, quotes_ignored)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("echo \"(\"", &bracket_type), 0,
+        "has_unclosed_brackets should ignore brackets in quotes");
+}
+
+Test(brackets, multiple_unclosed)
+{
+    char bracket_type = 0;
+    
+    cr_assert_eq(has_unclosed_brackets("({ test", &bracket_type), 1,
+        "has_unclosed_brackets should return 1 for multiple unclosed brackets");
+    cr_assert_eq(bracket_type, OPEN_PAREN,
+        "bracket_type should be set to OPEN_PAREN when multiple types are unclosed");
+}
+
+
+Test(continuation, null_input)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation(NULL, &is_operator), 0,
+        "has_trailing_continuation should return 0 for NULL input");
+}
+
+Test(continuation, empty_string)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("", &is_operator), 0,
+        "has_trailing_continuation should return 0 for empty string");
+}
+
+Test(continuation, no_continuation)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test", &is_operator), 0,
+        "has_trailing_continuation should return 0 when no continuation");
+}
+
+Test(continuation, backslash)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test\\", &is_operator), 1,
+        "has_trailing_continuation should return 1 for backslash");
+    cr_assert_eq(is_operator, 0,
+        "is_operator should be set to 0 for backslash");
+}
+
+Test(continuation, pipe)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test |", &is_operator), 1,
+        "has_trailing_continuation should return 1 for pipe");
+    cr_assert_eq(is_operator, 1,
+        "is_operator should be set to 1 for pipe");
+}
+
+Test(continuation, semicolon)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test ;", &is_operator), 1,
+        "has_trailing_continuation should return 1 for semicolon");
+    cr_assert_eq(is_operator, 1,
+        "is_operator should be set to 1 for semicolon");
+}
+
+Test(continuation, redirect_in)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test <", &is_operator), 1,
+        "has_trailing_continuation should return 1 for redirect in");
+    cr_assert_eq(is_operator, 1,
+        "is_operator should be set to 1 for redirect in");
+}
+
+Test(continuation, redirect_out)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test >", &is_operator), 1,
+        "has_trailing_continuation should return 1 for redirect out");
+    cr_assert_eq(is_operator, 1,
+        "is_operator should be set to 1 for redirect out");
+}
+
+Test(continuation, double_redirect_in)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test <<", &is_operator), 1,
+        "has_trailing_continuation should return 1 for double redirect in");
+    cr_assert_eq(is_operator, 1,
+        "is_operator should be set to 1 for double redirect in");
+}
+
+Test(continuation, double_redirect_out)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test >>", &is_operator), 1,
+        "has_trailing_continuation should return 1 for double redirect out");
+    cr_assert_eq(is_operator, 1,
+        "is_operator should be set to 1 for double redirect out");
+}
+
+Test(continuation, trailing_spaces)
+{
+    int is_operator = -1;
+    
+    cr_assert_eq(has_trailing_continuation("echo test\\   ", &is_operator), 1,
+        "has_trailing_continuation should handle trailing spaces");
+    cr_assert_eq(is_operator, 0,
+        "is_operator should be set to 0 for backslash with trailing spaces");
+}
+
+
+Test(quotes, null_input)
+{
+    char quote_type = 0;
+    
+    cr_assert_eq(has_unclosed_quotes(NULL, &quote_type), 0,
+        "has_unclosed_quotes should return 0 for NULL input");
+}
+
+Test(quotes, empty_string)
+{
+    char quote_type = 0;
+    
+    cr_assert_eq(has_unclosed_quotes("", &quote_type), 0,
+        "has_unclosed_quotes should return 0 for empty string");
+}
+
+Test(quotes, closed_single_quotes)
+{
+    char quote_type = 0;
+    
+    cr_assert_eq(has_unclosed_quotes("echo 'test'", &quote_type), 0,
+        "has_unclosed_quotes should return 0 for closed single quotes");
+}
+
+Test(quotes, closed_double_quotes)
+{
+    char quote_type = 0;
+    
+    cr_assert_eq(has_unclosed_quotes("echo \"test\"", &quote_type), 0,
+        "has_unclosed_quotes should return 0 for closed double quotes");
+}
+
+Test(quotes, unclosed_single_quotes)
+{
+    char quote_type = 0;
+    
+    cr_assert_eq(has_unclosed_quotes("echo 'test", &quote_type), 1,
+        "has_unclosed_quotes should return 1 for unclosed single quotes");
+    cr_assert_eq(quote_type, QUOTE,
+        "quote_type should be set to QUOTE for unclosed single quotes");
+}
+
+Test(quotes, unclosed_double_quotes)
+{
+    char quote_type = 0;
+    
+    cr_assert_eq(has_unclosed_quotes("echo \"test", &quote_type), 1,
+        "has_unclosed_quotes should return 1 for unclosed double quotes");
+    cr_assert_eq(quote_type, DBL_QUOTE,
+        "quote_type should be set to DBL_QUOTE for unclosed double quotes");
+}
+
+Test(quotes, mixed_quotes)
+{
+    char quote_type = 0;
+    
+    cr_assert_eq(has_unclosed_quotes("echo 'test\"", &quote_type), 1,
+        "has_unclosed_quotes should return 1 for mixed unclosed quotes");
+    cr_assert_eq(quote_type, QUOTE,
+        "quote_type should be set to QUOTE for mixed unclosed quotes");
+}
+
+Test(quotes, nested_quotes)
+{
+    char quote_type = 0;
+    
+    cr_assert_eq(has_unclosed_quotes("echo \"'test'\"", &quote_type), 0,
+        "has_unclosed_quotes should return 0 for nested quotes");
+}
+
