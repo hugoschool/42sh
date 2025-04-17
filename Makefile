@@ -38,6 +38,8 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/prepend.c	\
 		src/utilities/print_help.c	\
 		src/utilities/strisdigit.c	\
+		src/multiline.c	\
+		src/need_multiline.c	\
 		src/command_struct.c	\
 		src/parenthesis.c	\
 		src/path_handler.c	\
@@ -53,6 +55,7 @@ NAME	=	42sh
 
 CFLAGS += -Wall -Wextra -pedantic
 CPPFLAGS	+= -Iinclude/
+LDLIBS	+=	-lreadline
 ifeq ($(ENV), dev)
 	CFLAGS	+=	-g3
 endif
@@ -60,10 +63,10 @@ endif
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ)
+	gcc -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	$(RM) $(OBJ) $(LIB_OBJ)
+	$(RM) $(OBJ)
 
 fclean: clean
 	$(RM) $(NAME)

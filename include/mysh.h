@@ -26,6 +26,7 @@
     #define ENV "env"
     #define HEREDOC "heredoc"
     #define CORE_DUMPED " (core dumped)\n"
+    #define MULTI_PROMPT "...: "
     #define CONFIG_FILE ".42shrc"
     #define HISTORY_FILE ".42sh_history"
 
@@ -33,6 +34,8 @@
     #include <ctype.h>
     #include <stdlib.h>
     #include <stdio.h>
+    #include <readline/readline.h>
+    #include <readline/history.h>
     #include <unistd.h>
     #include <string.h>
     #include <sys/types.h>
@@ -53,15 +56,27 @@
     #define REDIR_OUT '>'
     #define REDIR_IN '<'
     #define AND '&'
-    #define OR '|'
+    #define BACKSLASH '\\'
     #define AND_OP "&&"
     #define OR_OP "||"
     #define OPEN_PAREN '('
     #define CLOSE_PAREN ')'
+    #define OPEN_BRACKET '['
+    #define CLOSE_BRACKET ']'
+    #define OPEN_BRACE '{'
+    #define CLOSE_BRACE '}'
+    #define QUOTE '\''
+    #define DBL_QUOTE '"'
 
 // command_struct.c //
 int set_redirection(simple_command_t *cmd, redirection_type_t type,
     char *file);
+
+// multiline.c //
+int has_unclosed_quotes(const char *line, char *quote_type);
+char *read_multiline_input(char *initial_line, int check_type, void *param);
+int has_trailing_continuation(const char *line, int *is_operator);
+int has_unclosed_brackets(const char *line, char *bracket_type);
 
 // parenthesis.c //
 int execute_subshell(ast_node_t *node);
