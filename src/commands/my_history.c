@@ -14,7 +14,9 @@ int save_history(char *line)
     FILE *fp = get_file_path(HISTORY_FILE, "a");
     char *temp = calloc(strlen(line) + 2, sizeof(char));
 
-    if (!fp)
+    if (!fp || !line)
+        return 0;
+    if (line[0] && line[0] == '!')
         return 0;
     strcat(temp, line);
     strcat(temp, "\n");

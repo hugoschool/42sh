@@ -29,6 +29,7 @@
     #define CONFIG_FILE ".42shrc"
     #define HISTORY_FILE ".42sh_history"
 
+    #include <stdbool.h>
     #include <ctype.h>
     #include <stdlib.h>
     #include <stdio.h>

@@ -47,7 +47,7 @@ int is_valid_command_after_open_paren(char **tokens, int *pos,
     int max_pos);
 
 // prepend.c //
-char *prepend(char *line, char *pre);
+char *prepend(char *line, char *pre, bool space);
 
 // print_help.c //
 void print_help(void);
