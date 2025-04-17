@@ -42,10 +42,8 @@ bool my_acces_star(char *str)
 
 bool is_card(char *str)
 {
-    if (strchr(str, '*') != NULL && my_acces_star(strdup(str))) {
-        printf("%s\n", str);
+    if (strchr(str, '*') != NULL && my_acces_star(strdup(str)))
         return true;
-    }
     if (strchr(str, '?') != NULL)
         return true;
     if (strchr(str, '+') != NULL)
