@@ -103,7 +103,7 @@ jobs:
                     fi
                 done
 
-                if [ "$return_value" -eq "2" ]
+                if [ $return_value == 2 ]
                 then
                     exit 1
                 fi
