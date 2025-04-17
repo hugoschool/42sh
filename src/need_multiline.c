@@ -110,23 +110,31 @@ int has_unclosed_brackets(const char *line, char *bracket_type)
  * or backslash (0)
  * @return 1 if the line ends with a continuation character, 0 otherwise
  */
+static int if_line_pass(const char *line, int last)
+{
+    return (line[last] == REDIR_IN || line[last] == REDIR_OUT ||
+    line[last] == PIPE || line[last] == ';') ||
+    (last >= 1 &&
+    ((line[last - 1] == REDIR_IN && line[last] == REDIR_IN) ||
+    (line[last - 1] == REDIR_OUT && line[last] == REDIR_OUT)));
+}
+
 int has_trailing_continuation(const char *line, int *is_operator)
 {
     int len = (line) ? strlen(line) : 0;
+    int last_non_space = len - 1;
 
     if (!line || len == 0)
         return 0;
-    if (line[len - 1] == BACKSLASH) {
+    while (last_non_space >= 0 && (line[last_non_space] == ' ' ||
+    line[last_non_space] == '\t'))
+        last_non_space--;
+    if (last_non_space < 0)
+        return 0;
+    if (line[last_non_space] == BACKSLASH ||
+    if_line_pass(line, last_non_space)) {
         if (is_operator)
-            *is_operator = 0;
-        return 1;
-    }
-    if ((line[len - 1] == REDIR_IN || line[len - 1] == REDIR_OUT ||
-    line[len - 1] == PIPE || line[len - 1] == ';') ||
-    (len >= 2 && (line[len - 2] == REDIR_IN && line[len - 1] == REDIR_IN) ||
-    (line[len - 2] == REDIR_OUT && line[len - 1] == REDIR_OUT))) {
-        if (is_operator)
-            *is_operator = 1;
+            *is_operator = (line[last_non_space] == BACKSLASH) ? 0 : 1;
         return 1;
     }
     return 0;
