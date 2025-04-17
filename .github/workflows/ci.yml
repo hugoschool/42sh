@@ -86,6 +86,7 @@ jobs:
               run: |
                 mapfile -t new < tester/test_history.txt
                 mapfile -t old < tester/test_history.txt.old
+                return_value=1
 
                 for i in "${!new[@]}"; do
                     num=$(echo ${new[$i]} | cut -d ':' -f 1)
