@@ -35,9 +35,8 @@ const char *error_messages[] = {
     "Invalid operator '|'. Did you mean '||'?\n",
     "Invalid null command after '&&'.\n",
     "Invalid null command after '||'.\n",
-    "Missing closing parenthesis.\n",
-    "Missing opening parenthesis.\n",
-    "Too many ('s.\n"
+    "Too many ('s.\n",
+    "Too many )'s.\n"
 };
 
 /**
