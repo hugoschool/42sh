@@ -29,7 +29,7 @@ typedef enum {
     ERR_NO_NAME_REDIRECTION,
     ERR_INVALID_NULL_COMMAND,
     ERR_EXIT_SYNTAX,
-    ERR_EXIT_BAD_FORMAT,
+    ERR_BAD_FORMAT_NUM,
     ERR_HEREDOC_FAILED,
     ERR_INVALID_OPERATOR,
     ERR_SETENV_BEGIN_LETTER,
@@ -38,11 +38,16 @@ typedef enum {
     ERR_INVALID_AND_OPERATOR,
     ERR_INVALID_OR_OPERATOR,
     ERR_INVALID_AND_SYNTAX,
-    ERR_INVALID_OR_SYNTAX
+    ERR_INVALID_OR_SYNTAX,
+    ERR_MISSING_CLOSING_PAREN,
+    ERR_MISSING_OPENING_PAREN,
+    ERR_EVENT_NOT_FOUND,
+    ERR_NO_MATCH
 } error_type_t;
 
 char *get_error_msg(error_type_t type);
 
 int print_error(char *cmd, char *msg, int nb);
+int get_errno_error(char *cmd);
 
 #endif // ERROR_TYPES_H

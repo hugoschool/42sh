@@ -7,32 +7,46 @@
 
 SRC	=	src/ast/command_parser.c	\
 		src/ast/create_ast.c	\
-		src/ast/execute_pipe.c	\
 		src/ast/execute_ast.c	\
+		src/ast/execute_builtins.c	\
+		src/ast/execute_pipe.c	\
 		src/ast/parser_ast.c	\
 		src/ast/pipeline_parser.c	\
-		src/ast/setup_redirection.c	\
+		src/ast/redirections.c	\
 		src/ast/validate_syntax.c	\
 		src/commands/env.c	\
 		src/commands/executor.c	\
+		src/commands/my_alias.c	\
 		src/commands/my_cd.c	\
 		src/commands/my_exit.c	\
 		src/commands/my_getenv.c	\
+		src/commands/my_history_bang.c	\
+		src/commands/my_history.c	\
 		src/commands/my_setenv.c	\
 		src/commands/my_unsetenv.c	\
 		src/pipe/redirection.c	\
 		src/pipe/tokenize_with_quotes.c	\
 		src/pipe/tokenize.c	\
-		src/utilities/bin_not_compatible.c	\
 		src/utilities/char_utilities.c	\
+		src/utilities/concat_args.c	\
+		src/utilities/count_lines_file.c	\
+		src/utilities/count_args.c	\
 		src/utilities/error_handling.c	\
 		src/utilities/frees.c	\
+		src/utilities/file_path.c	\
 		src/utilities/is.c	\
+		src/utilities/prepend.c	\
 		src/utilities/print_help.c	\
-		src/args_parser.c	\
+		src/utilities/strisdigit.c	\
+		src/multiline.c	\
+		src/need_multiline.c	\
 		src/command_struct.c	\
+		src/parenthesis.c	\
 		src/path_handler.c	\
-		src/truth_table.c
+		src/config_files.c	\
+		src/truth_table.c \
+		src/prompt.c	\
+		src/utilities/wildcards.c
 
 
 MAIN_SRC	= main.c
@@ -43,14 +57,18 @@ NAME	=	42sh
 
 CFLAGS += -Wall -Wextra -pedantic
 CPPFLAGS	+= -Iinclude/
+LDLIBS	+=	-lreadline
+ifeq ($(ENV), dev)
+	CFLAGS	+=	-g3
+endif
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ) -g3
+	gcc -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	$(RM) $(OBJ) $(LIB_OBJ)
+	$(RM) $(OBJ)
 
 fclean: clean
 	$(RM) $(NAME)

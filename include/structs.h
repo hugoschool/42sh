@@ -31,7 +31,8 @@ typedef enum {
     NODE_REDIR_OUT,
     NODE_REDIR_IN,
     NODE_REDIR_APPEND,
-    NODE_REDIR_HEREDOC
+    NODE_REDIR_HEREDOC,
+    NODE_SUBSHELL
 } node_type_t;
 
 /**
@@ -119,6 +120,17 @@ typedef struct command_s {
     simple_command_t **commands;
     int cmd_count;
 } command_t;
+
+/**
+ * @brief Structure for aliases
+ *
+ * alias : name of the alias
+ * command : command replacing the alias
+ */
+typedef struct alias_s {
+    char *alias;
+    char *command;
+} alias_t;
 
 // DATA //
 /**

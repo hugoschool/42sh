@@ -98,8 +98,7 @@ static ast_node_t *process_right_logical_command(ast_node_t *right,
             print_error(get_error_msg(ERR_INVALID_AND_SYNTAX), NULL, 0);
         if (op_type != NODE_AND)
             print_error(get_error_msg(ERR_INVALID_OR_SYNTAX), NULL, 0);
-        free_ast(left);
-        return NULL;
+        return (ast_node_t *)free_ast(left);
     }
     return right;
 }
@@ -119,8 +118,7 @@ static ast_node_t *create_logical_node(node_type_t op_type, ast_node_t *left,
 
     if (!logical_node) {
         free_ast(right);
-        free_ast(left);
-        return NULL;
+        return (ast_node_t *)free_ast(left);
     }
     return logical_node;
 }
@@ -141,16 +139,12 @@ ast_node_t *parse_logical_operator(char **tokens, int *pos, int max_pos,
     NODE_OR;
 
     (*pos)++;
-    if (!is_valid_command_after_logical(tokens, pos, max_pos, op_type)) {
-        free_ast(left);
-        return NULL;
-    }
+    if (!is_valid_command_after_logical(tokens, pos, max_pos, op_type))
+        return (ast_node_t *)free_ast(left);
     right = parse_pipeline(tokens, pos, max_pos);
     right = process_right_logical_command(right, left, op_type);
-    if (!right) {
-        free_ast(left);
-        return NULL;
-    }
+    if (!right)
+        return (ast_node_t *)free_ast(left);
     return create_logical_node(op_type, left, right);
 }
 

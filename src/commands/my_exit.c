@@ -25,8 +25,8 @@ int my_exit(char *args[])
         if (i == 0 && args[1][i] == '-')
             continue;
         if (args[1][i] < '0' || args[1][i] > '9')
-            return print_error(get_error_msg(ERR_EXIT_BAD_FORMAT),
-            NULL, 1);
+            return print_error(args[0],
+            get_error_msg(ERR_BAD_FORMAT_NUM), 1);
     }
     return atoi(args[1]);
 }

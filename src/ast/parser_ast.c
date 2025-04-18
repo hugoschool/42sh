@@ -61,9 +61,9 @@ static char *free_tokens_and_line(char **tokens, char *line_copy,
 }
 
 /**
- * @brief Preprocesses a command line for parsing.
+ * @brief Preprocesses the tokens for parsing.
  *
- * Trims whitespace, duplicates the line, allocates token array, and tokenizes.
+ * Allocates token array, and tokenizes.
  *
  * @param line : The input command line.
  * @param line_copy : Pointer to store the duplicated line.
@@ -71,17 +71,9 @@ static char *free_tokens_and_line(char **tokens, char *line_copy,
  * @param token_count : Pointer to store the token count.
  * @return : 1 on success, 0 on error.
  */
-int preprocess_line(char *line, char **line_copy, char ***tokens,
+static int preprocess_tokens(char *line, char **line_copy, char ***tokens,
     int *token_count)
 {
-    line = trim_whitespace(line);
-    if (!line)
-        return 0;
-    *line_copy = strdup(line);
-    if (!*line_copy) {
-        perror("strdup failed");
-        return 0;
-    }
     *tokens = allocate_tokens(line);
     if (!*tokens) {
         free(*line_copy);
@@ -92,6 +84,37 @@ int preprocess_line(char *line, char **line_copy, char ***tokens,
         free_tokens_and_line(*tokens, *line_copy, 0);
         return 0;
     }
+    return 1;
+}
+
+/**
+ * @brief Preprocesses a command line for parsing.
+ *
+ * Trims whitespace, duplicates the line then takes care of the tokens
+ *
+ * @param line : The input command line.
+ * @param line_copy : Pointer to store the duplicated line.
+ * @param tokens : Pointer to store the token array.
+ * @param token_count : Pointer to store the token count.
+ * @return : 1 on success, 0 on error.
+ */
+int preprocess_line(char *line, char **line_copy, char ***tokens,
+    int *token_count)
+{
+    char *aliased_line = replace_alias_line(line);
+
+    if (aliased_line)
+        line = aliased_line;
+    line = trim_whitespace(line);
+    if (!line)
+        return 0;
+    *line_copy = strdup(line);
+    if (!*line_copy) {
+        perror("strdup failed");
+        return 0;
+    }
+    if (!preprocess_tokens(line, line_copy, tokens, token_count))
+        return 0;
     return 1;
 }
 

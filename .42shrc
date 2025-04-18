@@ -1,0 +1,8 @@
+## This is the default config file
+##
+## Each comment start with a double "##" on every line
+##
+## echo -e "\033[95mAuto generated config file\033[0m"
+
+## Aliases
+alias ll "ls -l --color"

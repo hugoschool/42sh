@@ -3,11 +3,11 @@
 For this project, we will use a corporate like Git repo with branches, each branches will have it's purpose.
 
 * Main: Where the mouli will execute the code, only merge within DO NOT PUSH
-* Dev: Where we implement features, we can push here but it is more likely convinient to create a branch for every feature we implement and to merge it in the DEV
 * Test: where we develop test, to merge with dev to check everything before pushing to main
+* [feature]: everyone will dev his own feature and merge it using a pull request
 
 In case of breaking something in main branch, DO NOT PUSH, create branch hotfix and then merge it (because in the hotfix you can commit instead of the man branch)  
-This also apply for the main branch  
+This also apply for the main branch
 
 If you need help with git : [Git course by me](https://www.canva.com/design/DAGgfwSCgPc/goCja-JEPHb2s3MRiMo2ow/edit?utm_content=DAGgfwSCgPc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
 Or just ask me
@@ -40,3 +40,4 @@ Do remember to commit and push when you do anything that might goes well to save
 
 ## **Trello's link**
 
+[Trello's link](https://trello.com/invite/b/67fe1ea7899db1c0d6b29c40/ATTI3ce14c0039f72dc5986f928d6857dbaa3D07FEAE/42sh)

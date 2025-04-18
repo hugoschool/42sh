@@ -12,7 +12,7 @@ const char *error_messages[] = {
     ": Command not found.\n",
     ": No such file or directory.\n",
     ": Not a directory.\n",
-    "Exec format error. Binary file not executable.\n",
+    ": Exec format error. Binary file not executable.\n",
     ": Cannot create file.\n",
     "cd: Too many arguments.\n",
     "setenv: Too many arguments.\n",
@@ -22,11 +22,11 @@ const char *error_messages[] = {
     "Ambiguous input redirect.\n",
     "Ambiguous output redirect.\n",
     "Missing name for redirect.\n",
-    "Missing name for redirection\n"
+    "Missing name for redirection\n",
     "Invalid null command.\n",
     "exit: Expression Syntax.\n",
-    "exit: Badly formed number.\n",
-    ": Failed to create heredoc.\n"
+    ": Badly formed number.\n",
+    ": Failed to create heredoc.\n",
     "Unknown node type\n",
     "setenv: Variable name must begin with a letter.\n",
     "setenv: Variable name must contain alphanumeric characters.\n",
@@ -34,7 +34,11 @@ const char *error_messages[] = {
     "Invalid operator '&'. Did you mean '&&'?\n",
     "Invalid operator '|'. Did you mean '||'?\n",
     "Invalid null command after '&&'.\n",
-    "Invalid null command after '||'.\n"
+    "Invalid null command after '||'.\n",
+    "Too many ('s.\n",
+    "Too many )'s.\n",
+    ": Event not found.\n",
+    ": No match.\n"
 };
 
 /**
@@ -63,4 +67,19 @@ int print_error(char *cmd, char *msg, int nb)
     if (msg)
         write(2, msg, strlen(msg));
     return nb;
+}
+
+/**
+ * @brief Prints an error message depending on errno value.
+ *
+ * @param cmd : Command name.
+ * @return : Exit code 1.
+ */
+int get_errno_error(char *cmd)
+{
+    if (errno == ENOEXEC)
+        return print_error(cmd, get_error_msg(ERR_WRG_ARCH), 1);
+    if (errno != ENOEXEC)
+        return print_error(cmd, get_error_msg(ERR_NOT_FOUND), 1);
+    return 1;
 }

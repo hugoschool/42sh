@@ -38,12 +38,8 @@ static void execute_file(char *args[], char **environ, int pass)
         check_is_dir(args[0]);
         if (access(args[0], X_OK) != 0)
             exit(print_error(args[0], get_error_msg(ERR_PERMISSION), 1));
-        if (execve(args[0], args, environ) == -1 && errno == ENOEXEC) {
-            bin_not_compatible(args[0]);
-            exit(1);
-        }
-        if (execve(args[0], args, environ) == -1 && errno != ENOEXEC)
-            exit(print_error(args[0], get_error_msg(ERR_NOT_FOUND), 1));
+        if (execve(args[0], args, environ) == -1)
+            exit(get_errno_error(args[0]));
     }
 }
 
@@ -70,24 +66,6 @@ static char *get_path_value(void)
 }
 
 /**
- * @brief Attempts to execute a command using a given path.
- *
- * @param full_path : The complete path to try.
- * @param args : The command arguments.
- * @param environ : The environment variables.
- * @return : 1 if execution succeeded, 0 if failed.
- */
-static int try_execute_path(const char *full_path, char *args[],
-    char **environ)
-{
-    if (access(full_path, X_OK) == 0) {
-        execve(full_path, args, environ);
-        return 1;
-    }
-    return 0;
-}
-
-/**
  * @brief Builds a full path by combining directory and command.
  *
  * @param dir : The directory path.
@@ -98,12 +76,12 @@ static void build_full_path(const char *dir, const char *cmd, char *full_path)
 {
     int dir_len;
 
-    strncpy(full_path, dir, MAX_PATH);
+    strncpy(full_path, dir, PATH_MAX);
     dir_len = strlen(full_path);
     if (dir_len > 0 && full_path[dir_len - 1] != '/')
         strncpy(full_path + dir_len, "/", 2);
     strncpy(full_path + strlen(full_path), cmd,
-    MAX_PATH - strlen(full_path));
+    PATH_MAX - strlen(full_path));
 }
 
 /**
@@ -115,7 +93,7 @@ static void build_full_path(const char *dir, const char *cmd, char *full_path)
 static void search_in_path(char *args[], char **environ)
 {
     char *path_value;
-    char full_path[MAX_PATH];
+    char full_path[PATH_MAX];
     char *saveptr;
     char *dir;
 
@@ -125,8 +103,10 @@ static void search_in_path(char *args[], char **environ)
     dir = strtok_r(path_value, ":", &saveptr);
     while (dir) {
         build_full_path(dir, args[0], full_path);
-        if (try_execute_path(full_path, args, environ))
+        if (access(full_path, X_OK) == 0) {
+            args[0] = full_path;
             break;
+        }
         dir = strtok_r(NULL, ":", &saveptr);
     }
     free(path_value);
@@ -138,11 +118,13 @@ static void search_in_path(char *args[], char **environ)
  *
  * @param args : Arguments passed to the command.
  */
-void execute_command_path(char *args[])
+void execute_command_path(char *args[], int wc_err)
 {
     extern char **environ;
     struct stat st;
 
+    if (wc_err == -1)
+        exit(print_error(args[0], get_error_msg(ERR_NO_MATCH), 1));
     if (!environ || !args || !args[0])
         exit(1);
     if (args[0][0] == '\0')

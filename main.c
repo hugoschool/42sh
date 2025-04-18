@@ -34,15 +34,6 @@ static void setup_signal_handlers(void)
 }
 
 /**
- * @brief Displays the shell prompt if running in interactive mode.
- */
-static void display_prompt(void)
-{
-    if (isatty(STDIN_FILENO))
-        write(1, PROMPT, strlen(PROMPT));
-}
-
-/**
  * @brief Processes special commands like help and exit.
  *
  * @param line : The command line to check.
@@ -78,56 +69,53 @@ static void handle_eof(char *line, int last_status)
 }
 
 /**
- * @brief Executes a command by parsing and processing the command line.
+ * @brief Handles line continuation and unclosed quotes in input
  *
- * @param line : The command line to execute.
- * @return : The status of the command execution.
+ * @param line The input line to process
+ * @param quote_type Pointer to store the type of unclosed quote
+ * @return The processed line (possibly extended with additional input)
  */
-static int main_execute_command(char *line)
+static char *process_multiline(char *line, int type, void *param)
 {
-    ast_node_t *root = parse_line(line);
-    int status;
+    char *multiline_buffer = read_multiline_input(line, type, param);
 
-    if (!root)
-        return 1;
-    status = execute_ast(root);
-    free_ast(root);
-    return status;
+    if (multiline_buffer != line) {
+        free(line);
+        line = multiline_buffer;
+    }
+    return line;
 }
 
-/**
- * @brief Reads a command line from standard input.
- *
- * @param line : Pointer to the line buffer.
- * @param len : Pointer to the buffer size.
- * @param read_size : Pointer to store the number of bytes read.
- * @return : The line read, or NULL on EOF.
- */
-static char *read_command_line(char **line, size_t *len, ssize_t *read_size)
+static char *handle_line_continuation(char *line, char *quote_type)
 {
-    *read_size = getline(line, len, stdin);
-    if (*read_size == -1)
-        return NULL;
-    if (*read_size > 0 && (*line)[*read_size - 1] == '\n')
-        (*line)[*read_size - 1] = '\0';
-    return *line;
+    int is_operator = 0;
+    char bracket_type = 0;
+
+    if (has_unclosed_quotes(line, quote_type))
+        line = process_multiline(line, 0, &quote_type);
+    if (has_trailing_continuation(line, &is_operator))
+        line = process_multiline(line, 1, &is_operator);
+    if (has_unclosed_brackets(line, &bracket_type))
+        line = process_multiline(line, 2, &bracket_type);
+    return line;
 }
 
-int main(int argc, char **argv)
+int main(void)
 {
     char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
     int last_status = 0;
+    char quote_type = 0;
 
-    (void)argc;
-    (void)argv;
     setup_environment();
     setup_signal_handlers();
+    setup_config_files();
     while (1) {
         display_prompt();
-        if (!read_command_line(&line, &len, &read))
+        line = readline(COLOR_CYAN" $> "COLOR_NONE);
+        if (!line)
             handle_eof(line, last_status);
+        line = handle_line_continuation(line, &quote_type);
+        save_history(line);
         if (process_special_commands(line, last_status))
             continue;
         last_status = main_execute_command(line);
