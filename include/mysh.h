@@ -17,6 +17,7 @@
     #define NLSPATH_PRINT_PT1 "/usr/share/locale/%L/LC_MESSAGES/%N.c"
     #define NLSPATH_PRINT_PT2 "at:/usr/share/locale/%l/LC_MESSAGES/%N.cat\n"
     #define ALIAS "alias"
+    #define BINDKEY "bindkey"
     #define CD "cd"
     #define EXIT "exit"
     #define HISTORY "history"
@@ -70,6 +71,11 @@
     #define QUOTE '\''
     #define DBL_QUOTE '"'
 
+// bindkeys.c //
+int handle_bindkey(const char *key_seq, const char *func_name);
+void init_default_bindkeys(void);
+int my_bindkey(char *args[], int count);
+
 // command_struct.c //
 int set_redirection(simple_command_t *cmd, redirection_type_t type,
     char *file);
@@ -93,6 +99,11 @@ int execute_logical(ast_node_t *node, int op_is_and);
 ast_node_t *parse_logical_expression(char **tokens, int *pos, int max_pos);
 int handle_logical_operator(token_line_t *tl, token_state_t *state,
     int i);
+
+// setup.c //
+void setup_environment(void);
+void setup_signal_handlers(void);
+void setup_bindkeys(void);
 
 // config_files.c //
 void setup_config_files(void);

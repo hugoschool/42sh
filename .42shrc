@@ -6,3 +6,14 @@
 
 ## Aliases
 alias ll "ls -l --color"
+
+## Key Bindings
+bindkey "\C-a" beginning-of-line
+bindkey "\C-e" end-of-line
+bindkey "\C-l" clear-screen
+bindkey "\C-p" previous-history
+bindkey "\C-n" next-history
+bindkey "\C-f" forward-char
+bindkey "\C-b" backward-char
+bindkey "\M-f" forward-word
+bindkey "\M-b" backward-word

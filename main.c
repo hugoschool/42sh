@@ -7,32 +7,6 @@
 
 #include "mysh.h"
 
-/**
- * @brief Sets up the environment variables for the shell.
- *
- * Specifically, it sets the NLSPATH if not already defined.
- */
-static void setup_environment(void)
-{
-    char *args[] = {SETENV, NLSPATH,
-    NLSPATH_PRINT_PT1 NLSPATH_PRINT_PT2, NULL};
-
-    if (!my_getenv(NLSPATH))
-        my_setenv(args, 2);
-}
-
-/**
- * @brief Sets up signal handlers for the shell.
- *
- * Ignores SIGINT, SIGQUIT, and SIGTSTP signals.
- */
-static void setup_signal_handlers(void)
-{
-    signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
-    signal(SIGTSTP, SIG_IGN);
-}
-
 static void prompt_git(void)
 {
     FILE *git = fopen(".git/HEAD", "r");
@@ -145,6 +119,7 @@ int main(void)
 
     setup_environment();
     setup_signal_handlers();
+    setup_bindkeys();
     setup_config_files();
     while (1) {
         display_prompt();

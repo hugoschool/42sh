@@ -39,13 +39,15 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/print_help.c	\
 		src/utilities/strisdigit.c	\
 		src/multiline.c	\
+		src/bindkeys.c	\
 		src/need_multiline.c	\
 		src/command_struct.c	\
 		src/parenthesis.c	\
 		src/path_handler.c	\
 		src/config_files.c	\
 		src/truth_table.c \
-		src/utilities/wildcards.c
+		src/utilities/wildcards.c	\
+		src/setup.c
 
 
 MAIN_SRC	= main.c
