@@ -84,7 +84,7 @@ coding_style: fclean
 
 unit_tests: fclean all
 	gcc -o unit_tests tests/test_mysh.c $(SRC) -Iinclude/ \
-	--coverage -lcriterion
+	--coverage -lcriterion -lreadline
 	-./unit_tests
 
 gcovr: unit_tests
