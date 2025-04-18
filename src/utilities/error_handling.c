@@ -37,7 +37,8 @@ const char *error_messages[] = {
     "Invalid null command after '||'.\n",
     "Too many ('s.\n",
     "Too many )'s.\n",
-    ": Event not found.\n"
+    ": Event not found.\n",
+    ": No match.\n"
 };
 
 /**

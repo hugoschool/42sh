@@ -57,7 +57,7 @@ static char *validate_cd_args(char *args[], int count, char *old_pwd,
         print_error(get_error_msg(ERR_CD_TOO_MANY), NULL, 0);
         return NULL;
     }
-    if (!getcwd(cwd, MAX_PATH)) {
+    if (!getcwd(cwd, PATH_MAX)) {
         perror("getcwd failed");
         return NULL;
     }
@@ -77,7 +77,7 @@ static char *validate_cd_args(char *args[], int count, char *old_pwd,
  */
 static int change_directory(char *path, char *old_pwd, char *cwd)
 {
-    char new_pwd[MAX_PATH];
+    char new_pwd[PATH_MAX];
     char *set_pwd[] = {"setenv", "PWD", new_pwd, NULL};
     char *set_oldpwd[] = {"setenv", "OLDPWD", cwd, NULL};
     struct stat st;
@@ -90,8 +90,8 @@ static int change_directory(char *path, char *old_pwd, char *cwd)
         return print_error(path, get_error_msg(ERR_NOT_A_DIR), 1);
     if (access(path, X_OK) != 0 || chdir(path) != 0)
         return print_error(path, get_error_msg(ERR_PERMISSION), 1);
-    strncpy(old_pwd, cwd, MAX_PATH);
-    if (getcwd(new_pwd, MAX_PATH)) {
+    strncpy(old_pwd, cwd, PATH_MAX);
+    if (getcwd(new_pwd, PATH_MAX)) {
         my_setenv(set_pwd, 2);
         my_setenv(set_oldpwd, 2);
     }
@@ -111,8 +111,8 @@ static int change_directory(char *path, char *old_pwd, char *cwd)
  */
 int my_cd(char *args[], int count)
 {
-    static char old_pwd[MAX_PATH] = "";
-    char cwd[MAX_PATH];
+    static char old_pwd[PATH_MAX] = "";
+    char cwd[PATH_MAX];
     char *path = validate_cd_args(args, count, old_pwd, cwd);
 
     return change_directory(path, old_pwd, cwd);

@@ -7,7 +7,6 @@
 
 #ifndef MYSH_H
     #define MYSH_H
-    #define MAX_PATH 1024
     #define PATH "PATH"
     #define HOME "HOME"
     #define NLSPATH "NLSPATH"
@@ -31,6 +30,7 @@
     #define HISTORY_FILE ".42sh_history"
 
     #include <stdbool.h>
+    #include <linux/limits.h>
     #include <ctype.h>
     #include <stdlib.h>
     #include <stdio.h>
@@ -45,6 +45,8 @@
     #include <fcntl.h>
     #include <signal.h>
     #include <linux/limits.h>
+    #include <dirent.h>
+    #include <glob.h>
     #include "errors.h"
     #include "ast.h"
     #include "commands.h"
@@ -84,7 +86,7 @@ ast_node_t *parse_command_or_subshell(char **tokens, int *pos, int max_pos);
 int handle_wait_status(int wait_status);
 
 // path_handler.c //
-void execute_command_path(char *args[]);
+void execute_command_path(char *args[], int wc_err);
 
 // truth_table.c //
 int execute_logical(ast_node_t *node, int op_is_and);
@@ -94,5 +96,11 @@ int handle_logical_operator(token_line_t *tl, token_state_t *state,
 
 // config_files.c //
 void setup_config_files(void);
+
+// prompt.c //
+void display_prompt(void);
+
+// wildcard //
+int wildcard(ast_node_t *ast);
 
 #endif //MYSH_H
