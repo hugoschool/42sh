@@ -30,7 +30,6 @@
     #define HISTORY_FILE ".42sh_history"
 
     #include <stdbool.h>
-    #include <linux/limits.h>
     #include <ctype.h>
     #include <stdlib.h>
     #include <stdio.h>
