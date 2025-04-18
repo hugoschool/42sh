@@ -86,7 +86,7 @@ ast_node_t *parse_command_or_subshell(char **tokens, int *pos, int max_pos);
 int handle_wait_status(int wait_status);
 
 // path_handler.c //
-void execute_command_path(char *args[]);
+void execute_command_path(char *args[], int wc_err);
 
 // truth_table.c //
 int execute_logical(ast_node_t *node, int op_is_and);
