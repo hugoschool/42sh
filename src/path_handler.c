@@ -76,12 +76,12 @@ static void build_full_path(const char *dir, const char *cmd, char *full_path)
 {
     int dir_len;
 
-    strncpy(full_path, dir, MAX_PATH);
+    strncpy(full_path, dir, PATH_MAX);
     dir_len = strlen(full_path);
     if (dir_len > 0 && full_path[dir_len - 1] != '/')
         strncpy(full_path + dir_len, "/", 2);
     strncpy(full_path + strlen(full_path), cmd,
-    MAX_PATH - strlen(full_path));
+    PATH_MAX - strlen(full_path));
 }
 
 /**
@@ -93,7 +93,7 @@ static void build_full_path(const char *dir, const char *cmd, char *full_path)
 static void search_in_path(char *args[], char **environ)
 {
     char *path_value;
-    char full_path[MAX_PATH];
+    char full_path[PATH_MAX];
     char *saveptr;
     char *dir;
 
