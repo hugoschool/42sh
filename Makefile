@@ -45,6 +45,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/path_handler.c	\
 		src/config_files.c	\
 		src/truth_table.c \
+		src/prompt.c	\
 		src/utilities/wildcards.c
 
 

@@ -7,7 +7,6 @@
 
 #ifndef MYSH_H
     #define MYSH_H
-    #define MAX_PATH 1024
     #define PATH "PATH"
     #define HOME "HOME"
     #define NLSPATH "NLSPATH"
@@ -96,6 +95,9 @@ int handle_logical_operator(token_line_t *tl, token_state_t *state,
 
 // config_files.c //
 void setup_config_files(void);
+
+// prompt.c //
+void display_prompt(void);
 
 // wildcard //
 int wildcard(ast_node_t *ast);

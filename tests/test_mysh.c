@@ -354,10 +354,10 @@ Test(utils, print_help, .init = redirect_all_stdout)
 Test(builtin, my_cd_home, .init = redirect_all_stdout)
 {
     extern char **environ;
-    char original_dir[MAX_PATH];
+    char original_dir[PATH_MAX];
     char *home_dir;
 
-    getcwd(original_dir, MAX_PATH);
+    getcwd(original_dir, PATH_MAX);
 
     home_dir = my_getenv("HOME");
     if (!home_dir) {
@@ -369,8 +369,8 @@ Test(builtin, my_cd_home, .init = redirect_all_stdout)
 
     cr_assert_eq(result, 0, "cd to HOME should succeed");
 
-    char current_dir[MAX_PATH];
-    getcwd(current_dir, MAX_PATH);
+    char current_dir[PATH_MAX];
+    getcwd(current_dir, PATH_MAX);
 
     cr_assert_str_eq(current_dir, home_dir, "Should change to HOME directory");
 
@@ -379,18 +379,18 @@ Test(builtin, my_cd_home, .init = redirect_all_stdout)
 
 Test(builtin, my_cd_explicit_dir, .init = redirect_all_stdout)
 {
-    char original_dir[MAX_PATH];
+    char original_dir[PATH_MAX];
     char *test_dir = "/tmp";
 
-    getcwd(original_dir, MAX_PATH);
+    getcwd(original_dir, PATH_MAX);
 
     char *args[] = {"cd", test_dir, NULL};
     int result = my_cd(args, 1);
 
     cr_assert_eq(result, 0, "cd to explicit dir should succeed");
 
-    char current_dir[MAX_PATH];
-    getcwd(current_dir, MAX_PATH);
+    char current_dir[PATH_MAX];
+    getcwd(current_dir, PATH_MAX);
 
     cr_assert_str_eq(current_dir, test_dir, "Should change to specified directory");
 
