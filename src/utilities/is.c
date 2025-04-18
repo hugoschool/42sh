@@ -30,8 +30,8 @@ int is_logical_op(const char *line, int i)
 {
     if (!line || !line[i] || !line[i + 1])
         return 0;
-    return ((line[i] == '&' && line[i + 1] == '&') ||
-    (line[i] == '|' && line[i + 1] == '|'));
+    return ((line[i] == AND && line[i + 1] == AND) ||
+    (line[i] == PIPE && line[i + 1] == PIPE));
 }
 
 /**
