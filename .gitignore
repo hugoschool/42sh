@@ -21,3 +21,4 @@ coding-style-reports.log
 *.py
 test_dir
 &
+.42sh_history

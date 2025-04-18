@@ -20,6 +20,8 @@ SRC	=	src/ast/command_parser.c	\
 		src/commands/my_cd.c	\
 		src/commands/my_exit.c	\
 		src/commands/my_getenv.c	\
+		src/commands/my_history_bang.c	\
+		src/commands/my_history.c	\
 		src/commands/my_setenv.c	\
 		src/commands/my_unsetenv.c	\
 		src/pipe/redirection.c	\
@@ -27,13 +29,17 @@ SRC	=	src/ast/command_parser.c	\
 		src/pipe/tokenize.c	\
 		src/utilities/char_utilities.c	\
 		src/utilities/concat_args.c	\
+		src/utilities/count_lines_file.c	\
 		src/utilities/count_args.c	\
 		src/utilities/error_handling.c	\
 		src/utilities/frees.c	\
+		src/utilities/file_path.c	\
 		src/utilities/is.c	\
 		src/utilities/prepend.c	\
 		src/utilities/print_help.c	\
-		src/args_parser.c	\
+		src/utilities/strisdigit.c	\
+		src/multiline.c	\
+		src/need_multiline.c	\
 		src/command_struct.c	\
 		src/parenthesis.c	\
 		src/path_handler.c	\
@@ -50,6 +56,7 @@ NAME	=	42sh
 
 CFLAGS += -Wall -Wextra -pedantic
 CPPFLAGS	+= -Iinclude/
+LDLIBS	+=	-lreadline
 ifeq ($(ENV), dev)
 	CFLAGS	+=	-g3
 endif
@@ -57,10 +64,10 @@ endif
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ)
+	gcc -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	$(RM) $(OBJ) $(LIB_OBJ)
+	$(RM) $(OBJ)
 
 fclean: clean
 	$(RM) $(NAME)

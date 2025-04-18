@@ -136,24 +136,6 @@ static int wait_and_proc_status(pid_t left_pid, pid_t right_pid,
 }
 
 /**
- * @brief Checks if a node represents a builtin command.
- *
- * @param node : The AST node to check.
- * @return : 1 if the node is a builtin command, 0 otherwise.
- */
-static int is_builtin_command(ast_node_t *node)
-{
-    if (!node || !node->args || !node->args[0])
-        return 0;
-    return (strcmp(node->args[0], ALIAS) == 0 ||
-    strcmp(node->args[0], CD) == 0 ||
-    strcmp(node->args[0], EXIT) == 0 ||
-    strcmp(node->args[0], SETENV) == 0 ||
-    strcmp(node->args[0], UNSETENV) == 0 ||
-    strcmp(node->args[0], ENV) == 0);
-}
-
-/**
  * @brief Executes a pipe expression with a left and right command.
  *
  * @param node : The pipe node to execute.
@@ -166,14 +148,14 @@ int execute_pipe(ast_node_t *node)
     pid_t right_pid;
     int left_stts = 0;
     int right_stts = 0;
-    int builtin_right = is_builtin_command(node->right);
+    int r_builtin = node->right ? is_builtin_command(node->right->args) : 1;
 
     if (create_pipe(pipe_fds) != 0)
         return 1;
     left_pid = execute_left_command(pipe_fds, node);
     if (left_pid == -1)
         return 1;
-    if (builtin_right)
+    if (r_builtin)
         return execute_builtin_right(pipe_fds, node, left_pid, &left_stts);
     right_pid = execute_right_command(pipe_fds, node, left_pid);
     if (right_pid == -1)

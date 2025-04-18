@@ -1125,62 +1125,77 @@ echo 'cd /tmp'
 
 
 # History
-[1501]
-NAME="History - last command"
-SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
-CLEAN=""
-TESTS=
-echo 'echo "First command"'
-echo '!!'
-[1501-END]
-
-[1502]
-NAME="History - by number"
-SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
-CLEAN=""
-TESTS=
-echo 'echo "Command 1"'
-echo 'echo "Command 2"'
-echo 'echo "Command 3"'
-echo '!2'
-[1502-END]
 
 [1503]
-NAME="History - by prefix"
+NAME="History - Invalid number"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'echo "Test history"'
-echo 'ls -la'
-echo '!ec'
+echo 'history Hello'
+echo 'history 42sh'
 [1503-END]
 
-[1504]
-NAME="History - negative research"
-SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
-CLEAN=""
-TESTS=
-echo 'echo "First"'
-echo 'echo "Second"'
-echo 'echo "Third"'
-echo '!-2'
-[1504-END]
+# History Bangs
 
-[1505]
-NAME="History - undefined command"
+# This test will never pass because tcsh doesn't have !!
+# [1551]
+# NAME="History Bangs - last command"
+# SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+# CLEAN=""
+# TESTS=
+# echo 'echo "First command"'
+# echo '!!'
+# [1551-END]
+
+# All of these tests won't work because tcsh is dependant on the session 
+# and everytime we add an echo here it will relaunch a tcsh session
+# [1552]
+# NAME="History Bangs - by number"
+# SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+# CLEAN=""
+# TESTS=
+# echo 'echo "Command 1"'
+# echo 'echo "Command 2"'
+# echo 'echo "Command 3"'
+# echo '!2'
+# [1552-END]
+
+# [1553]
+# NAME="History Bangs - by prefix"
+# SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+# CLEAN=""
+# TESTS=
+# echo 'echo "Test history"'
+# echo 'ls -la'
+# echo '!ec'
+# [1553-END]
+
+# [1554]
+# NAME="History Bangs - negative research"
+# SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+# CLEAN=""
+# TESTS=
+# echo 'echo "First"'
+# echo 'echo "Second"'
+# echo 'echo "Third"'
+# echo '!-2'
+# [1554-END]
+
+[1555]
+NAME="History Bangs - undefined command"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
 echo '!nonexistent'
-[1505-END]
+[1555-END]
 
-[1506]
-NAME="History - incorrect syntax"
+[1556]
+NAME="History Bangs - incorrect syntax"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
 echo '!'
-[1506-END]
+[1556-END]
 
 
 # Alias advanced

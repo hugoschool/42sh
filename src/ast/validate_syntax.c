@@ -16,7 +16,7 @@
 int validate_subshell_node(ast_node_t *node)
 {
     if (!node || !node->left)
-        return print_error(get_error_msg(ERR_INVALID_SUBSHELL), NULL, 1);
+        return print_error(get_error_msg(ERR_MISSING_CLOSING_PAREN), NULL, 1);
     return 0;
 }
 

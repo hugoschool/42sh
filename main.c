@@ -95,37 +95,53 @@ static void handle_eof(char *line, int last_status)
 }
 
 /**
- * @brief Reads a command line from standard input.
+ * @brief Handles line continuation and unclosed quotes in input
  *
- * @param line : Pointer to the line buffer.
- * @param len : Pointer to the buffer size.
- * @param read_size : Pointer to store the number of bytes read.
- * @return : The line read, or NULL on EOF.
+ * @param line The input line to process
+ * @param quote_type Pointer to store the type of unclosed quote
+ * @return The processed line (possibly extended with additional input)
  */
-static char *read_command_line(char **line, size_t *len, ssize_t *read_size)
+static char *process_multiline(char *line, int type, void *param)
 {
-    *read_size = getline(line, len, stdin);
-    if (*read_size == -1)
-        return NULL;
-    if (*read_size > 0 && (*line)[*read_size - 1] == '\n')
-        (*line)[*read_size - 1] = '\0';
-    return *line;
+    char *multiline_buffer = read_multiline_input(line, type, param);
+
+    if (multiline_buffer != line) {
+        free(line);
+        line = multiline_buffer;
+    }
+    return line;
+}
+
+static char *handle_line_continuation(char *line, char *quote_type)
+{
+    int is_operator = 0;
+    char bracket_type = 0;
+
+    if (has_unclosed_quotes(line, quote_type))
+        line = process_multiline(line, 0, &quote_type);
+    if (has_trailing_continuation(line, &is_operator))
+        line = process_multiline(line, 1, &is_operator);
+    if (has_unclosed_brackets(line, &bracket_type))
+        line = process_multiline(line, 2, &bracket_type);
+    return line;
 }
 
 int main(void)
 {
     char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
     int last_status = 0;
+    char quote_type = 0;
 
     setup_environment();
     setup_signal_handlers();
     setup_config_files();
     while (1) {
         display_prompt();
-        if (!read_command_line(&line, &len, &read))
+        line = readline("");
+        if (!line)
             handle_eof(line, last_status);
+        line = handle_line_continuation(line, &quote_type);
+        save_history(line);
         if (process_special_commands(line, last_status))
             continue;
         last_status = main_execute_command(line);
