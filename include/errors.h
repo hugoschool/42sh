@@ -41,7 +41,8 @@ typedef enum {
     ERR_INVALID_OR_SYNTAX,
     ERR_MISSING_CLOSING_PAREN,
     ERR_MISSING_OPENING_PAREN,
-    ERR_EVENT_NOT_FOUND
+    ERR_EVENT_NOT_FOUND,
+    ERR_NO_MATCH
 } error_type_t;
 
 char *get_error_msg(error_type_t type);

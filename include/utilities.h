@@ -8,6 +8,7 @@
 #ifndef UTILITIES_H
     #define UTILITIES_H
     #include "mysh.h"
+    #include <stdbool.h>
 
     #define COLOR_CYAN "\033[1;36m"
     #define COLOR_BLUE "\033[1;34m"
@@ -54,5 +55,8 @@ void print_help(void);
 
 // strisdigit.c //
 int strisdigit(char *str);
+
+// dup_array //
+char **my_dup_array(char **array);
 
 #endif //UTILITIES_H

@@ -44,7 +44,8 @@ SRC	=	src/ast/command_parser.c	\
 		src/parenthesis.c	\
 		src/path_handler.c	\
 		src/config_files.c	\
-		src/truth_table.c
+		src/truth_table.c \
+		src/utilities/wildcards.c
 
 
 MAIN_SRC	= main.c
