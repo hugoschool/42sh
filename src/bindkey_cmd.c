@@ -71,6 +71,11 @@ void init_default_bindkeys(void)
  */
 int my_bindkey(char *args[], int count)
 {
+    if (count == 1 && (strcmp(args[1], "--help") == 0 ||
+    strcmp(args[1], "-h") == 0)) {
+        display_bindkey_help();
+        return 0;
+    }
     if (count == 0) {
         display_bindkeys();
         return 0;
@@ -78,5 +83,6 @@ int my_bindkey(char *args[], int count)
     if (count == 2)
         return handle_bindkey(args[1], args[2]);
     printf("Usage: bindkey [key_sequence function_name]\n");
+    printf("       bindkey --help for more information\n");
     return 1;
 }

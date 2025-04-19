@@ -36,6 +36,26 @@ static const bindkey_func_t bindkey_funcs[] = {
 };
 
 /**
+ * @brief Displays available readline functions for bindkey
+ */
+void display_bindkey_help(void)
+{
+    printf("Usage: bindkey [key_sequence function_name]\n\n");
+    printf("Available functions:\n");
+    for (int i = 0; bindkey_funcs[i].name; i++) {
+        if (i % 3 == 0 && i > 0)
+            printf("\n");
+        printf("  %-20s", bindkey_funcs[i].name);
+    }
+    printf("\n\n");
+    printf("Key sequence examples:\n");
+    printf("  \"\\C-a\"    Ctrl+A\n");
+    printf("  \"\\M-f\"    Meta+F (usually Alt+F)\n");
+    printf("  \"\\e\"      Escape key\n");
+    printf("  \"a\"       Single character 'a'\n");
+}
+
+/**
  * @brief Gets or sets the bindkey mappings
  *
  * @param new_mappings New mappings to set, or NULL to just get
