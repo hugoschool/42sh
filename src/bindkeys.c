@@ -36,6 +36,21 @@ static const bindkey_func_t bindkey_funcs[] = {
 };
 
 /**
+ * @brief Gets or sets the bindkey mappings
+ *
+ * @param new_mappings New mappings to set, or NULL to just get
+ * @return Current bindkey mappings
+ */
+bindkey_mapping_t *get_bindkey_mappings(bindkey_mapping_t *new_mappings)
+{
+    static bindkey_mapping_t *bindkey_mappings = NULL;
+    
+    if (new_mappings != NULL)
+        bindkey_mappings = new_mappings;
+    return bindkey_mappings;
+}
+
+/**
  * @brief Finds a readline function by its name
  *
  * @param func_name: Name of the readline function
@@ -104,6 +119,54 @@ static int parse_key_sequence(const char *seq)
 }
 
 /**
+ * @brief Adds a new bindkey mapping
+ *
+ * @param key_seq The key sequence string
+ * @param func_name The function name
+ */
+static void add_bindkey_mapping(const char *key_seq, const char *func_name)
+{
+    bindkey_mapping_t *new_mapping;
+    bindkey_mapping_t *current;
+    bindkey_mapping_t *mappings = get_bindkey_mappings(NULL);
+
+    current = mappings;
+    while (current) {
+        if (strcmp(current->key_seq, key_seq) == 0) {
+            free(current->func_name);
+            current->func_name = strdup(func_name);
+            return;
+        }
+        current = current->next;
+    }
+    new_mapping = malloc(sizeof(bindkey_mapping_t));
+    if (!new_mapping)
+        return;
+    new_mapping->key_seq = strdup(key_seq);
+    new_mapping->func_name = strdup(func_name);
+    new_mapping->next = mappings;
+    get_bindkey_mappings(new_mapping);
+}
+
+/**
+ * @brief Displays all defined bindkeys
+ */
+static void display_bindkeys(void)
+{
+    bindkey_mapping_t *current = get_bindkey_mappings(NULL);
+
+    if (!current) {
+        printf("No bindkey defined\n");
+        return;
+    }
+    printf("Defined key bindings:\n");
+    while (current) {
+        printf("  %-15s %s\n", current->key_seq, current->func_name);
+        current = current->next;
+    }
+}
+
+/**
  * @brief Processes a bindkey command and configures readline
  *
  * @param key_seq: Key sequence to bind
@@ -119,6 +182,7 @@ int handle_bindkey(const char *key_seq, const char *func_name)
         fprintf(stderr, "bindkey: Invalid key sequence or function\n");
         return 1;
     }
+    add_bindkey_mapping(key_seq, func_name);
     rl_bind_key(key, func);
     return 0;
 }
@@ -146,8 +210,10 @@ void init_default_bindkeys(void)
  */
 int my_bindkey(char *args[], int count)
 {
-    if (count == 0)
+    if (count == 0) {
+        display_bindkeys();
         return 0;
+    }
     if (count == 2)
         return handle_bindkey(args[1], args[2]);
     printf("Usage: bindkey [key_sequence function_name]\n");
