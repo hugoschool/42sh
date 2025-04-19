@@ -163,6 +163,24 @@ typedef struct token_line_s {
     int tokens_max;
 } token_line_t;
 
+typedef struct bindkey_func_s {
+    char *name;
+    rl_command_func_t *func;
+} bindkey_func_t;
+
+/**
+ * @brief Structure for bindkey mapping
+ *
+ * key_seq : Key sequence string (e.g. "\C-a")
+ * func_name : Name of the readline function
+ * next : Pointer to the next mapping
+ */
+typedef struct bindkey_mapping_s {
+    char *key_seq;
+    char *func_name;
+    struct bindkey_mapping_s *next;
+} bindkey_mapping_t;
+
 typedef struct env_data_s {
     char **old_env;
     char **new_env;

@@ -1455,7 +1455,7 @@ NAME="Logical operators with exit codes"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'exit 0 && echo "Should not display this"'
+echo 'exit 42 && echo "Should not display this"'
 [2015-END]
 
 [2016]

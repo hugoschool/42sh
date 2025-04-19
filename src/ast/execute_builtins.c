@@ -9,6 +9,7 @@
 
 const char *builtins[] = {
     ALIAS,
+    BINDKEY,
     CD,
     EXIT,
     HISTORY,
@@ -47,6 +48,8 @@ static int handle_most_builtins(char **args, int arg_count)
 {
     if (strcmp(args[0], ALIAS) == 0)
         return my_alias(args, arg_count);
+    if (strcmp(args[0], BINDKEY) == 0)
+        return my_bindkey(args, arg_count);
     if (strcmp(args[0], CD) == 0)
         return my_cd(args, arg_count);
     if (strcmp(args[0], ENV) == 0)
