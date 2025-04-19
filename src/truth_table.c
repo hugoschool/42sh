@@ -15,8 +15,30 @@
  * @param i : Current position in the line.
  * @return : 0 on success, -1 on failure, 1 for double operator.
  */
-int handle_logical_operator(token_line_t *tl, token_state_t *state,
-    int i)
+int assign_logical_operator(token_line_t *tl, token_state_t *state, int i)
+{
+    int pass_in_if = 0;
+
+    if (tl->line[i] == AND && tl->line[i + 1] == AND) {
+        tl->tokens[state->count] = strdup(AND_OP);
+        pass_in_if = 1;
+    }
+    if (!pass_in_if && tl->line[i] == PIPE && tl->line[i + 1] == PIPE) {
+        tl->tokens[state->count] = strdup(OR_OP);
+        pass_in_if = 1;
+    }
+    if (!pass_in_if) {
+        tl->tokens[state->count] = malloc(3);
+        if (!tl->tokens[state->count])
+            return -1;
+        tl->tokens[state->count][0] = tl->line[i];
+        tl->tokens[state->count][1] = tl->line[i + 1];
+        tl->tokens[state->count][2] = '\0';
+    }
+    return (!tl->tokens[state->count]) ? -1 : 0;
+}
+
+int handle_logical_operator(token_line_t *tl, token_state_t *state, int i)
 {
     int ret = 0;
 
@@ -28,14 +50,11 @@ int handle_logical_operator(token_line_t *tl, token_state_t *state,
             return -1;
         state->in_token = 0;
     }
-    tl->tokens[state->count] = malloc(3);
-    if (!tl->tokens[state->count])
+    ret = assign_logical_operator(tl, state, i);
+    if (ret == -1)
         return -1;
-    tl->tokens[state->count][0] = tl->line[i];
-    tl->tokens[state->count][1] = tl->line[i];
-    tl->tokens[state->count][2] = '\0';
     state->count++;
-    return 1;
+    return 2;
 }
 
 /**

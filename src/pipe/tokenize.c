@@ -197,8 +197,11 @@ static int process_token_char(token_line_t *tl, token_state_t *state, int i)
 {
     int special_result = handle_special_cases(tl, state, i);
 
-    if (special_result != 0)
+    if (special_result != 0) {
+        if (special_result == 2)
+            i++;
         return special_result;
+    }
     if (!(state->in_token)) {
         state->start = i;
         state->in_token = 1;

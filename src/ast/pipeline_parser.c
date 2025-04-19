@@ -79,7 +79,8 @@ ast_node_t *parse_pipeline(char **tokens, int *pos, int max_pos)
     left = parse_command_or_subshell(tokens, pos, max_pos);
     if (!left)
         return NULL;
-    while (*pos < max_pos && tokens[*pos] && tokens[*pos][0] == PIPE) {
+    while (*pos < max_pos && tokens[*pos] && tokens[*pos][0] == PIPE &&
+    (strlen(tokens[*pos]) == 1 || strcmp(tokens[*pos], OR_OP) != 0)) {
         (*pos)++;
         if (!is_valid_command_after_pipe(tokens, pos, max_pos))
             return NULL;
