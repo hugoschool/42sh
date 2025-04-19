@@ -18,16 +18,14 @@ static ssize_t read_input_line(char **line)
     ssize_t read;
     char *input;
     size_t len = 0;
-    int fetch_isatty = isatty(STDIN_FILENO);
 
-    if (fetch_isatty) {
+    if (isatty(STDIN_FILENO)) {
         input = readline(MULTI_PROMPT);
         if (!input)
             return -1;
         *line = input;
         read = strlen(input);
-    }
-    if (!fetch_isatty) {
+    } else {
         read = getline(line, &len, stdin);
         if (read > 0 && (*line)[read - 1] == '\n') {
             (*line)[read - 1] = '\0';
