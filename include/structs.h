@@ -163,6 +163,11 @@ typedef struct token_line_s {
     int tokens_max;
 } token_line_t;
 
+typedef struct bindkey_func_s {
+    char *name;
+    rl_command_func_t *func;
+} bindkey_func_t;
+
 typedef struct env_data_s {
     char **old_env;
     char **new_env;

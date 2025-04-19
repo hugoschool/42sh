@@ -16,6 +16,12 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "mysh.h"
+#include <readline/readline.h>
+#include <readline/history.h>
+
+extern int handle_bindkey(const char *key_seq, const char *func_name);
+extern void init_default_bindkeys(void);
+extern int my_bindkey(char *args[], int count);
 
 int main(int argc, char *argv[]) {
     struct criterion_test_set *tests = criterion_initialize();
@@ -1560,3 +1566,123 @@ Test(quotes, nested_quotes)
         "has_unclosed_quotes should return 0 for nested quotes");
 }
 
+Test(bindkeys, my_bindkey_no_args)
+{
+    char *args[] = {};
+    int ret = my_bindkey(args, 0);
+    cr_assert_eq(ret, 0, "my_bindkey with no args should return 0");
+}
+
+Test(bindkeys, my_bindkey_invalid_usage, .init = redirect_all_stdout)
+{
+    char *args[] = {"bindkey"};
+    int ret = my_bindkey(args, 1);
+    cr_assert_eq(ret, 1, "my_bindkey with invalid usage should return 1");
+    cr_assert_stdout_eq_str("Usage: bindkey [key_sequence function_name]\n");
+}
+
+Test(bindkeys, my_bindkey_valid_args)
+{
+    char *args[] = {"bindkey", "a", "beginning-of-line"};
+    int ret = my_bindkey(args, 2);
+    cr_assert_eq(ret, 0, "my_bindkey with valid args should return 0");
+}
+
+Test(bindkeys, my_bindkey_invalid_function, .init = redirect_all_stdout)
+{
+    char *args[] = {"bindkey", "a", "nonexistent-function"};
+    int ret = my_bindkey(args, 2);
+    cr_assert_eq(ret, 1, "my_bindkey with invalid function should return 1");
+    cr_assert_stderr_eq_str("bindkey: Invalid key sequence or function\n");
+}
+
+Test(bindkeys, handle_bindkey_invalid_key, .init = redirect_all_stdout)
+{
+    int ret = handle_bindkey("", "beginning-of-line");
+    cr_assert_eq(ret, 1, "handle_bindkey with invalid key should return 1");
+    cr_assert_stderr_eq_str("bindkey: Invalid key sequence or function\n");
+}
+
+Test(bindkeys, handle_bindkey_invalid_function, .init = redirect_all_stdout)
+{
+    int ret = handle_bindkey("a", "nonexistent-function");
+    cr_assert_eq(ret, 1, "handle_bindkey with invalid function should return 1");
+    cr_assert_stderr_eq_str("bindkey: Invalid key sequence or function\n");
+}
+
+Test(bindkeys, handle_bindkey_simple_key)
+{
+    int ret = handle_bindkey("a", "beginning-of-line");
+    cr_assert_eq(ret, 0, "handle_bindkey with simple key should return 0");
+}
+
+Test(bindkeys, handle_bindkey_escape_sequence)
+{
+    int ret = handle_bindkey("\\n", "end-of-line");
+    cr_assert_eq(ret, 0, "handle_bindkey with escape sequence should return 0");
+}
+
+Test(bindkeys, handle_bindkey_control_sequence)
+{
+    int ret = handle_bindkey("\\C-a", "clear-screen");
+    cr_assert_eq(ret, 0, "handle_bindkey with control sequence should return 0");
+}
+
+Test(bindkeys, handle_bindkey_escaped_char)
+{
+    int ret = handle_bindkey("\\t", "forward-char");
+    cr_assert_eq(ret, 0, "handle_bindkey with escaped char should return 0");
+}
+
+Test(bindkeys, handle_bindkey_meta_sequence)
+{
+    int ret = handle_bindkey("\\M-a", "backward-char");
+    cr_assert_eq(ret, 0, "handle_bindkey with meta sequence should return 0");
+}
+
+Test(bindkeys, init_default_bindkeys_test)
+{
+    init_default_bindkeys();
+    cr_assert(true, "init_default_bindkeys should not crash");
+}
+
+Test(bindkeys, parse_key_sequence_null)
+{
+    char *args[] = {"bindkey", NULL, "beginning-of-line"};
+    int ret = my_bindkey(args, 2);
+    cr_assert_eq(ret, 1, "my_bindkey with NULL key should return 1");
+}
+
+Test(bindkeys, parse_escaped_chars)
+{
+    int ret;
+    ret = handle_bindkey("\\r", "forward-char");
+    cr_assert_eq(ret, 0, "handle_bindkey with \\r should return 0");
+    ret = handle_bindkey("\\b", "backward-char");
+    cr_assert_eq(ret, 0, "handle_bindkey with \\b should return 0");
+    ret = handle_bindkey("\\e", "clear-screen");
+    cr_assert_eq(ret, 0, "handle_bindkey with \\e should return 0");
+}
+
+Test(bindkeys, parse_control_sequence_letters)
+{
+    int ret;
+    ret = handle_bindkey("\\C-z", "end-of-line");
+    cr_assert_eq(ret, 0, "handle_bindkey with \\C-z should return 0");
+    ret = handle_bindkey("\\C-A", "beginning-of-line");
+    cr_assert_eq(ret, 0, "handle_bindkey with \\C-A should return 0");
+}
+
+Test(bindkeys, parse_control_sequence_invalid, .init = redirect_all_stdout)
+{
+    int ret = handle_bindkey("\\C-", "beginning-of-line");
+    cr_assert_eq(ret, 1, "handle_bindkey with invalid control sequence should return 1");
+    cr_assert_stderr_eq_str("bindkey: Invalid key sequence or function\n");
+}
+
+Test(bindkeys, parse_backslash_sequence_invalid, .init = redirect_all_stdout)
+{
+    int ret = handle_bindkey("\\", "beginning-of-line");
+    cr_assert_eq(ret, 1, "handle_bindkey with invalid backslash sequence should return 1");
+    cr_assert_stderr_eq_str("bindkey: Invalid key sequence or function\n");
+}

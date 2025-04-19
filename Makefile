@@ -39,6 +39,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/print_help.c	\
 		src/utilities/strisdigit.c	\
 		src/multiline.c	\
+		src/bindkeys.c	\
 		src/need_multiline.c	\
 		src/command_struct.c	\
 		src/parenthesis.c	\
@@ -46,7 +47,8 @@ SRC	=	src/ast/command_parser.c	\
 		src/config_files.c	\
 		src/truth_table.c \
 		src/prompt.c	\
-		src/utilities/wildcards.c
+		src/utilities/wildcards.c	\
+		src/setup.c
 
 
 MAIN_SRC	= main.c
@@ -83,7 +85,7 @@ coding_style: fclean
 
 unit_tests: fclean all
 	gcc -o unit_tests tests/test_mysh.c $(SRC) -Iinclude/ \
-	--coverage -lcriterion
+	--coverage -lcriterion -lreadline
 	-./unit_tests
 
 gcovr: unit_tests
