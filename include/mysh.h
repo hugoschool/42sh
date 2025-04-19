@@ -74,6 +74,11 @@
 int handle_bindkey(const char *key_seq, const char *func_name);
 void init_default_bindkeys(void);
 int my_bindkey(char *args[], int count);
+bindkey_mapping_t *get_bindkey_mappings(bindkey_mapping_t *new_mappings);
+int parse_key_sequence(const char *seq);
+rl_command_func_t *find_readline_function(const char *func_name);
+void add_bindkey_mapping(const char *key_seq, const char *func_name);
+void display_bindkey_help(void);
 
 // command_struct.c //
 int set_redirection(simple_command_t *cmd, redirection_type_t type,
