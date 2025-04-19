@@ -113,10 +113,11 @@ int has_unclosed_brackets(const char *line, char *bracket_type)
 static int if_line_pass(const char *line, int last)
 {
     return (line[last] == REDIR_IN || line[last] == REDIR_OUT ||
-    line[last] == PIPE || line[last] == ';') ||
+    line[last] == PIPE || line[last] == ';' || line[last] == AND) ||
     (last >= 1 &&
     ((line[last - 1] == REDIR_IN && line[last] == REDIR_IN) ||
-    (line[last - 1] == REDIR_OUT && line[last] == REDIR_OUT)));
+    (line[last - 1] == REDIR_OUT && line[last] == REDIR_OUT) ||
+    (line[last - 1] == AND && line[last] == AND)));
 }
 
 int has_trailing_continuation(const char *line, int *is_operator)
