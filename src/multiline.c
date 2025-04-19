@@ -16,14 +16,23 @@
 static ssize_t read_input_line(char **line)
 {
     ssize_t read;
+    char *input;
     size_t len = 0;
+    int fetch_isatty = isatty(STDIN_FILENO);
 
-    if (isatty(STDIN_FILENO))
-        printf("%s", MULTI_PROMPT);
-    read = getline(line, &len, stdin);
-    if (read > 0 && (*line)[read - 1] == '\n') {
-        (*line)[read - 1] = '\0';
-        read--;
+    if (fetch_isatty) {
+        input = readline(MULTI_PROMPT);
+        if (!input)
+            return -1;
+        *line = input;
+        read = strlen(input);
+    }
+    if (!fetch_isatty) {
+        read = getline(line, &len, stdin);
+        if (read > 0 && (*line)[read - 1] == '\n') {
+            (*line)[read - 1] = '\0';
+            read--;
+        }
     }
     return read;
 }
@@ -52,6 +61,7 @@ static char *append_line_to_buffer(char *buffer, char *line,
     strcat(new_buffer, line);
     if (buffer != initial_line)
         free(buffer);
+    free(line);
     return new_buffer;
 }
 
@@ -111,16 +121,13 @@ static char *continue_reading_input(char *buffer, int check_type, void *param,
     while (1) {
         buffer = handle_continuation(buffer, check_type, param);
         read = read_input_line(&line);
-        if (read == -1) {
-            free(line);
+        if (read == -1)
             return buffer;
-        }
         buffer = append_line_to_buffer(buffer, line, initial_line, read);
         need_more = needs_more_input(buffer, check_type, param);
         if (!need_more)
             break;
     }
-    free(line);
     return buffer;
 }
 
