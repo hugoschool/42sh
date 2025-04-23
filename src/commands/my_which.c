@@ -7,6 +7,13 @@
 
 #include "mysh.h"
 
+/**
+ * @brief Iterate directory in the PATH.
+ *
+ * @param path : The PATH env as a string.
+ * @param arg : The argument to add at the end of the PATH string.
+ * @param which : Is the command which or where?
+*/
 static bool print_file_path(char *path, char *arg, bool which)
 {
     char *path_dir = NULL;
@@ -31,6 +38,14 @@ static bool print_file_path(char *path, char *arg, bool which)
     return found;
 }
 
+/**
+ * @brief Iterate over each argument inside the array and determine if it's
+ * a binary in the PATH or not.
+ *
+ * @param args : A NULL terminated arguments array.
+ * @param count : The amount of arguments in the arguments array.
+ * @param which : Is the command which or where?
+*/
 static void iterate_args(char *args[], int count, bool which)
 {
     char *path = NULL;
@@ -47,13 +62,26 @@ static void iterate_args(char *args[], int count, bool which)
     }
 }
 
+/**
+ * @brief The builtin command for where.
+ *
+ * @param args : A NULL terminated arguments array.
+ * @param count : The amount of arguments in the arguments array.
+ * @return : Exit code for that builtin.
+*/
 static int my_where(char *args[], int count)
 {
     iterate_args(args, count, false);
     return 0;
 }
 
-// TODO: docstrings
+/**
+ * @brief The builtin command for where & which.
+ *
+ * @param args : A NULL terminated arguments array.
+ * @param count : The amount of arguments in the arguments array.
+ * @return : Exit code for that builtin.
+*/
 int my_which(char *args[], int count)
 {
     if (strcmp(args[0], WHERE) == 0)

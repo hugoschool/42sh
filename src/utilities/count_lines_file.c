@@ -7,7 +7,12 @@
 
 #include "mysh.h"
 
-// TODO: docstrings
+/**
+ * @brief Count lines of a file
+ *
+ * @param fp : File pointer to the file to read.
+ * @return : The amount of lines read.
+*/
 long count_lines_file(FILE *fp)
 {
     long i = 0;
