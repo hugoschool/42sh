@@ -85,7 +85,7 @@ int main(void)
     setup_bindkeys();
     setup_config_files();
     while (1) {
-        line = readline(display_prompt());
+        line = my_readline(display_prompt());
         if (!line)
             handle_eof(line, last_status);
         line = handle_line_continuation(line, &quote_type);

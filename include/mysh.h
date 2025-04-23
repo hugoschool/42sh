@@ -114,6 +114,7 @@ void setup_config_files(void);
 
 // prompt.c //
 char *display_prompt(void);
+char *my_readline(char *prompt);
 
 // wildcard //
 int wildcard(ast_node_t *ast);

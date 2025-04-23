@@ -29,6 +29,8 @@ static char *prompt_git(void)
 
 /**
  * @brief Displays the shell prompt if running in interactive mode.
+ *
+ * @return The allocated prompt.
  */
 char *display_prompt(void)
 {
@@ -49,4 +51,27 @@ char *display_prompt(void)
     if (isatty(STDIN_FILENO))
         return current_dir;
     return NULL;
+}
+
+/**
+ * @brief Readline without printing if we're not in a tty.
+ *
+ * @param prompt : The prompt if we use readline.
+ * @return The line from getline/readline.
+ */
+char *my_readline(char *prompt)
+{
+    size_t len = 0;
+    ssize_t n = 0;
+    char *line = NULL;
+
+    if (!isatty(STDIN_FILENO)) {
+        n = getline(&line, &len, stdin);
+        if (n == -1)
+            return NULL;
+        if (n > 0 && line[n - 1] == '\n')
+            line[n - 1] = '\0';
+    } else
+        line = readline(prompt);
+    return line;
 }
