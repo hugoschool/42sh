@@ -79,6 +79,7 @@ int main(void)
     char *line = NULL;
     int last_status = 0;
     char quote_type = 0;
+    char *prompt = NULL;
 
     setup_environment();
     setup_signal_handlers();

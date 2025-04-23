@@ -67,11 +67,14 @@ char *my_readline(char *prompt)
 
     if (!isatty(STDIN_FILENO)) {
         n = getline(&line, &len, stdin);
-        if (n == -1)
+        if (n == -1) {
+            free(prompt);
             return NULL;
+        }
         if (n > 0 && line[n - 1] == '\n')
             line[n - 1] = '\0';
     } else
         line = readline(prompt);
+    free(prompt);
     return line;
 }
