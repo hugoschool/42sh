@@ -39,6 +39,20 @@ static bool print_file_path(char *path, char *arg, bool which)
 }
 
 /**
+ * @brief Display the buitlin message for where & which.
+ *
+ * @param args : The command that is a builtin.
+ * @param which : Is the command which or where?
+*/
+static void display_builtin_command(char *command, bool which)
+{
+    if (which)
+        printf("%s: shell built-in command.\n", command);
+    else
+        printf("%s is a shell built-in\n", command);
+}
+
+/**
  * @brief Iterate over each argument inside the array and determine if it's
  * a binary in the PATH or not.
  *
@@ -53,7 +67,7 @@ static void iterate_args(char *args[], int count, bool which)
     for (int i = 1; i < count + 1; i++) {
         path = get_path_value();
         if (is_builtin_command((char *[]){args[i], 0})) {
-            printf("%s: shell built-in command.\n", args[i]);
+            display_builtin_command(args[0], which);
             continue;
         }
         if (!print_file_path(path, args[i], which))
