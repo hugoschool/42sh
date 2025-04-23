@@ -7,8 +7,13 @@
 
 #include "mysh.h"
 
-// TODO: docstrings
 // TODO: change open in home to create file
+/**
+ * @brief Save the line into the history.
+ *
+ * @param line : The line to save into the file.
+ * @return : 0 if an error occurred, 1 if no error.
+*/
 int save_history(char *line)
 {
     FILE *fp = get_file_path(HISTORY_FILE, "a");
@@ -26,6 +31,9 @@ int save_history(char *line)
     return 1;
 }
 
+/**
+ * @brief Reads all the lines of the history file
+*/
 static void read_entire_file(void)
 {
     char *line = NULL;
@@ -44,8 +52,12 @@ static void read_entire_file(void)
     fclose(fp);
 }
 
-// TODO: docstrings
 // TODO: if n > lines, print whole file
+/**
+ * @brief Reads the last n lines of the history file
+ *
+ * @param n : Last n lines to be read
+*/
 static void read_n_last_lines(long n)
 {
     FILE *fp = get_file_path(HISTORY_FILE, "r");
@@ -69,8 +81,14 @@ static void read_n_last_lines(long n)
     fclose(fp);
 }
 
-// TODO: docstrings
 // TODO: error handling here such as badly formed number
+/**
+ * @brief The builtin command for the history.
+ *
+ * @param args : A NULL terminated arguments array.
+ * @param count : The amount of arguments in the arguments array.
+ * @return : Exit code for that builtin.
+*/
 int my_history(char *args[], int count)
 {
     if (strncmp(args[0], HISTORY_BANG, strlen(HISTORY_BANG)) == 0)

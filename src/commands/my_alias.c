@@ -101,7 +101,7 @@ char *replace_alias_line(char *line)
     for (int i = 0; alias[i] != NULL; i++) {
         if (strncmp(line, alias[i]->alias, strlen(alias[i]->alias)) == 0) {
             command = alias[i]->command;
-            str = prepend(&line[strlen(alias[i]->alias)], command, false);
+            str = prepend(&line[strlen(alias[i]->alias)], command, 0);
             break;
         }
     }

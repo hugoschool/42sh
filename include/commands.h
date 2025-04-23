@@ -44,4 +44,7 @@ int my_setenv(char *args[], int count);
 int check_unsetenv(char *args[]);
 int my_unsetenv(char *args[]);
 
+// my_which //
+int my_which(char *args[], int count);
+
 #endif //COMMANDS_H

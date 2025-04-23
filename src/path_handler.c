@@ -51,7 +51,7 @@ static void execute_file(char *args[], char **environ, int pass)
  * @note : This function allocates memory for the PATH value, which should be
  * freed after use.
  */
-static char *get_path_value(void)
+char *get_path_value(void)
 {
     char *path_value = my_getenv(PATH);
 

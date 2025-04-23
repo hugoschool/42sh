@@ -7,7 +7,12 @@
 
 #include "mysh.h"
 
-// TODO: docstrings
+/**
+ * @brief Tells us if the string is composed of digits only.
+ *
+ * @param str : The input string
+ * @return 1 if it's the case, 0 if it isn't.
+*/
 int strisdigit(char *str)
 {
     for (int i = 0; str[i] != '\0'; i++) {

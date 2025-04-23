@@ -7,6 +7,15 @@
 
 #include "mysh.h"
 
+/**
+ * @brief Read the file and store the line and the previous line
+ *
+ * @param line : A pointer to the line string.
+ * @param prev : A pointer to the previous string.
+ * @param command : The command to run.
+ * @param fp : File pointer to the file to read.
+ * @return : The amount of lines read.
+*/
 static int read_file(char **line, char **prev, char *command, FILE *fp)
 {
     size_t len = 0;
@@ -26,6 +35,13 @@ static int read_file(char **line, char **prev, char *command, FILE *fp)
     return i;
 }
 
+/**
+ * @brief Execute the last command for the given command
+ *
+ * @param command : The command to run.
+ * @param rest : A concatenate of all given arguments.
+ * @return : Exit code of the last given command.
+*/
 static int execute_last_command(char *command, char *rest)
 {
     char *line = NULL;
@@ -40,7 +56,7 @@ static int execute_last_command(char *command, char *rest)
     fclose(fp);
     if (i != 0) {
         if ((line && strcmp(command, HISTORY_BANG) == 0) || prev) {
-            run_command = prepend(rest, prev ? prev : line, true);
+            run_command = prepend(rest, prev ? prev : line, ' ');
             printf("%s\n", run_command);
             return main_execute_command(run_command);
         } else
@@ -49,7 +65,13 @@ static int execute_last_command(char *command, char *rest)
     return 1;
 }
 
-// TODO: docstrings
+/**
+ * @brief The builtin command for history bangs `!`.
+ *
+ * @param args : A NULL terminated arguments array.
+ * @param count : The amount of arguments in the arguments array.
+ * @return : Exit code for that builtin.
+*/
 int my_history_bang(char *args[], int count)
 {
     char *start = args[0];
