@@ -1480,7 +1480,7 @@ NAME="Multiple where"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'where ls echo'
+echo 'where ls cp'
 [2101-END]
 
 [2102]
@@ -1504,7 +1504,7 @@ NAME="Nonexistant in between multiple where"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'where ls thisdoesntexist echo'
+echo 'where ls thisdoesntexist cp'
 [2104-END]
 
 [2105]
@@ -1512,7 +1512,7 @@ NAME="Builtin where"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'where env'
+echo 'where cd'
 [2105-END]
 
 [2106]
@@ -1528,7 +1528,7 @@ NAME="Multiple builtins where"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'where env where setenv'
+echo 'where cd where setenv'
 [2107-END]
 
 [2108]
@@ -1536,7 +1536,7 @@ NAME="Every previous case where"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'where ls env thisdoesntexist'
+echo 'where ls cd thisdoesntexist'
 [2108-END]
 
 [2109]
@@ -1561,7 +1561,7 @@ NAME="Multiple which"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'which ls echo'
+echo 'which ls cp'
 [2151-END]
 
 [2152]
@@ -1585,7 +1585,7 @@ NAME="Nonexistant in between multiple which"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'which ls thisdoesntexist echo'
+echo 'which ls thisdoesntexist cp'
 [2154-END]
 
 [2155]
@@ -1593,7 +1593,7 @@ NAME="Builtin which"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'which env'
+echo 'which cd'
 [2155-END]
 
 [2156]
@@ -1609,7 +1609,7 @@ NAME="Multiple builtins which"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'which env which setenv'
+echo 'which cd which setenv'
 [2157-END]
 
 [2158]
@@ -1617,7 +1617,7 @@ NAME="Every previous case which"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-echo 'which ls env thisdoesntexist'
+echo 'which ls cd thisdoesntexist'
 [2158-END]
 
 [2159]

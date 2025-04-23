@@ -59,21 +59,24 @@ static void display_builtin_command(char *command, bool which)
  * @param args : A NULL terminated arguments array.
  * @param count : The amount of arguments in the arguments array.
  * @param which : Is the command which or where?
+ * @return 1 if we couldn't find ONE binary, 0 if we found ALL binaries
 */
-static void iterate_args(char *args[], int count, bool which)
+static int iterate_args(char *args[], int count, bool which)
 {
     char *path = NULL;
+    int rv = 0;
 
     for (int i = 1; i < count + 1; i++) {
         path = get_path_value();
         if (is_builtin_command((char *[]){args[i], 0})) {
-            display_builtin_command(args[0], which);
+            display_builtin_command(args[i], which);
             continue;
         }
         if (!print_file_path(path, args[i], which))
-            print_error(args[i], get_error_msg(ERR_NOT_FOUND), 1);
+            rv = print_error(args[i], get_error_msg(ERR_NOT_FOUND), 1);
         free(path);
     }
+    return rv;
 }
 
 /**
@@ -85,8 +88,7 @@ static void iterate_args(char *args[], int count, bool which)
 */
 static int my_where(char *args[], int count)
 {
-    iterate_args(args, count, false);
-    return 0;
+    return iterate_args(args, count, false);
 }
 
 /**
@@ -98,10 +100,9 @@ static int my_where(char *args[], int count)
 */
 int my_which(char *args[], int count)
 {
-    if (strcmp(args[0], WHERE) == 0)
-        return my_where(args, count);
     if (count == 0)
         return print_error(args[0], get_error_msg(ERR_TOO_FEW), 1);
-    iterate_args(args, count, true);
-    return 0;
+    if (strcmp(args[0], WHERE) == 0)
+        return my_where(args, count);
+    return iterate_args(args, count, true);;
 }
