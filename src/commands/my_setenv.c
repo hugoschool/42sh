@@ -166,7 +166,7 @@ int my_setenv(char *args[], int count)
         return 0;
     }
     if (count > 2)
-        return print_error(get_error_msg(ERR_TOO_MANY), NULL, 1);
+        return print_error(args[0], get_error_msg(ERR_TOO_MANY), 1);
     if (!is_valid_identifier(args[1]))
         return 1;
     new_env = create_new_env(environ, args[1], (count == 2) ? args[2] : "");
