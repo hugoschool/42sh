@@ -104,5 +104,5 @@ int my_which(char *args[], int count)
         return print_error(args[0], get_error_msg(ERR_TOO_FEW), 1);
     if (strcmp(args[0], WHERE) == 0)
         return my_where(args, count);
-    return iterate_args(args, count, true);;
+    return iterate_args(args, count, true);
 }
