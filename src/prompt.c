@@ -7,7 +7,7 @@
 
 #include "mysh.h"
 
-static void prompt_git(void)
+static char *prompt_git(void)
 {
     FILE *git = fopen(".git/HEAD", "r");
     char *line = NULL;
@@ -19,26 +19,62 @@ static void prompt_git(void)
         if (strstr(line, "ds/") == NULL) {
             fclose(git);
             free(line);
-            return;
+            return NULL;
         }
-        printf(COLOR_BLUE" git:%s%s", COLOR_RED,
-            &(strstr(line, "ds/")[3]));
         fclose(git);
+        return line;
     }
-    if (line != NULL)
-        free(line);
+    return NULL;
 }
 
 /**
  * @brief Displays the shell prompt if running in interactive mode.
+ *
+ * @return The allocated prompt.
  */
-void display_prompt(void)
+char *display_prompt(void)
 {
-    char current_dir[PATH_MAX];
+    char *current_dir = calloc((PATH_MAX * 2) + 1, sizeof(char));
+    char temp[PATH_MAX];
+    char *line = NULL;
 
-    getcwd(current_dir, PATH_MAX);
-    if (isatty(STDIN_FILENO)) {
-        printf(COLOR_CYAN"-> %s", current_dir);
-        prompt_git();
+    strcpy(current_dir, COLOR_CYAN"-> ");
+    getcwd(temp, PATH_MAX);
+    strcat(current_dir, temp);
+    line = prompt_git();
+    if (line != NULL) {
+        strcat(current_dir, COLOR_BLUE" git: "COLOR_RED);
+        strcat(current_dir, &strstr(line, "ds/")[3]);
+        free(line);
     }
+    strcat(current_dir, COLOR_CYAN" $> "COLOR_NONE);
+    if (isatty(STDIN_FILENO))
+        return current_dir;
+    return NULL;
+}
+
+/**
+ * @brief Readline without printing if we're not in a tty.
+ *
+ * @param prompt : The prompt if we use readline.
+ * @return The line from getline/readline.
+ */
+char *my_readline(char *prompt)
+{
+    size_t len = 0;
+    ssize_t n = 0;
+    char *line = NULL;
+
+    if (!isatty(STDIN_FILENO)) {
+        n = getline(&line, &len, stdin);
+        if (n == -1) {
+            free(prompt);
+            return NULL;
+        }
+        if (n > 0 && line[n - 1] == '\n')
+            line[n - 1] = '\0';
+    } else
+        line = readline(prompt);
+    free(prompt);
+    return line;
 }

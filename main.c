@@ -79,14 +79,14 @@ int main(void)
     char *line = NULL;
     int last_status = 0;
     char quote_type = 0;
+    char *prompt = NULL;
 
     setup_environment();
     setup_signal_handlers();
     setup_bindkeys();
     setup_config_files();
     while (1) {
-        display_prompt();
-        line = readline(COLOR_CYAN" $> "COLOR_NONE);
+        line = my_readline(display_prompt());
         if (!line)
             handle_eof(line, last_status);
         line = handle_line_continuation(line, &quote_type);
