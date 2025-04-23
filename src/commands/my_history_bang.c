@@ -40,7 +40,7 @@ static int execute_last_command(char *command, char *rest)
     fclose(fp);
     if (i != 0) {
         if ((line && strcmp(command, HISTORY_BANG) == 0) || prev) {
-            run_command = prepend(rest, prev ? prev : line, true);
+            run_command = prepend(rest, prev ? prev : line, ' ');
             printf("%s\n", run_command);
             return main_execute_command(run_command);
         } else

@@ -23,6 +23,8 @@
     #define HISTORY_BANG "!"
     #define SETENV "setenv"
     #define UNSETENV "unsetenv"
+    #define WHERE "where"
+    #define WHICH "which"
     #define ENV "env"
     #define HEREDOC "heredoc"
     #define CORE_DUMPED " (core dumped)\n"
@@ -96,6 +98,7 @@ ast_node_t *parse_command_or_subshell(char **tokens, int *pos, int max_pos);
 int handle_wait_status(int wait_status);
 
 // path_handler.c //
+char *get_path_value(void);
 void execute_command_path(char *args[], int wc_err);
 
 // truth_table.c //

@@ -16,7 +16,7 @@
 int check_unsetenv(char *args[])
 {
     if (!args[1])
-        return print_error(get_error_msg(ERR_UNSETENV_TOO_FEW), NULL, 1);
+        return print_error(get_error_msg(ERR_TOO_FEW), NULL, 1);
     if (strcmp(args[1], "*") == 0)
         return print_error(get_error_msg(ERR_UNSETENV_ALPHA_CARA), NULL, 1);
     return 0;
@@ -85,7 +85,7 @@ int my_unsetenv(char *args[])
     char **new_environ;
 
     if (!args[1] || (args[1] && args[2]))
-        return print_error((!args[1]) ? get_error_msg(ERR_UNSETENV_TOO_FEW)
+        return print_error((!args[1]) ? get_error_msg(ERR_TOO_FEW)
         : get_error_msg(ERR_UNSETENV_WRONG_NUM), NULL, 1);
     if (strcmp(args[1], "*") == 0)
         return print_error(get_error_msg(ERR_UNSETENV_WRONG_ARG), NULL, 1);

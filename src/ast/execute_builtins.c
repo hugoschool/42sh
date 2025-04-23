@@ -17,6 +17,8 @@ const char *builtins[] = {
     SETENV,
     UNSETENV,
     ENV,
+    WHERE,
+    WHICH,
     NULL
 };
 
@@ -61,6 +63,9 @@ static int handle_most_builtins(char **args, int arg_count)
         return my_setenv(args, arg_count);
     if (strcmp(args[0], UNSETENV) == 0)
         return my_unsetenv(args);
+    if (strcmp(args[0], WHERE) == 0
+        || strcmp(args[0], WHICH) == 0)
+        return my_which(args, arg_count);
     return -1;
 }
 

@@ -54,7 +54,7 @@ static char *validate_cd_args(char *args[], int count, char *old_pwd,
     char *path = (count == 1) ? args[1] : NULL;
 
     if (args[1] && args[2]) {
-        print_error(get_error_msg(ERR_CD_TOO_MANY), NULL, 0);
+        print_error(get_error_msg(ERR_TOO_MANY), NULL, 0);
         return NULL;
     }
     if (!getcwd(cwd, PATH_MAX)) {
