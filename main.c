@@ -85,8 +85,7 @@ int main(void)
     setup_bindkeys();
     setup_config_files();
     while (1) {
-        display_prompt();
-        line = readline(COLOR_CYAN" $> "COLOR_NONE);
+        line = readline(display_prompt());
         if (!line)
             handle_eof(line, last_status);
         line = handle_line_continuation(line, &quote_type);

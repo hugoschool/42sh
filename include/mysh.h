@@ -113,7 +113,7 @@ void setup_bindkeys(void);
 void setup_config_files(void);
 
 // prompt.c //
-void display_prompt(void);
+char *display_prompt(void);
 
 // wildcard //
 int wildcard(ast_node_t *ast);
