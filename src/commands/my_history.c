@@ -52,7 +52,23 @@ static void read_entire_file(void)
     fclose(fp);
 }
 
-// TODO: if n > lines, print whole file
+/**
+ * @brief Prints the last n lines of a file
+ *
+ * @param line : Pointer to the line
+ * @param fp : File pointer
+*/
+static void print_n_last_lines(char **line, FILE *fp)
+{
+    ssize_t nread = 0;
+    size_t len = 0;
+
+    while (nread != -1) {
+        printf("%s", *line);
+        nread = getline(line, &len, fp);
+    }
+}
+
 /**
  * @brief Reads the last n lines of the history file
  *
@@ -67,16 +83,17 @@ static void read_n_last_lines(long n)
     ssize_t nread = 0;
     long i = 0;
 
+    if (n > lines) {
+        read_entire_file();
+        return;
+    }
     if (!fp || lines == -1 || n < 0)
         return;
     while (nread != -1 && i != (lines - n + 1)) {
         nread = getline(&line, &len, fp);
         i++;
     }
-    while (nread != -1) {
-        printf("%s", line);
-        nread = getline(&line, &len, fp);
-    }
+    print_n_last_lines(&line, fp);
     free(line);
     fclose(fp);
 }
