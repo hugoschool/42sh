@@ -1257,6 +1257,16 @@ echo 'ech'
 echo 'cat /tmp/alias_test'
 [1606-END]
 
+[1607]
+NAME="Aliases - small alias"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN="rm -f /tmp/alias_test"
+TESTS=
+echo 'alias c "echo Hey, I am Gurt and this is a test"'
+echo 'echo Hello > /tmp/alias_test'
+echo 'cat /tmp/alias_test'
+echo 'c'
+[1607-END]
 
 # Scripting advanced
 [1701]
