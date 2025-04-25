@@ -129,7 +129,7 @@ static int wait_and_proc_status(pid_t left_pid, pid_t right_pid,
         return WEXITSTATUS(*right_status);
     if (WIFSIGNALED(*right_status)) {
         signal = WTERMSIG(*right_status);
-        return print_error(strsignal(signal),
+        return print_error(my_strsignal(signal),
         WCOREDUMP(*right_status) ? CORE_DUMPED : "", 128 + signal);
     }
     return 1;

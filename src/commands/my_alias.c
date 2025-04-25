@@ -87,23 +87,27 @@ static char *get_alias_command(char *alias)
 /**
  * @brief Replaces the given string by the command of the alias.
  *
- * @param line : The string to be replaced.
+ * @param cmd : The string to be replaced.
  * @return : If found, newly replaced aliased command. If not, NULL.
 */
-char *replace_alias_line(char *line)
+char *replace_alias_line(char *cmd)
 {
     alias_t **alias = my_getaliases(NULL);
     char *str = NULL;
-    char *command = NULL;
+    char *temp = NULL;
 
     if (!alias)
         return NULL;
     for (int i = 0; alias[i] != NULL; i++) {
-        if (strncmp(line, alias[i]->alias, strlen(alias[i]->alias)) == 0) {
-            command = alias[i]->command;
-            str = prepend(&line[strlen(alias[i]->alias)], command, 0);
+        temp = prepend(" ", alias[i]->alias, 0);
+        if (!temp)
+            return NULL;
+        if (strcmp(cmd, alias[i]->alias) == 0 ||
+            strncmp(cmd, temp, strlen(temp)) == 0) {
+            str = prepend(&cmd[strlen(alias[i]->alias)], alias[i]->command, 0);
             break;
         }
+        free(temp);
     }
     if (!str)
         return NULL;

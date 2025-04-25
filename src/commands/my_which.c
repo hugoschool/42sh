@@ -43,13 +43,15 @@ static bool print_file_path(char *path, char *arg, bool which)
  *
  * @param args : The command that is a builtin.
  * @param which : Is the command which or where?
+ * @return : Value of which
 */
-static void display_builtin_command(char *command, bool which)
+static bool display_builtin_command(char *command, bool which)
 {
     if (which)
         printf("%s: shell built-in command.\n", command);
     else
         printf("%s is a shell built-in\n", command);
+    return which;
 }
 
 /**
@@ -65,14 +67,14 @@ static int iterate_args(char *args[], int count, bool which)
 {
     char *path = NULL;
     int rv = 0;
+    bool command_builtin = false;
 
     for (int i = 1; i < count + 1; i++) {
         path = get_path_value();
-        if (is_builtin_command((char *[]){args[i], 0})) {
-            display_builtin_command(args[i], which);
+        command_builtin = is_builtin_command((char *[]){args[i], 0});
+        if (command_builtin && display_builtin_command(args[i], which) == true)
             continue;
-        }
-        if (!print_file_path(path, args[i], which))
+        if (!print_file_path(path, args[i], which) && !command_builtin)
             rv = print_error(args[i], get_error_msg(ERR_NOT_FOUND), 1);
         free(path);
     }
