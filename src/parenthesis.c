@@ -141,7 +141,7 @@ int handle_wait_status(int wait_status)
         return WEXITSTATUS(wait_status);
     if (WIFSIGNALED(wait_status)) {
         signal = WTERMSIG(wait_status);
-        return print_error(strsignal(signal),
+        return print_error(my_strsignal(signal),
         WCOREDUMP(wait_status) ? CORE_DUMPED : "", 128 + signal);
     }
     return 1;

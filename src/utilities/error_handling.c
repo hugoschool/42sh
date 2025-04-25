@@ -82,3 +82,13 @@ int get_errno_error(char *cmd)
         return print_error(cmd, get_error_msg(ERR_NOT_FOUND), 1);
     return 1;
 }
+
+char *my_strsignal(int signal)
+{
+    switch (signal) {
+        case 8:
+            return "Floating exception";
+        default:
+            return strsignal(signal);
+    }
+}
