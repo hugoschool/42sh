@@ -11,6 +11,7 @@
     #define HOME "HOME"
     #define NLSPATH "NLSPATH"
     #define ENV_PATH "/usr/bin/env/"
+    #define DEFAULT_PATH "path=/usr/local/bin:/usr/bsd:/bin:/usr/bin"
     #define NLSPATH_PT1 "/usr/share/locale/%L/LC_MESSAGES/%N.c"
     #define NLSPATH_PT2 "at:/usr/share/locale/%cl/LC_MESSAGES/%N.cat"
     #define NLSPATH_PRINT_PT1 "/usr/share/locale/%L/LC_MESSAGES/%N.c"
