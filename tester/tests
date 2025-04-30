@@ -111,11 +111,12 @@ echo 'echo -e "\x01\x02\x03\x04\x05"'
 [014-END]
 
 [015]
-NAME="env -i ./42sh"
-SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+NAME="No path (fallback)"
+SETUP="export TERM=xterm ; unset PATH"
 CLEAN=""
 TESTS=
-echo 'env -i ./42sh'
+echo 'ls'
+echo 'pwd'
 [015-END]
 
 [016]
@@ -125,7 +126,6 @@ CLEAN=""
 TESTS=
 echo 'cd /tmp ; ls -la | grep total ; echo "Test réussi" > test_file.txt ; cat test_file.txt ; rm test_file.txt'
 [016-END]
-
 
 # Builtins CD
 [101]

@@ -14,11 +14,11 @@
  */
 void setup_environment(void)
 {
-    char *args[] = {SETENV, NLSPATH,
-    NLSPATH_PRINT_PT1 NLSPATH_PRINT_PT2, NULL};
-
     if (!my_getenv(NLSPATH))
-        my_setenv(args, 2);
+        my_setenv((char *[]) {SETENV, NLSPATH,
+            NLSPATH_PRINT_PT1 NLSPATH_PRINT_PT2, NULL}, 2);
+    if (!my_getenv(PATH))
+        my_setenv((char *[]) {SETENV, PATH, DEFAULT_PATH, NULL}, 2);
 }
 
 /**
