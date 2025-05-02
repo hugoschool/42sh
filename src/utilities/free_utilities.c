@@ -13,5 +13,4 @@ void free_env(void)
 
     for (int i = 0; environ[i] != NULL; i++)
         free(environ[i]);
-    free(environ);
 }
