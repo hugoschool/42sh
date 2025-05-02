@@ -39,6 +39,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/prepend.c	\
 		src/utilities/print_help.c	\
 		src/utilities/strisdigit.c	\
+		src/utilities/free_utilities.c	\
 		src/multiline.c	\
 		src/bindkey_mapping.c	\
 		src/bindkey_cmd.c	\

@@ -40,6 +40,9 @@ char *free_ast(ast_node_t *node);
 void free_tokens(char **tokens, int count);
 char **free_tokens_on_error(char **tokens, int token_count);
 
+// free_utilities.c //
+void free_env(void);
+
 // is.c //
 int is_special_token(char c);
 int is_valid_redirection_type(node_type_t type);

@@ -33,13 +33,13 @@ static int process_special_commands(char *line, int last_status)
  * @param line : The line buffer to free (if allocated).
  * @param last_status : The status of the last executed command.
  */
-static void handle_eof(char *line, int last_status)
+static int handle_eof(char *line, int last_status)
 {
     if (isatty(STDIN_FILENO))
         write(1, "exit\n", 5);
     if (line)
         free(line);
-    exit(last_status);
+    return last_status;
 }
 
 /**
@@ -87,7 +87,7 @@ int main(void)
     while (1) {
         line = my_readline(display_prompt());
         if (!line)
-            handle_eof(line, last_status);
+            return handle_eof(line, last_status);
         line = handle_line_continuation(line, &quote_type);
         save_history(line);
         if (process_special_commands(line, last_status))
