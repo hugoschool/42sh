@@ -30,7 +30,7 @@ void setup_signal_handlers(void)
 {
     signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
-    signal(SIGTSTP, SIG_IGN);
+    signal(SIGTSTP, handle_sigstop);
 }
 
 /**

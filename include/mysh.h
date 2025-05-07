@@ -56,6 +56,7 @@
     #include "pipe.h"
     #include "structs.h"
     #include "utilities.h"
+    #include "list.h"
 
     #define PIPE '|'
     #define REDIR_OUT '>'
@@ -122,5 +123,11 @@ char *my_readline(char *prompt);
 
 // wildcard //
 int wildcard(ast_node_t *ast);
+
+// job_control.c //
+void pid_cur_job(void (*ptr_func)(llist_t *, pid_t *));
+void add_to_sleep_proc(llist_t *jobs, pid_t *shell);
+void set_pid_shell(llist_t *jobs, pid_t *shell);
+void handle_sigstop(int sig);
 
 #endif //MYSH_H

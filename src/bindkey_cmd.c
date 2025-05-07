@@ -50,6 +50,8 @@ int handle_bindkey(const char *key_seq, const char *func_name)
 
 /**
  * @brief Initializes default keyboard shortcuts
+ * for a better understanding of the value:
+ * in ascii, ctrl+key are the 1st ascii value, so ctrl+a will be 1 in ascII
  */
 void init_default_bindkeys(void)
 {

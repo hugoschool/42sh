@@ -40,6 +40,9 @@ SRC	=	src/ast/command_parser.c	\
 		src/utilities/print_help.c	\
 		src/utilities/strisdigit.c	\
 		src/utilities/free_utilities.c	\
+		src/utilities/wildcards.c	\
+		src/linked_list/list.c	\
+		src/linked_list/list_array.c	\
 		src/multiline.c	\
 		src/bindkey_mapping.c	\
 		src/bindkey_cmd.c	\
@@ -50,8 +53,8 @@ SRC	=	src/ast/command_parser.c	\
 		src/config_files.c	\
 		src/truth_table.c \
 		src/prompt.c	\
-		src/utilities/wildcards.c	\
-		src/setup.c
+		src/setup.c	\
+		src/job_control.c
 
 
 MAIN_SRC	= main.c

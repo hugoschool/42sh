@@ -84,6 +84,7 @@ int main(void)
     setup_signal_handlers();
     setup_bindkeys();
     setup_config_files();
+    pid_cur_job(*set_pid_shell);
     while (1) {
         line = my_readline(display_prompt());
         if (!line)
