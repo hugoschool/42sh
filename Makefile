@@ -25,6 +25,7 @@ SRC	=	src/ast/command_parser.c	\
 		src/commands/my_setenv.c	\
 		src/commands/my_unsetenv.c	\
 		src/commands/my_which.c	\
+		src/commands/my_fg.c	\
 		src/pipe/redirection.c	\
 		src/pipe/tokenize_with_quotes.c	\
 		src/pipe/tokenize.c	\

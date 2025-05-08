@@ -47,4 +47,7 @@ int my_unsetenv(char *args[]);
 // my_which //
 int my_which(char *args[], int count);
 
+// my_fg //
+int my_fg(char *args[], int ac);
+
 #endif //COMMANDS_H

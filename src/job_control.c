@@ -9,6 +9,8 @@
 
 void handle_sigstop(int sig)
 {
+    rl_on_new_line();
+    rl_redisplay();
     if (sig == SIGSTOP)
         pid_cur_job(add_to_sleep_proc);
 }

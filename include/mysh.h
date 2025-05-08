@@ -19,6 +19,7 @@
     #define ALIAS "alias"
     #define BINDKEY "bindkey"
     #define CD "cd"
+    #define FG "fg"
     #define EXIT "exit"
     #define HISTORY "history"
     #define HISTORY_BANG "!"
