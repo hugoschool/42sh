@@ -43,3 +43,13 @@ void setup_bindkeys(void)
     rl_readline_name = "42sh";
     rl_attempted_completion_function = NULL;
 }
+
+void setup_shell(void)
+{
+    setup_environment();
+    setup_signal_handlers();
+    setup_bindkeys();
+    setup_config_files();
+    pid_cur_job(GET_PID_SHELL, NULL);
+    using_history();
+}

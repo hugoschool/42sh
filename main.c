@@ -80,15 +80,12 @@ int main(void)
     int last_status = 0;
     char quote_type = 0;
 
-    setup_environment();
-    setup_signal_handlers();
-    setup_bindkeys();
-    setup_config_files();
-    pid_cur_job(GET_PID_SHELL, NULL);
+    setup_shell();
     while (1) {
         line = my_readline(display_prompt());
         if (!line)
             return handle_eof(line, last_status);
+        add_history(line);
         line = handle_line_continuation(line, &quote_type);
         save_history(line);
         if (process_special_commands(line, last_status))

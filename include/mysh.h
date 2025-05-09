@@ -114,6 +114,7 @@ int handle_logical_operator(token_line_t *tl, token_state_t *state,
 void setup_environment(void);
 void setup_signal_handlers(void);
 void setup_bindkeys(void);
+void setup_shell(void);
 
 // config_files.c //
 void setup_config_files(void);
