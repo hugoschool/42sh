@@ -107,7 +107,7 @@ static int execute_external_command(ast_node_t *node, int old_stdin,
     }
     if (pid == 0)
         exit(execute_child_process(node));
-    waitpid(pid, &wait_status, 0);
+    waitpid(pid, &wait_status, WUNTRACED);
     status = handle_wait_status(wait_status);
     return status;
 }

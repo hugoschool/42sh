@@ -28,6 +28,7 @@ void setup_environment(void)
  */
 void setup_signal_handlers(void)
 {
+    rl_catch_signals = 0;
     signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGTSTP, handle_sigstop);

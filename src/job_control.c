@@ -14,8 +14,6 @@ static void free_jobs(llist_t *jobs, pid_t *pid)
 
 void handle_sigstop(int sig)
 {
-    rl_on_new_line();
-    rl_redisplay();
     if (sig == SIGSTOP)
         pid_cur_job(BACKGROUND, NULL);
 }
@@ -23,10 +21,18 @@ void handle_sigstop(int sig)
 /**
  * @breif fg
  */
-static void foreground(llist_t **jobs, pid_t *pid, char *argv[])
+static void foreground(llist_t **jobs, pid_t *shell, char *argv[])
 {
-    if (*jobs == NULL)
+    int argc = count_args(argv);
+
+    if (*jobs == NULL) {
         printf("fg: pas de travail en cours.\n");
+        return;
+    }
+    if (argc == 0) {
+        kill(*shell, SIGTSTP);
+        kill(*((pid_t *)(*jobs)->data), SIGCONT);
+    }
 }
 
 /**
@@ -38,26 +44,27 @@ static void background(llist_t **jobs, pid_t *shell)
 
     if (temp == *shell)
         return;
-    if (jobs == NULL)
+    if (*jobs == NULL)
         *jobs = create_node(&temp);
-}
-
-void set_pid_shell(llist_t **jobs, pid_t *shell)
-{
-    *shell = getpid();
-    (void)jobs;
+    else
+        cat_list(jobs, create_node(&temp), START);
+    kill(temp, SIGTSTP);
+    rl_on_new_line();
+    rl_redisplay();
 }
 
 void pid_cur_job(enum jobs action, char *argv[])
 {
-    static llist_t *list_job = NULL;
+    static llist_t *list = NULL;
     static pid_t shell = 0;
 
-    if (action == GET_PID_SHELL)
+    if (action == GET_PID_SHELL) {
         shell = getpid();
+        setpgid(shell, shell);
+    }
     if (action == BACKGROUND)
-        background(&list_job, &shell);
+        background(&list, &shell);
     if (action == FOREGROUND)
-        foreground(&list_job, &shell, argv);
+        foreground(&list, &shell, argv);
     return;
 }

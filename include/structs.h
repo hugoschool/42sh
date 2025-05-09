@@ -206,6 +206,6 @@ typedef enum jobs {
     BACKGROUND,
     FOREGROUND,
     FREE
-} jobs_n;
+} jobs_t;
 
 #endif //STRUCT_H
