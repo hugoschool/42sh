@@ -7,7 +7,7 @@
 
 #include "mysh.h"
 
-int my_fg(char *args[], int ac)
+int my_fg(char *args[])
 {
     pid_cur_job(FOREGROUND, args);
     return 0;

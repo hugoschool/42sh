@@ -7,11 +7,6 @@
 
 #include "mysh.h"
 
-static void free_jobs(llist_t *jobs, pid_t *pid)
-{
-    return;
-}
-
 void handle_sigstop(int sig)
 {
     if (sig == SIGSTOP)

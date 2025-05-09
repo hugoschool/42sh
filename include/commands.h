@@ -48,6 +48,6 @@ int my_unsetenv(char *args[]);
 int my_which(char *args[], int count);
 
 // my_fg //
-int my_fg(char *args[], int ac);
+int my_fg(char *args[]);
 
 #endif //COMMANDS_H

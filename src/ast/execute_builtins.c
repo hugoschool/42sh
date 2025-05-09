@@ -40,10 +40,10 @@ int is_builtin_command(char **args)
     return 0;
 }
 
-static int handle_most_builtins_next(char **args, int ac)
+static int handle_most_builtins_next(char **args)
 {
     if (strcmp(args[0], FG) == 0)
-        return my_fg(args, ac);
+        return my_fg(args);
     return -1;
 }
 
@@ -74,7 +74,7 @@ static int handle_most_builtins(char **args, int arg_count)
     if (strcmp(args[0], WHERE) == 0
         || strcmp(args[0], WHICH) == 0)
         return my_which(args, arg_count);
-    return handle_most_builtins_next(args, arg_count);
+    return handle_most_builtins_next(args);
 }
 
 /**
