@@ -201,4 +201,11 @@ typedef struct unset_data_s {
     int found;
 } unset_data_t;
 
+typedef enum jobs {
+    GET_PID_SHELL,
+    BACKGROUND,
+    FOREGROUND,
+    FREE
+} jobs_n;
+
 #endif //STRUCT_H

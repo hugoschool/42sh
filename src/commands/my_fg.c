@@ -9,16 +9,6 @@
 
 int my_fg(char *args[], int ac)
 {
-    if (!args[1])
-        return 0;
-    if (args[1] && args[2])
-        return print_error(get_error_msg(ERR_EXIT_SYNTAX), NULL, 1);
-    for (int i = 0; args[1][i]; i++) {
-        if (i == 0 && args[1][i] == '-')
-            continue;
-        if (args[1][i] < '0' || args[1][i] > '9')
-            return print_error(args[0],
-            get_error_msg(ERR_BAD_FORMAT_NUM), 1);
-    }
-    return atoi(args[1]);
+    pid_cur_job(FOREGROUND, args);
+    return 0;
 }

@@ -7,44 +7,57 @@
 
 #include "mysh.h"
 
+static void free_jobs(llist_t *jobs, pid_t *pid)
+{
+    return;
+}
+
 void handle_sigstop(int sig)
 {
     rl_on_new_line();
     rl_redisplay();
     if (sig == SIGSTOP)
-        pid_cur_job(add_to_sleep_proc);
+        pid_cur_job(BACKGROUND, NULL);
 }
 
-void reactivate_shell(llist_t *job, pid_t *pid)
+/**
+ * @breif fg
+ */
+static void foreground(llist_t **jobs, pid_t *pid, char *argv[])
 {
-
+    if (*jobs == NULL)
+        printf("fg: pas de travail en cours.\n");
 }
 
-void free_jobs(llist_t *jobs, pid_t *pid)
-{
-
-}
-
-void add_to_sleep_proc(llist_t *jobs, pid_t *shell)
+/**
+ * @breif ctrl + z
+ */
+static void background(llist_t **jobs, pid_t *shell)
 {
     pid_t temp = getpid();
 
     if (temp == *shell)
         return;
     if (jobs == NULL)
-        jobs = create_node(&temp);
+        *jobs = create_node(&temp);
 }
 
-void set_pid_shell(llist_t *jobs, pid_t *shell)
+void set_pid_shell(llist_t **jobs, pid_t *shell)
 {
     *shell = getpid();
     (void)jobs;
 }
 
-void pid_cur_job(void (*ptr_func)(llist_t *, pid_t *))
+void pid_cur_job(enum jobs action, char *argv[])
 {
     static llist_t *list_job = NULL;
     static pid_t shell = 0;
 
-    ptr_func(list_job, &shell);
+    if (action == GET_PID_SHELL)
+        shell = getpid();
+    if (action == BACKGROUND)
+        background(&list_job, &shell);
+    if (action == FOREGROUND)
+        foreground(&list_job, &shell, argv);
+    return;
 }
