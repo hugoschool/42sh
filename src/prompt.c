@@ -38,6 +38,8 @@ char *display_prompt(void)
     char temp[PATH_MAX];
     char *line = NULL;
 
+    if (current_dir == NULL)
+        return NULL;
     strcpy(current_dir, COLOR_CYAN"-> ");
     getcwd(temp, PATH_MAX);
     strcat(current_dir, temp);
@@ -50,6 +52,7 @@ char *display_prompt(void)
     strcat(current_dir, COLOR_CYAN" $> "COLOR_NONE);
     if (isatty(STDIN_FILENO))
         return current_dir;
+    free(current_dir);
     return NULL;
 }
 
